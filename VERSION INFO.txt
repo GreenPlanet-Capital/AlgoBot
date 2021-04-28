@@ -1,0 +1,2 @@
+This version has:
+Only Jupyter Notebook prototypes on Indicator functions, signal generator functions and the train test functions of each indicator.

@@ -37,8 +37,8 @@ Function Checklist
 Usage Example:
 
 '''
-import imports
-from StockDataExtraction import StockData
+# import imports
+# from StockDataExtraction import StockData
 
 class AccumulationDistribution:
 
@@ -58,8 +58,8 @@ class AccumulationDistribution:
         self.sensitivity = sensitivity
         self.absolute_sensitivity = absolute_sensitivity
 
-    def __str__(self):
-        return
+    # def __str__(self):
+    #     return
 
 #######################
 #Indicator Generator Function
@@ -385,7 +385,7 @@ class AccumulationDistribution:
 
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
 

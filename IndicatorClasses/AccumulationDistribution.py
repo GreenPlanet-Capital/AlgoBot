@@ -37,8 +37,8 @@ Function Checklist
 Usage Example:
 
 '''
-# import imports
-# from StockDataExtraction import StockData
+from ..AlgoBot import imports
+from StockDataExtraction import StockData
 
 class AccumulationDistribution:
 

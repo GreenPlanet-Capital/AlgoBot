@@ -1,0 +1,19 @@
+'''
+Name: 
+Naming Convention of DataFrame Columns:
+Function List:
+Type of Indicator:
+Usage Notes:
+'''
+'''
+- a function to take the dataframe input and clean it, in order to keep just the HIGH, LOW, CLOSE and VOLUME
+- indicator generation function
+- signal generation function
+- train test function, that returns the efficacy
+- current long/short strength 
+- a function to plot
+'''
+'''
+Usage Example:
+
+'''

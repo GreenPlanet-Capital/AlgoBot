@@ -71,9 +71,9 @@ class SingleStockData:
         self.df['VOLUME'] = self.df['VOLUME'].astype(float)
 
 def main():
-    stock_data = StockData(0,True)
-    stock_data.create_dataframe()
-    print(stock_data)
+    stock_data = SingleStockData(0,False)
+    stock_data.generate_dataframe()
+    print(stock_data.df)
 
 if __name__ == '__main__':
     main()

@@ -7,7 +7,7 @@ import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 
-class StockData:
+class SingleStockData:
     def __init__(self,sheet_number = 0,require_small_data = True):
         self.sheet_number = sheet_number
         self.require_small_data = require_small_data
@@ -16,7 +16,7 @@ class StockData:
     def __str__(self):
         return (self.df.to_string())
 
-    def create_dataframe(self):
+    def generate_dataframe(self):
         self.get_sheet()
     
     def get_sheet(self):
@@ -72,7 +72,7 @@ class StockData:
 
 def main():
     stock_data = StockData(0,True)
-    stock_data
+    stock_data.create_dataframe()
     print(stock_data)
 
 if __name__ == '__main__':

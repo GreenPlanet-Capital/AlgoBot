@@ -4,7 +4,6 @@ Name: BALANCE OF POWER
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: BOP
     Signal Generated DataFrame head: BOP SIGNAL
-    Signum Generated DataFrame head: 
 
 Function List:
     indicator_generator
@@ -12,10 +11,12 @@ Function List:
     train_test
     live_signal
 
-Type of Indicator: 
+Type of Indicator: Long/Short Signal
 
-Usage Notes:
-    
+Usage Notes: 
+* Measure the strength of buyers against sellers in the market.
+* When the BoP crosses above zero, this is considered as a signal to buy. When the BoP crosses below zero, this is considered as a signal to sell.
+
 '''
 '''
 Function Checklist
@@ -250,7 +251,7 @@ class BalanceOfPower:
         self.df_trainTest = df_internal
 
         return return_potential_ratio
-        
+
 #######################
 #Live Signal Generation Function
 #######################

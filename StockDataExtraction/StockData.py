@@ -8,7 +8,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 
 class SingleStockData:
-    def __init__(self,sheet_number = 0,require_small_data = True):
+    def __init__(self,sheet_number = 0,require_small_data = True, back_limit = 100):
+        self.back_limit = back_limit
         self.sheet_number = sheet_number
         self.require_small_data = require_small_data
         self.df = pd.DataFrame()
@@ -42,7 +43,7 @@ class SingleStockData:
         worksheet = sheet.get_worksheet(self.sheet_number)
 
         if(self.require_small_data):
-            limit = -100
+            limit = -(self.back_limit)
         else:
             limit = 1
 
@@ -71,7 +72,7 @@ class SingleStockData:
         self.df['VOLUME'] = self.df['VOLUME'].astype(float)
 
 def main():
-    stock_data = SingleStockData(0,False)
+    stock_data = SingleStockData(0,True)
     stock_data.generate_dataframe()
     print(stock_data.df)
 

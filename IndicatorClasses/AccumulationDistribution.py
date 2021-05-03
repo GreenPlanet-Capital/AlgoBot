@@ -37,14 +37,23 @@ Function Checklist
 Usage Example:
 
 '''
-from ..AlgoBot import imports
-from StockDataExtraction import StockData
+import math
+import pandas as pd
+import json 
+import datetime
+import numpy as np
+import sys
+import oauth2client
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.text
 
 class AccumulationDistribution:
 
     def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
-        df_input = pd.DataFrame()
-
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 
         df_generatedSignal = pd.DataFrame() #Generated from signal_generation
@@ -74,7 +83,7 @@ class AccumulationDistribution:
         df_indicators['DATE'] = df['DATE']
         
         temp_list = [None for i in range(len(df))]
-        indic_columnhead = 'ACCUMULATION DISTRIBUTION ' + str(lookback_period)
+        indic_columnhead = 'ACCUMULATION DISTRIBUTION ' + str(n)
         df_indicators[indic_columnhead] = temp_list
         
         initial_gap = len(df) - int(len(df)/n)*n
@@ -217,8 +226,8 @@ class AccumulationDistribution:
 
     def train_test(self, indic_name = 'ACCUMULATION DISTRIBUTION', stop_percent = 0.05):
         n = self.lookback_period
-        df = df_input
-        signal_df = df_generatedSignal
+        df = self.dataframe_input
+        signal_df = self.df_generatedSignal
 
         signum_colhead = indic_name + ' ' + 'SIGNUM' + ' ' + str(n)
         
@@ -370,7 +379,7 @@ class AccumulationDistribution:
         indic_name = 'ACCUMULATION DISTRIBUTION'
         mid_string = 'SIGNUM'
         n = self.lookback_period
-        col_head = indic_name + ' ' + mid_string + ' ' + n
+        col_head = indic_name + ' ' + mid_string + ' ' + str(n)
 
         return_val = self.df_generatedSignal[col_head].iloc[-1]
         return return_val

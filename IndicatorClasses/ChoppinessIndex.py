@@ -1,5 +1,5 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: CHOPPINESS INDEX
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: 
@@ -11,10 +11,11 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
-Type of Indicator: 
+Type of Indicator: Whipsaw/Volatility Indicator
 
-Usage Notes:
+Usage Notes: Used to lower confidence in the current trend
     
 '''
 '''
@@ -26,6 +27,7 @@ Function Checklist
 - current long/short strength 
 '''
 '''
-Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
+Inputs: dataframe_input, lookback_period
 Outputs: weight, live_signal
 '''
+

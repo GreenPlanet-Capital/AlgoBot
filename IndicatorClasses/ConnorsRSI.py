@@ -1,5 +1,5 @@
 '''
-Name: CONNORS RSI
+Name: ACCUMULATION DISTRIBUTION
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: 

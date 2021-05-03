@@ -1,5 +1,5 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: CHAIKIN OSCILLATOR
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: 

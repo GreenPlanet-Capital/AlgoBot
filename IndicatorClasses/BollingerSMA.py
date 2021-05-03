@@ -11,10 +11,11 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
-Type of Indicator: 
+Type of Indicator: Long/Short Strength
 
-Usage Notes:
+Usage Notes: Bollinger Bands on SMA
     
 '''
 '''

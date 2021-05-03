@@ -10,6 +10,7 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
 Type of Indicator: Volatility
 

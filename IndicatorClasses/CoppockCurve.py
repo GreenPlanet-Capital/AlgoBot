@@ -50,7 +50,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.text
 
-class ConnorsRSI:
+class CoppockCurve:
     def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 

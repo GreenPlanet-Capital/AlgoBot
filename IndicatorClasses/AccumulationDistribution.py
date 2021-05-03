@@ -67,9 +67,6 @@ class AccumulationDistribution:
         self.sensitivity = sensitivity
         self.absolute_sensitivity = absolute_sensitivity
 
-    # def __str__(self):
-    #     return
-
 #######################
 #Indicator Generator Function
 #######################
@@ -373,22 +370,30 @@ class AccumulationDistribution:
         self.df_trainTest = df_internal
 
         return return_potential_ratio
-    
 
-    def live_signal(self):
+#######################
+#Live Signal Generation Function
+#######################
+
+    def live_signal(self, live_lookback = 1):
         indic_name = 'ACCUMULATION DISTRIBUTION'
         mid_string = 'SIGNUM'
         n = self.lookback_period
         col_head = indic_name + ' ' + mid_string + ' ' + str(n)
+        out_list = []
+        for i in range(-live_lookback, 0):
+            out_list.append(self.df_generatedSignal[col_head].iloc[i])
+        return out_list
 
-        return_val = self.df_generatedSignal[col_head].iloc[-1]
-        return return_val
+#######################
+#Run Function
+#######################
 
-    def run(self):
+    def run(self, live_lookback = 1):
         self.indicator_generator()
         self.signal_generation()
         weight = self.train_test()
-        live_signal = self.live_signal()
+        live_signal = self.live_signal(live_lookback)
 
         return weight, live_signal
 

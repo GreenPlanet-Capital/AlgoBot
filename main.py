@@ -7,11 +7,12 @@ from IndicatorClasses.BollingerEMA import BollingerEMA
 from IndicatorClasses.BollingerSMA import BollingerSMA
 from IndicatorClasses.ChakinOscillator import ChaikinOscillator
 from IndicatorClasses.ChoppinessIndex import ChoppinessIndex
+from IndicatorClasses.CommodityChannelIndex import CommodityChannelIndex
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = ChoppinessIndex(dataframe_input = stock_data.df, lookback_period = 6)
-y = obj.run(100)
-#print(x)
+obj = CommodityChannelIndex(dataframe_input = stock_data.df, lookback_period = 6)
+x,y = obj.run(10)
+print(x)
 print(y)

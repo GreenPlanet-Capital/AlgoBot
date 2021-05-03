@@ -1,5 +1,5 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name:
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: 
@@ -11,6 +11,7 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
 Type of Indicator: 
 

@@ -1,8 +1,7 @@
 # List of Strategies
 
-* Accumulation/Distribution
-* Aroon
-* Average Directional index 
+* **Accumulation/Distribution**
+* **Aroon**
 * Average True Range
 * Balance of Power 
 * Bollinger bands

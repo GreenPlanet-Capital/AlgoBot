@@ -22,7 +22,7 @@ Usage Notes:
     both enter and exit a trade. A rising A/D along with rising stock price, or vice 
     versa confirms a trend. A falling A/D with rising price, and vice versa shows a reversal coming
 
-    Zero corossover Indicator. 
+    Zero crossover Indicator. 
 '''
 '''
 Function Checklist
@@ -31,12 +31,12 @@ Function Checklist
 - signal generation function
 - train test function, that returns the efficacy
 - current long/short strength 
-- a function to plot
 '''
 '''
-Usage Example:
+Inputs: dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50
+Outputs: weight, live_signal
+'''
 
-'''
 import math
 import pandas as pd
 import json 

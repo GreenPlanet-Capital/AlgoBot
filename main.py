@@ -13,11 +13,13 @@ from IndicatorClasses.CoppockCurve import CoppockCurve
 from IndicatorClasses.CumulativeVolume import CumulativeVolume
 from IndicatorClasses.DetrendedPriceOscillator import DetrendedPriceOscillator
 from IndicatorClasses.DirectionalMovement import DirectionalMovement
+from IndicatorClasses.DonchianChannels import DonchianChannels
+from IndicatorClasses.EaseOfMovement import EaseOfMovement
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = DirectionalMovement(dataframe_input = stock_data.df, lookback_period1 = 6, lookback_period2 = 9)
-x,y = obj.run(8)
-print(x)
+obj = EaseOfMovement(dataframe_input = stock_data.df, lookback_period = 6)
+y = obj.run(8)
+#print(x)
 print(y)

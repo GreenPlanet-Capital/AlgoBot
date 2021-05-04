@@ -17,11 +17,12 @@ from IndicatorClasses.DonchianChannels import DonchianChannels
 from IndicatorClasses.EaseOfMovement import EaseOfMovement
 from IndicatorClasses.EldersForce import EldersForce
 from IndicatorClasses.EnvelopeEMA import EnvelopeEMA
+from IndicatorClasses.EnvelopeSMA import EnvelopeSMA
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = EnvelopeEMA(dataframe_input = stock_data.df, lookback_period = 6)
+obj = EnvelopeSMA(dataframe_input = stock_data.df, lookback_period = 6)
 x,y = obj.run(8)
 print(x)
 print(y)

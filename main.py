@@ -24,10 +24,14 @@ from IndicatorClasses.FisherTransform import FisherTransform
 from IndicatorClasses.FisherTransformReversal import FisherTransformReversal
 from IndicatorClasses.McGinleyDynamic import McGinleyDynamic
 from IndicatorClasses.HistoricalVolatility import HistoricalVolatility
+from IndicatorClasses.KeltnerChannel import KeltnerChannel
+from IndicatorClasses.LinearRegression import LinearRegression
+from IndicatorClasses.LocalVolatility import LocalVolatility
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = HistoricalVolatility(dataframe_input = stock_data.df)
-x = obj.run(2)
+obj = LocalVolatility(dataframe_input = stock_data.df, lookback_period = 6)
+x = obj.run(3)
 print(x)
+

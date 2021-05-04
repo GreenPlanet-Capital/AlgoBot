@@ -20,11 +20,12 @@ from IndicatorClasses.EnvelopeEMA import EnvelopeEMA
 from IndicatorClasses.EnvelopeSMA import EnvelopeSMA
 from IndicatorClasses.ExponentialMovingAverage import ExponentialMovingAverage
 from IndicatorClasses.SimpleMovingAverage import SimpleMovingAverage
+from IndicatorClasses.FisherTransform import FisherTransform
 
-stock_data = SingleStockData(4,True, 700)
+stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = ExponentialMovingAverage(dataframe_input = stock_data.df, lookback_period1 = 6, lookback_period2 = 100)
-x,y = obj.run(300)
+obj = FisherTransform(dataframe_input = stock_data.df, lookback_period = 6)
+x,y = obj.run(3)
 print(x)
 print(y)

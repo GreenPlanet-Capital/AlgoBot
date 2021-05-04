@@ -2,9 +2,8 @@
 Name: LOCAL VOLATILITY
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: 
-    Signal Generated DataFrame head: 
-    Signum Generated DataFrame head: 
+    Indicator Generated DataFrame head: LOVALVOL + lookback_period
+    Signal Generated DataFrame head: LOVALVOL SIGNAL + lookback_period
 
 Function List:
     indicator_generator

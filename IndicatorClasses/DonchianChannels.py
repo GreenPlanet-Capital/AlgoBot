@@ -1,5 +1,5 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: DONCHIAN CHANNEL
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: 

@@ -2,19 +2,21 @@
 Name: EXPONENTIAL MOVING AVERAGE
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: 
-    Signal Generated DataFrame head: 
-    Signum Generated DataFrame head: 
+    Indicator Generated DataFrame head: OSC EMA + lookback_period1 + EMA + lookback_period2 
+    Signal Generated DataFrame head: OSC EMA + lookback_period1 + EMA SIGNAL + lookback_period2
+    Signum Generated DataFrame head: OSC EMA + lookback_period1 + EMA SIGNUM + lookback_period2
 
 Function List:
     indicator_generator
     signal_generation
     train_test
     live_signal
+    run
 
 Type of Indicator: Long/Short Strength
 
-Usage Notes:
+Usage Notes: Recursuve Moving Average that is more reactive to changes. 
+Oscillator Generator Required
     
 '''
 '''

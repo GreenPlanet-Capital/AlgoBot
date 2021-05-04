@@ -15,11 +15,13 @@ from IndicatorClasses.DetrendedPriceOscillator import DetrendedPriceOscillator
 from IndicatorClasses.DirectionalMovement import DirectionalMovement
 from IndicatorClasses.DonchianChannels import DonchianChannels
 from IndicatorClasses.EaseOfMovement import EaseOfMovement
+from IndicatorClasses.EldersForce import EldersForce
+from IndicatorClasses.EnvelopeEMA import EnvelopeEMA
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = EaseOfMovement(dataframe_input = stock_data.df, lookback_period = 6)
-y = obj.run(8)
-#print(x)
+obj = EnvelopeEMA(dataframe_input = stock_data.df, lookback_period = 6)
+x,y = obj.run(8)
+print(x)
 print(y)

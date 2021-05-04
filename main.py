@@ -23,11 +23,11 @@ from IndicatorClasses.SimpleMovingAverage import SimpleMovingAverage
 from IndicatorClasses.FisherTransform import FisherTransform
 from IndicatorClasses.FisherTransformReversal import FisherTransformReversal
 from IndicatorClasses.McGinleyDynamic import McGinleyDynamic
+from IndicatorClasses.HistoricalVolatility import HistoricalVolatility
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = McGinleyDynamic(dataframe_input = stock_data.df, lookback_period1 = 6, lookback_period2 = 9)
-x,y = obj.run(3)
+obj = HistoricalVolatility(dataframe_input = stock_data.df)
+x = obj.run(2)
 print(x)
-print(y)

@@ -21,11 +21,13 @@ from IndicatorClasses.EnvelopeSMA import EnvelopeSMA
 from IndicatorClasses.ExponentialMovingAverage import ExponentialMovingAverage
 from IndicatorClasses.SimpleMovingAverage import SimpleMovingAverage
 from IndicatorClasses.FisherTransform import FisherTransform
+from IndicatorClasses.FisherTransformReversal import FisherTransformReversal
+from IndicatorClasses.McGinleyDynamic import McGinleyDynamic
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = FisherTransform(dataframe_input = stock_data.df, lookback_period = 6)
+obj = McGinleyDynamic(dataframe_input = stock_data.df, lookback_period1 = 6, lookback_period2 = 9)
 x,y = obj.run(3)
 print(x)
 print(y)

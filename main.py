@@ -27,11 +27,12 @@ from IndicatorClasses.HistoricalVolatility import HistoricalVolatility
 from IndicatorClasses.KeltnerChannel import KeltnerChannel
 from IndicatorClasses.LinearRegression import LinearRegression
 from IndicatorClasses.LocalVolatility import LocalVolatility
+from IndicatorClasses.MassIndex import MassIndex
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = LocalVolatility(dataframe_input = stock_data.df, lookback_period = 6)
+obj = MassIndex(dataframe_input = stock_data.df, lookback_period = 6)
 x = obj.run(3)
 print(x)
 

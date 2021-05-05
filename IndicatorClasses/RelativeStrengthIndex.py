@@ -1,20 +1,35 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: RELATIVE STRENGTH INDEX
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: 
-    Signal Generated DataFrame head: 
-    Signum Generated DataFrame head: 
+    Indicator Generated DataFrame head: RSI + lookback_period 
+    Signal Generated DataFrame head: RSI REVERSAL SIGNAL + lookbcak_period
+    Signum Generated DataFrame head: RSI REVERSAL SIGNUM + lookbcak_period
 
 Function List:
     indicator_generator
     signal_generation
     train_test
     live_signal
+    run
 
-Type of Indicator: 
+Type of Indicator: Long/Short Strength
 
 Usage Notes:
+* The RSI will rise as the number and size of positive closes increase, and it will fall as the number and size of losses increase. The second part of the calculation smooths the result, so the RSI will only near 100 or 0 in a strongly trending market.
+* Can be used as an oscillator
+* Bullish Swing Rejection Signal: 
+* * RSI falls into oversold territory.
+* * RSI crosses back above 30%.
+* * RSI forms another dip without crossing back into oversold territory.
+* * RSI then breaks its most recent high.
+* Bearish Swing Rejection Signal
+* * RSI rises into overbought territory.
+* * RSI crosses back below 70%.
+* * RSI forms another high without crossing back into overbought territory.
+* * RSI then breaks its most recent low.
+* A bullish divergence occurs when the RSI creates an oversold reading followed by a higher low that matches correspondingly lower lows in the price. This indicates rising bullish momentum, and a break above oversold territory could be used to trigger a new long position.
+* A bearish divergence occurs when the RSI creates an overbought reading followed by a lower high that matches corresponding higher highs on the price. 
     
 '''
 '''

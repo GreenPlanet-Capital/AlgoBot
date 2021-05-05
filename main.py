@@ -47,11 +47,14 @@ from IndicatorClasses.TRIX import TRIX
 from IndicatorClasses.TrueStrengthIndicator import TrueStrengthIndicator
 from IndicatorClasses.Volume import Volume
 from IndicatorClasses.VolumeOscillator import VolumeOscillator
+from IndicatorClasses.VortexOscillator import VortexOscillator
+from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
+from IndicatorClasses.TradingRange import TradingRange
 
-stock_data = SingleStockData(4,True, 200)
+stock_data = SingleStockData(5,False)
 stock_data.generate_dataframe()
 
-obj = VolumeOscillator(dataframe_input = stock_data.df, lookback_period = 6)
-x,y = obj.run(3)
+obj = TradingRange(dataframe_input = stock_data.df, lookback_period = 100)
+x = obj.run(20)
 print(x)
-print(y)
+

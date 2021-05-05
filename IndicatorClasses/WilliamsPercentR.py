@@ -27,7 +27,7 @@ Function Checklist
 - current long/short strength 
 '''
 '''
-Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
+Inputs: dataframe_input, lookback_period, sensitivity = 1.2, absolute_sensitivity = 50
 Outputs: weight, live_signal
 '''
 
@@ -45,9 +45,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.text
 
-class :
+class WilliamsPercentR:
 
-    def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
+    def __init__(self, dataframe_input, lookback_period, sensitivity = 1.2, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 
         df_generatedSignal = pd.DataFrame() #Generated from signal_generation
@@ -66,18 +66,84 @@ class :
 #######################
 
     def indicator_generator(self):
+        df = self.dataframe_input
+        n = self.lookback_period
+        
+        df_indicators = pd.DataFrame()
+        
+        df_indicators['DATE'] = df['DATE']
+        
+        temp_list = [None for i in range(len(df))]
+        indic_columnhead = 'WILL R ' + str(n)
+        df_indicators[indic_columnhead] = temp_list
+        
+        will_r = [None for i in range(n)]
+        initial_start_ctr = 0
+        initial_end_ctr = n
+        
+        for i in range(len(df) - n):
+            low_price = min(list(df['LOW'].iloc[initial_start_ctr : initial_end_ctr]))
+            high_price = max(list(df['HIGH'].iloc[initial_start_ctr : initial_end_ctr]))        
+            close_price = df['CLOSE'].iloc[initial_end_ctr]
+            
+            will_r_val = (high_price - close_price)/(high_price - low_price) 
+            will_r.append(will_r_val*100)
+            
+            initial_start_ctr += 1
+            initial_end_ctr += 1
 
+        df_indicators[indic_columnhead] = will_r
+        
+        self.df_generatedIndicators = df_indicators
+    
 #######################
 #Signal Generation Dividers
 #######################
 
-    def signal_generation(self, indic_name = ''):
+    def signal_generation(self, indic_name = 'WILL R'):
+        indic_df = self.df_generatedIndicators
+        sensitivity = self.sensitivity
+        n = self.lookback_period
+        
+        df_internal = pd.DataFrame()
+        df_internal['DATE'] = indic_df['DATE']
+        df_out = pd.DataFrame()
+        df_out['DATE'] = indic_df['DATE']
+        
+        indic_list = list(indic_df[indic_name + ' ' + str(n)])
+        indic_list = indic_list[n:]
+        
+        #signum truth table construction
+        indic_mean = indic_df[indic_name + ' ' + str(n)].mean()
+        indic_std = indic_df[indic_name +  ' ' + str(n)].std()
+        
+        df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = indic_df[indic_name + ' ' + str(n)] <  (indic_mean + (indic_std * sensitivity))
+        df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = indic_df[indic_name + ' ' + str(n)] >=  (indic_mean - (indic_std * sensitivity))
+
+        #indicator signum
+        long = list(df_internal[indic_name + ' SIGNUM BUY ' + str(n)])
+        short = list(df_internal[indic_name + ' SIGNUM SELL ' + str(n)])
+        
+        indic_out = [] 
+        for i in range(len(long)):
+            append_val = 0
+            if (long[i] == True and short[i] == False):
+                append_val = 100
+            elif (long[i] == False and short[i] == True):
+                append_val = -100
+            else:
+                append_val = 0 
+            indic_out.append(append_val)
+            
+        df_out[indic_name + ' REVERSAL SIGNUM ' + str(n)] = indic_out
+        
+        self.df_generatedSignal = df_out
 
 #######################
 #Train Test Function
 #######################
 
-    def train_test(self, indic_name = '', stop_percent = 0.05):
+    def train_test(self, indic_name = 'WILL R REVERSAL', stop_percent = 0.05):
         df = self.dataframe_input
         signal_df = self.df_generatedSignal
         n = self.lookback_period
@@ -225,13 +291,13 @@ class :
         self.df_trainTest = df_internal
 
         return return_potential_ratio
-        
+
 #######################
 #Live Signal Generation Function
 #######################
 
     def live_signal(self, live_lookback = 1):
-        indic_name = ''
+        indic_name = 'WILL R REVERSAL'
         mid_string = 'SIGNUM'
         n = self.lookback_period
         col_head = indic_name + ' ' + mid_string + ' ' + str(n)

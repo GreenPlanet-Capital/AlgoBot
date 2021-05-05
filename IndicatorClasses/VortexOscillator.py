@@ -1,10 +1,9 @@
 '''
-Name:
+Name: VORTEX OSCILLATOR
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: 
-    Signal Generated DataFrame head: 
-    Signum Generated DataFrame head: 
+    Indicator Generated DataFrame head: VORTEX OSCILLATOR + lookback_period
+    Signum Generated DataFrame head: VORTEX OSCILLATOR REVERSAL SIGNUM + lookback_period
 
 Function List:
     indicator_generator
@@ -13,9 +12,12 @@ Function List:
     live_signal
     run
 
-Type of Indicator: 
+Type of Indicator: Long/Short Strength
 
 Usage Notes:
+* Crossovers of the two trend lines signal a reversal
+* Highest divergence between the two trend line indicates a possible lower confidence in the trend
+
     
 '''
 '''
@@ -27,7 +29,7 @@ Function Checklist
 - current long/short strength 
 '''
 '''
-Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
+Inputs: dataframe_input, lookback_period, sensitivity = 1.3, absolute_sensitivity = 50
 Outputs: weight, live_signal
 '''
 
@@ -45,9 +47,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.text
 
-class :
+class VortexOscillator:
 
-    def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
+    def __init__(self, dataframe_input, lookback_period, sensitivity = 1.3, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 
         df_generatedSignal = pd.DataFrame() #Generated from signal_generation
@@ -66,18 +68,156 @@ class :
 #######################
 
     def indicator_generator(self):
+        def atr(dataframe_input, lookback_period):
+            df = dataframe_input
+            n = lookback_period
 
+            df_indicators = pd.DataFrame()
+
+            df_indicators['DATE'] = df['DATE']
+
+            temp_list = [None for i in range(len(df))]
+            indic_columnhead = 'ATR ' + str(lookback_period)
+            df_indicators[indic_columnhead] = temp_list
+
+            initial_gap = len(df) - int(len(df)/n)*n
+        
+            low_list = [None for i in range(n)]
+            high_list = [None for i in range(n)]
+            close_list = [None for i in range(n)]
+            atr = [None for i in range(n)]
+
+            initial_start_ctr = 0
+            initial_end_ctr = n
+
+            for i in range(len(df) - n):
+
+                low_price = min(list(df['LOW'].iloc[initial_start_ctr : initial_end_ctr]))
+                low_list.append(low_price)
+
+                high_price = max(list(df['HIGH'].iloc[initial_start_ctr : initial_end_ctr]))
+                high_list.append(high_price)
+
+                close_price = df['CLOSE'].iloc[initial_end_ctr]
+                close_list.append(close_price)
+
+                atr_val = max([abs(high_price - low_price), abs(high_price - close_price), abs(low_price - close_price)])
+
+                atr_val = atr_val/n
+
+                atr.append(atr_val)
+
+                initial_start_ctr += 1
+                initial_end_ctr += 1
+
+            df_indicators[indic_columnhead] = atr
+
+            return df_indicators
+        
+        df = self.dataframe_input
+        n = self.lookback_period
+        
+        df_indicators = pd.DataFrame()
+        
+        df_indicators['DATE'] = df['DATE']
+        
+        temp_list = [None for i in range(len(df))]
+        indic_columnhead1 = 'VORTEX+ ' + str(n)
+        indic_columnhead2 = 'VORTEX- ' + str(n)
+        df_indicators[indic_columnhead1] = temp_list
+        df_indicators[indic_columnhead2] = temp_list
+        
+        atr_df = atr(df,n)
+        
+        ref_col = 'ATR ' + str(n) 
+        atr_df[ref_col] = atr_df[ref_col]*n
+        
+        initial_gap = len(df) - int(len(df)/n)*n
+        
+        VIn_plus = [None for i in range(n+1)]
+        VIn_minus = [None for i in range(n+1)]
+        
+        vortex = [None for i in range(n)]
+        
+        initial_start_ctr = 1
+        initial_end_ctr = n + 1
+        
+        for i in range(len(df) - n - 1):
+            
+            today_low_price = min(list(df['LOW'].iloc[initial_start_ctr : initial_end_ctr]))
+            prev_low_price = min(list(df['LOW'].iloc[(initial_start_ctr - 1) : (initial_end_ctr - 1)]))
+            today_high_price = max(list(df['HIGH'].iloc[initial_start_ctr : initial_end_ctr]))
+            prev_high_price = max(list(df['HIGH'].iloc[(initial_start_ctr - 1) : (initial_end_ctr - 1)]))
+            
+            sum_atr_val = atr_df[ref_col].iloc[initial_end_ctr]
+            
+            vm_plus = abs(today_high_price - prev_low_price)
+            vm_minus = abs(today_low_price - prev_high_price)
+            
+            VIn_plus_val = vm_plus/sum_atr_val
+            VIn_minus_val = (vm_minus/sum_atr_val)
+                                
+            VIn_plus.append(VIn_plus_val)
+            VIn_minus.append(VIn_minus_val)
+                                
+            initial_start_ctr += 1
+            initial_end_ctr += 1
+
+        df_indicators[indic_columnhead1] = VIn_plus
+        df_indicators[indic_columnhead2] = VIn_minus
+        
+        df_indicators['VORTEX OSCILLATOR ' + str(n)] = df_indicators[indic_columnhead1] - df_indicators[indic_columnhead2]
+                                
+        self.df_generatedIndicators = df_indicators
+    
 #######################
 #Signal Generation Dividers
 #######################
 
-    def signal_generation(self, indic_name = ''):
+    def signal_generation(self, indic_name = 'VORTEX OSCILLATOR'):
+        indic_df = self.df_generatedIndicators
+        sensitivity = self.sensitivity
+        n = self.lookback_period
+        
+        df_internal = pd.DataFrame()
+        df_internal['DATE'] = indic_df['DATE']
+        df_out = pd.DataFrame()
+        df_out['DATE'] = indic_df['DATE']
+        
+        indic_list = list(indic_df[indic_name + ' ' + str(n)])
+        indic_list = indic_list[n:]
+        
+        #signum truth table construction
+        indic_mean = indic_df[indic_name + ' ' + str(n)].mean()
+        indic_std = indic_df[indic_name +  ' ' + str(n)].std()
+        
+        df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = indic_df[indic_name + ' ' + str(n)] <  (indic_mean + (indic_std * sensitivity))
+        df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = indic_df[indic_name + ' ' + str(n)] >=  (indic_mean - (indic_std * sensitivity))
+
+        #indicator signum
+        long = list(df_internal[indic_name + ' SIGNUM BUY ' + str(n)])
+        short = list(df_internal[indic_name + ' SIGNUM SELL ' + str(n)])
+        
+        indic_out = [] 
+        for i in range(len(long)):
+            append_val = 0
+            if (long[i] == True and short[i] == False):
+                append_val = 100
+            elif (long[i] == False and short[i] == True):
+                append_val = -100
+            else:
+                append_val = 0 
+            indic_out.append(append_val)
+            
+        df_out[indic_name + ' REVERSAL SIGNUM ' + str(n)] = indic_out
+        
+        self.df_generatedSignal = df_out
 
 #######################
 #Train Test Function
 #######################
 
-    def train_test(self, indic_name = '', stop_percent = 0.05):
+    def train_test(self, indic_name = 'VORTEX OSCILLATOR REVERSAL', stop_percent = 0.05):
         df = self.dataframe_input
         signal_df = self.df_generatedSignal
         n = self.lookback_period
@@ -225,12 +365,13 @@ class :
         self.df_trainTest = df_internal
 
         return return_potential_ratio
+
 #######################
 #Live Signal Generation Function
 #######################
 
     def live_signal(self, live_lookback = 1):
-        indic_name = ''
+        indic_name = 'VORTEX OSCILLATOR REVERSAL'
         mid_string = 'SIGNUM'
         n = self.lookback_period
         col_head = indic_name + ' ' + mid_string + ' ' + str(n)

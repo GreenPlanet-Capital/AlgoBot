@@ -13,7 +13,7 @@ Function List:
     live_signal
     run
 
-Type of Indicator: Volume
+Type of Indicator: Volume - Long/Short Strength
 
 Usage Notes:
 1. The volume oscillator should rise in a rallying market. When an issue becomes overbought, the oscillator will reverse its direction. When the market declines or moves in a horizontal direction, the volume should contract. 

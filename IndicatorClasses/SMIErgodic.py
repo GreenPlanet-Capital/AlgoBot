@@ -137,7 +137,7 @@ class SMIErgodic:
         indic_mean = df_out[indic_name + ' SIGNAL ' + str(n)].mean()
         absolute_mean = 0
         indic_std = df_out[indic_name +  ' SIGNAL ' + str(n)].std()
-        absolute_std = 50
+        absolute_std = self.absolute_sensitivity
         
         df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] >  (indic_mean + indic_std * sensitivity)
         df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] <=  (indic_mean - indic_std * sensitivity)

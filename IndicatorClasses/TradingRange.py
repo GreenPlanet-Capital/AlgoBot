@@ -29,6 +29,7 @@ Function Checklist
 Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
 Outputs: weight, live_signal
 '''
+
 import math
 import pandas as pd
 import json 

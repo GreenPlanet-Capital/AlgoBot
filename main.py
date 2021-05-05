@@ -29,11 +29,13 @@ from IndicatorClasses.LinearRegression import LinearRegression
 from IndicatorClasses.LocalVolatility import LocalVolatility
 from IndicatorClasses.MassIndex import MassIndex
 from IndicatorClasses.MomentumOscillator import MomentumOscillator
+from IndicatorClasses.MomentumOscillatorReversal import MomentumOscillatorReversal
+
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = MomentumOscillator(dataframe_input = stock_data.df, lookback_period = 6)
+obj = MomentumOscillatorReversal(dataframe_input = stock_data.df, lookback_period = 6)
 x,y = obj.run(3)
 print(x)
 print(y)

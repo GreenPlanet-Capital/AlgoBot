@@ -45,12 +45,13 @@ from IndicatorClasses.WeightedMovingAverage import WeightedMovingAverage
 from IndicatorClasses.StochasticOscillatorReversal import StochasticOscillatorReversal
 from IndicatorClasses.TRIX import TRIX
 from IndicatorClasses.TrueStrengthIndicator import TrueStrengthIndicator
+from IndicatorClasses.Volume import Volume
+from IndicatorClasses.VolumeOscillator import VolumeOscillator
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = TrueStrengthIndicator(dataframe_input = stock_data.df, lookback_period = 5)
+obj = VolumeOscillator(dataframe_input = stock_data.df, lookback_period = 6)
 x,y = obj.run(3)
 print(x)
 print(y)
-

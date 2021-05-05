@@ -1,8 +1,8 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: VOLUME OSCILLATOR
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: 
+    Indicator Generated DataFrame head:  
     Signal Generated DataFrame head: 
     Signum Generated DataFrame head: 
 
@@ -11,10 +11,13 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
-Type of Indicator: 
+Type of Indicator: Volume
 
 Usage Notes:
+1. The volume oscillator should rise in a rallying market. When an issue becomes overbought, the oscillator will reverse its direction. When the market declines or moves in a horizontal direction, the volume should contract. 
+2. Volume expands during a sell-off. It is important to note that an increasing price, together with declining volume, is always, without exception, bearish. When the market is at the top, one would, therefore, expect to see an oversold volume chart. Another important point: rising volume, together with declining prices, is also bearish.
     
 '''
 '''
@@ -43,7 +46,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.text
 
-class :
+class VolumeOscillator:
 
     def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
@@ -64,18 +67,112 @@ class :
 #######################
 
     def indicator_generator(self):
+        df = self.dataframe_input
+        n = self.lookback_period
+    
+        df_indicators = pd.DataFrame()
+        df_indicators['DATE'] =  df['DATE'] 
+        df_indicators['VOLUME'] =  df['VOLUME']  
+        df_indicators['VOLUMESMA ' + str(n)] = df_indicators['VOLUME'].rolling(n).mean()
+        df_indicators['VOLUMESMA ' + str(2*n)] = df_indicators['VOLUME'].rolling(2*n).mean()
+        df_indicators['VOLUMEOSC ' + str(n)] = df_indicators['VOLUMESMA ' + str(n)] - df_indicators['VOLUMESMA ' + str(2*n)]
+        
+        self.df_generatedIndicators = df_indicators
 
 #######################
 #Signal Generation Dividers
 #######################
 
-    def signal_generation(self, indic_name = ''):
+    def signal_generation(self, indic_name = 'VOLUMEOSC'):
+        indic_df = self.df_generatedIndicators
+        sensitivity = self.sensitivity
+        n = self.lookback_period
+        
+        df_internal = pd.DataFrame()
+        df_internal['DATE'] = indic_df['DATE']
+        
+        indic_list = list(indic_df[indic_name + ' ' + str(n)])
+        indic_list = indic_list[n - 1:]
+        
+        signal_append = 0
+        signal_list = []
+        
+        for i in range(len(indic_list) - 1):
+            if (indic_list[i] > 0 and indic_list[i + 1] <= 0):
+                signal_append = indic_list[i + 1] - indic_list[i]
+            elif (indic_list[i] < 0 and indic_list[i + 1] >= 0):
+                signal_append = indic_list[i + 1] - indic_list[i]
+            else:
+                signal_append = 0
+            signal_list.append(signal_append)
+        
+        a = min(signal_list)
+        b = max(signal_list)
+        b_dash = 100
+        a_dash = -100
+        scaled_signal_list = [None for i in range(n)]
+        for i in signal_list:
+            frac = (i - a)/(b - a)
+            val1 = frac*(b_dash - a_dash)
+            scaled_val = val1 + a_dash
+            scaled_signal_list.append(scaled_val)
+        
+        df_out = pd.DataFrame()
+        df_out['DATE'] = indic_df['DATE']
+        df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
+        
+        #signum truth table construction
+        indic_mean = df_out[indic_name + ' SIGNAL ' + str(n)].mean()
+        absolute_mean = 0
+        indic_std = df_out[indic_name +  ' SIGNAL ' + str(n)].std()
+        absolute_std = 50
+        
+        df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] >  (indic_mean + indic_std * sensitivity)
+        df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] <=  (indic_mean - indic_std * sensitivity)
+        df_internal['ABSOLUTE ' + indic_name + ' SIGNUM BUY ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] >  (absolute_mean + (absolute_std * sensitivity))
+        df_internal['ABSOLUTE ' + indic_name + ' SIGNUM SELL ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] <=  (absolute_mean - (absolute_std * sensitivity))
+        
+        #indicator signum
+        long = list(df_internal[indic_name + ' SIGNUM BUY ' + str(n)])
+        short = list(df_internal[indic_name + ' SIGNUM SELL ' + str(n)])
+        
+        indic_out = [] 
+        for i in range(len(long)):
+            append_val = 0
+            if (long[i] == True and short[i] == False):
+                append_val = 100
+            elif (long[i] == False and short[i] == True):
+                append_val = -100
+            else:
+                append_val = 0 
+            indic_out.append(append_val)
+            
+        df_out[indic_name + ' SIGNUM ' + str(n)] = indic_out
+        
+        #absolute signum
+        abs_long = list(df_internal['ABSOLUTE ' + indic_name + ' SIGNUM BUY ' + str(n)])
+        abs_short = list(df_internal['ABSOLUTE ' + indic_name + ' SIGNUM SELL ' + str(n)])
+        
+        abs_out = [] 
+        for i in range(len(long)):
+            append_val = 0
+            if (abs_long[i] == True and abs_short[i] == False):
+                append_val = 100
+            elif (abs_long[i] == False and abs_short[i] == True):
+                append_val = -100
+            else:
+                append_val = 0 
+            abs_out.append(append_val)
+        
+        df_out['ABSOLUTE ' + indic_name + ' SIGNUM ' + str(n)] = abs_out
+        
+        self.df_generatedSignal = df_out
 
 #######################
 #Train Test Function
 #######################
 
-    def train_test(self, indic_name = '', stop_percent = 0.05):
+    def train_test(self, indic_name = 'VOLUMEOSC', stop_percent = 0.05):
         df = self.dataframe_input
         signal_df = self.df_generatedSignal
         n = self.lookback_period
@@ -223,12 +320,13 @@ class :
         self.df_trainTest = df_internal
 
         return return_potential_ratio
+
 #######################
 #Live Signal Generation Function
 #######################
 
     def live_signal(self, live_lookback = 1):
-        indic_name = ''
+        indic_name = 'VOLUMEOSC'
         mid_string = 'SIGNUM'
         n = self.lookback_period
         col_head = indic_name + ' ' + mid_string + ' ' + str(n)

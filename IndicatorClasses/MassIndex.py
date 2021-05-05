@@ -1,5 +1,5 @@
 '''
-Name: ACCUMULATION DISTRIBUTION
+Name: Mass Index
 
 Naming Convention of DataFrame Columns: 
     Indicator Generated DataFrame head: MASS INDEX + lookback_period
@@ -11,6 +11,7 @@ Function List:
     signal_generation
     train_test
     live_signal
+    run
 
 Type of Indicator: Reversal Strength
 

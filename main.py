@@ -42,11 +42,13 @@ from IndicatorClasses.SimpleMovingAverageOscillator import SimpleMovingAverageOs
 from IndicatorClasses.SMIErgodic import SMIErgodic
 from IndicatorClasses.StochasticOscillator import StochasticOscillator
 from IndicatorClasses.WeightedMovingAverage import WeightedMovingAverage
+from IndicatorClasses.StochasticOscillatorReversal import StochasticOscillatorReversal
+from IndicatorClasses.TRIX import TRIX
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = StochasticOscillator(dataframe_input = stock_data.df, lookback_period = 5)
+obj = TRIX(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

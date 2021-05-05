@@ -35,7 +35,7 @@ Function Checklist
 - current long/short strength 
 '''
 '''
-Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
+Inputs: dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50
 Outputs: weight, live_signal
 '''
 

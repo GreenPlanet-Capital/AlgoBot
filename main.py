@@ -33,11 +33,13 @@ from IndicatorClasses.MomentumOscillatorReversal import MomentumOscillatorRevers
 from IndicatorClasses.MoneyFlowReversal import MoneyFlowReversal
 from IndicatorClasses.MovingAverageConvergenceDivergence import MovingAverageConvergenceDivergence
 from IndicatorClasses.OnBalanceVolume import OnBalanceVolume
+from IndicatorClasses.PivotPoint import PivotPoint
+from IndicatorClasses.PriceVolumeTrend import PriceVolumeTrend
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = OnBalanceVolume(dataframe_input = stock_data.df, lookback_period = 5)
+obj = PriceVolumeTrend(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

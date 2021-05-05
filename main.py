@@ -35,11 +35,13 @@ from IndicatorClasses.MovingAverageConvergenceDivergence import MovingAverageCon
 from IndicatorClasses.OnBalanceVolume import OnBalanceVolume
 from IndicatorClasses.PivotPoint import PivotPoint
 from IndicatorClasses.PriceVolumeTrend import PriceVolumeTrend
+from IndicatorClasses.PriceVolumeTrendReversal import PriceVolumeTrendReversal
+from IndicatorClasses.RateOfChange import RateOfChange
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = PriceVolumeTrend(dataframe_input = stock_data.df, lookback_period = 5)
+obj = RateOfChange(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

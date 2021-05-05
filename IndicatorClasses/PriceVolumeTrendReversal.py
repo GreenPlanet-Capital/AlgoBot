@@ -2,9 +2,9 @@
 Name: PRICE VOLUME TREND
 
 Naming Convention of DataFrame Columns: 
-    Indicator Generated DataFrame head: OSC PRIC VOL + lookback_period
-    Signal Generated DataFrame head: OSC PRIC VOL SIGNAL + lookback_period
-    Signum Generated DataFrame head: OSC PRIC VOL SIGNUM + lookback_period
+    Indicator Generated DataFrame head: PRICE VOL + lookback_period
+    Signal Generated DataFrame head: PRICE VOL REVERSAL SIGNAL + lookback_period
+    Signum Generated DataFrame head: PRICE VOL REVERSAL SIGNUM + lookback_period
 
 Function List:
     indicator_generator
@@ -34,9 +34,10 @@ Function Checklist
 - current long/short strength 
 '''
 '''
-Inputs: dataframe_input, lookback_period, sensitivity = , absolute_sensitivity = 
+Inputs: dataframe_input, lookback_period, sensitivity = 1.2, absolute_sensitivity = 50
 Outputs: weight, live_signal
 '''
+
 import math
 import pandas as pd
 import json 
@@ -51,8 +52,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.text
 
-class PriceVolumeTrend:
-    def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
+class PriceVolumeTrendReversal:
+    def __init__(self, dataframe_input, lookback_period, sensitivity = 1.2, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 
         df_generatedSignal = pd.DataFrame() #Generated from signal_generation
@@ -110,55 +111,26 @@ class PriceVolumeTrend:
 #Signal Generation Dividers
 #######################
 
-    def signal_generation(self, indic_name = 'OSC PRIC VOL'):
-        indic_df = self.df_generatedIndicators 
+    def signal_generation(self, indic_name = 'PRICE VOL'):
+        indic_df = self.df_generatedIndicators
         sensitivity = self.sensitivity
         n = self.lookback_period
         
         df_internal = pd.DataFrame()
         df_internal['DATE'] = indic_df['DATE']
-        
-        indic_list = list(indic_df[indic_name + ' ' + str(n)])
-        indic_list = indic_list[n - 1:]
-        
-        signal_append = 0
-        signal_list = []
-        
-        for i in range(len(indic_list) - 1):
-            if (indic_list[i] > 0 and indic_list[i + 1] <= 0):
-                signal_append = indic_list[i + 1] - indic_list[i]
-            elif (indic_list[i] < 0 and indic_list[i + 1] >= 0):
-                signal_append = indic_list[i + 1] - indic_list[i]
-            else:
-                signal_append = 0
-            signal_list.append(signal_append)
-        
-        a = min(signal_list)
-        b = max(signal_list)
-        b_dash = 100
-        a_dash = -100
-        scaled_signal_list = [None for i in range(n)]
-        for i in signal_list:
-            frac = (i - a)/(b - a)
-            val1 = frac*(b_dash - a_dash)
-            scaled_val = val1 + a_dash
-            scaled_signal_list.append(scaled_val)
-        
         df_out = pd.DataFrame()
         df_out['DATE'] = indic_df['DATE']
-        df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
+        
+        indic_list = list(indic_df[indic_name + ' ' + str(n)])
+        indic_list = indic_list[n:]
         
         #signum truth table construction
-        indic_mean = df_out[indic_name + ' SIGNAL ' + str(n)].mean()
-        absolute_mean = 0
-        indic_std = df_out[indic_name +  ' SIGNAL ' + str(n)].std()
-        absolute_std = 50
+        indic_mean = indic_df[indic_name + ' ' + str(n)].mean()
+        indic_std = indic_df[indic_name +  ' ' + str(n)].std()
         
-        df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] >  (indic_mean + indic_std * sensitivity)
-        df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] <=  (indic_mean - indic_std * sensitivity)
-        df_internal['ABSOLUTE ' + indic_name + ' SIGNUM BUY ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] >  (absolute_mean + (absolute_std * sensitivity))
-        df_internal['ABSOLUTE ' + indic_name + ' SIGNUM SELL ' + str(n)] = df_out[indic_name + ' SIGNAL ' + str(n)] <=  (absolute_mean - (absolute_std * sensitivity))
-        
+        df_internal[indic_name + ' SIGNUM BUY ' + str(n)] = indic_df[indic_name + ' ' + str(n)] <  (indic_mean + (indic_std * sensitivity))
+        df_internal[indic_name + ' SIGNUM SELL ' + str(n)] = indic_df[indic_name + ' ' + str(n)] >=  (indic_mean - (indic_std * sensitivity))
+
         #indicator signum
         long = list(df_internal[indic_name + ' SIGNUM BUY ' + str(n)])
         short = list(df_internal[indic_name + ' SIGNUM SELL ' + str(n)])
@@ -174,24 +146,7 @@ class PriceVolumeTrend:
                 append_val = 0 
             indic_out.append(append_val)
             
-        df_out[indic_name + ' SIGNUM ' + str(n)] = indic_out
-        
-        #absolute signum
-        abs_long = list(df_internal['ABSOLUTE ' + indic_name + ' SIGNUM BUY ' + str(n)])
-        abs_short = list(df_internal['ABSOLUTE ' + indic_name + ' SIGNUM SELL ' + str(n)])
-        
-        abs_out = [] 
-        for i in range(len(long)):
-            append_val = 0
-            if (abs_long[i] == True and abs_short[i] == False):
-                append_val = 100
-            elif (abs_long[i] == False and abs_short[i] == True):
-                append_val = -100
-            else:
-                append_val = 0 
-            abs_out.append(append_val)
-        
-        df_out['ABSOLUTE ' + indic_name + ' SIGNUM ' + str(n)] = abs_out
+        df_out[indic_name + ' REVERSAL SIGNUM ' + str(n)] = indic_out
         
         self.df_generatedSignal = df_out
 
@@ -199,7 +154,7 @@ class PriceVolumeTrend:
 #Train Test Function
 #######################
 
-    def train_test(self, indic_name = 'OSC PRIC VOL', stop_percent = 0.05):
+    def train_test(self, indic_name = 'PRICE VOL REVERSAL', stop_percent = 0.05):
         df = self.dataframe_input
         signal_df = self.df_generatedSignal
         n = self.lookback_period
@@ -353,7 +308,7 @@ class PriceVolumeTrend:
 #######################
 
     def live_signal(self, live_lookback = 1):
-        indic_name = 'OSC PRIC VOL'
+        indic_name = 'PRICE VOL REVERSAL'
         mid_string = 'SIGNUM'
         n = self.lookback_period
         col_head = indic_name + ' ' + mid_string + ' ' + str(n)

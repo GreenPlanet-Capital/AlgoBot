@@ -32,11 +32,12 @@ from IndicatorClasses.MomentumOscillator import MomentumOscillator
 from IndicatorClasses.MomentumOscillatorReversal import MomentumOscillatorReversal
 from IndicatorClasses.MoneyFlowReversal import MoneyFlowReversal
 from IndicatorClasses.MovingAverageConvergenceDivergence import MovingAverageConvergenceDivergence
+from IndicatorClasses.OnBalanceVolume import OnBalanceVolume
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = MovingAverageConvergenceDivergence(dataframe_input = stock_data.df, lookback_period = 5)
+obj = OnBalanceVolume(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

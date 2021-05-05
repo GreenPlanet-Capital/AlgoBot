@@ -40,11 +40,13 @@ from IndicatorClasses.RateOfChange import RateOfChange
 from IndicatorClasses.RelativeStrengthIndex import RelativeStrengthIndex
 from IndicatorClasses.SimpleMovingAverageOscillator import SimpleMovingAverageOscillator
 from IndicatorClasses.SMIErgodic import SMIErgodic
+from IndicatorClasses.StochasticOscillator import StochasticOscillator
+from IndicatorClasses.WeightedMovingAverage import WeightedMovingAverage
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = SMIErgodic(dataframe_input = stock_data.df, lookback_period = 5)
+obj = StochasticOscillator(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

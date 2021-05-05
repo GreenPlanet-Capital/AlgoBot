@@ -175,7 +175,7 @@ class TrueStrengthIndicator:
         
         df_out['ABSOLUTE ' + indic_name + ' SIGNUM ' + str(n)] = abs_out
         
-        self.df_generatedIndicators = df_out
+        self.df_generatedSignal = df_out
 
 #######################
 #Train Test Function

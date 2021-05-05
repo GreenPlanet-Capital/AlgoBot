@@ -353,6 +353,7 @@ class SimpleMovingAverageOscillator:
         self.df_trainTest = df_internal
 
         return return_potential_ratio
+
 #######################
 #Live Signal Generation Function
 #######################

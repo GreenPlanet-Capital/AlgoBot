@@ -39,11 +39,12 @@ from IndicatorClasses.PriceVolumeTrendReversal import PriceVolumeTrendReversal
 from IndicatorClasses.RateOfChange import RateOfChange
 from IndicatorClasses.RelativeStrengthIndex import RelativeStrengthIndex
 from IndicatorClasses.SimpleMovingAverageOscillator import SimpleMovingAverageOscillator
+from IndicatorClasses.SMIErgodic import SMIErgodic
 
 stock_data = SingleStockData(4,True, 200)
 stock_data.generate_dataframe()
 
-obj = SimpleMovingAverageOscillator(dataframe_input = stock_data.df, lookback_period = 5)
+obj = SMIErgodic(dataframe_input = stock_data.df, lookback_period = 5)
 x,y = obj.run(3)
 print(x)
 print(y)

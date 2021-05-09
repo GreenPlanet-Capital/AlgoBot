@@ -502,7 +502,7 @@ class Engine1:
             tsi_weight * tsi_weightedSignal + 
             vol_osc_weight * vol_osc_weightedSignal + 
             vor_osc_weight * vor_osc_weightedSignal + 
-            will_r_weight * will_r_weightedSignal + 
+            will_r_weight * will_r_weightedSignal 
         )
 
         return final_reading
@@ -534,5 +534,6 @@ class Engine1:
         :returns:
         """
         # Generate the dictionary based on order of precendence
+        pass
         
      

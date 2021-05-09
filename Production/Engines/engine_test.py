@@ -163,17 +163,178 @@ class Engine1:
         con_rsi_weightedSignal = generate_weightedList(con_rsi_liveSignal_list)
         con_rsi_weight = weight_adjust(con_rsi_weight)
 
-        acc_dist = AccumulationDistribution(dataframe_input = df_input, lookback_period = lookback)
-        acc_dist_weight, acc_dist_liveSignal_list = acc_dist.run(reading_lookback)
-        acc_dist_weightedSignal = generate_weightedList(acc_dist_liveSignal_list)
-        acc_dist_weight = weight_adjust(acc_dist_weight)
+        cop_cur = CoppockCurve(dataframe_input = df_input, lookback_period = lookback)
+        cop_cur_weight, cop_cur_liveSignal_list = cop_cur.run(reading_lookback)
+        cop_cur_weightedSignal = generate_weightedList(cop_cur_liveSignal_list)
+        cop_cur_weight = weight_adjust(cop_cur_weight)
 
-        acc_dist = AccumulationDistribution(dataframe_input = df_input, lookback_period = lookback)
-        acc_dist_weight, acc_dist_liveSignal_list = acc_dist.run(reading_lookback)
-        acc_dist_weightedSignal = generate_weightedList(acc_dist_liveSignal_list)
-        acc_dist_weight = weight_adjust(acc_dist_weight)
+        dir_mov = DirectionalMovement(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        dir_mov_weight, _liveSignal_list = dir_mov.run(reading_lookback)
+        dir_mov_weightedSignal = generate_weightedList(dir_mov_liveSignal_list)
+        dir_mov_weight = weight_adjust(dir_mov_weight)
+
+        donch = DonchianChannels(dataframe_input = df_input, lookback_period = lookback)
+        donch_weight, donch_liveSignal_list = donch.run(reading_lookback)
+        donch_weightedSignal = generate_weightedList(donch_liveSignal_list)
+        donch_weight = weight_adjust(donch_weight)
+
+        el_force = EldersForce(dataframe_input = df_input, lookback_period = lookback)
+        el_force_weight, el_force_liveSignal_list = el_force.run(reading_lookback)
+        el_force_weightedSignal = generate_weightedList(el_force_liveSignal_list)
+        el_force_weight = weight_adjust(el_force_weight)
+
+        env_ema = EnvelopeEMA(dataframe_input = df_input, lookback_period = lookback)
+        env_ema_weight, _liveSignal_list = env_ema.run(reading_lookback)
+        env_ema_weightedSignal = generate_weightedList(env_ema_liveSignal_list)
+        env_ema_weight = weight_adjust(env_ema_weight)
+
+        env_sma = EnvelopeSMA(dataframe_input = df_input, lookback_period = lookback)
+        env_sma_weight, env_sma_liveSignal_list = env_sma.run(reading_lookback)
+        env_sma_weightedSignal = generate_weightedList(env_sma_liveSignal_list)
+        env_sma_weight = weight_adjust(env_sma_weight)
+
+        ema = ExponentialMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        ema_weight, ema_liveSignal_list = ema.run(reading_lookback)
+        ema_weightedSignal = generate_weightedList(ema_liveSignal_list)
+        ema_weight = weight_adjust(ema_weight)
+
+        sma = SimpleMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        sma_weight, sma_liveSignal_list = sma.run(reading_lookback)
+        sma_weightedSignal = generate_weightedList(sma_liveSignal_list)
+        sma_weight = weight_adjust(sma_weight)
+
+        fish_transform = FisherTransform(dataframe_input = df_input, lookback_period = lookback)
+        fish_transform_weight, fish_transform_liveSignal_list = fish_transform.run(reading_lookback)
+        fish_transform_weightedSignal = generate_weightedList(fish_transform_liveSignal_list)
+        fish_transform_weight = weight_adjust(fish_transform_weight)
+
+        fish_trans_rev = FisherTransformReversal(dataframe_input = df_input, lookback_period = lookback)
+        fish_trans_rev_weight, fish_trans_rev_liveSignal_list = fish_trans_rev.run(reading_lookback)
+        fish_trans_rev_weightedSignal = generate_weightedList(fish_trans_rev_liveSignal_list)
+        fish_trans_rev_weight = weight_adjust(fish_trans_rev_weight)
+
+        mcg_dyn = McGinleyDynamic(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        mcg_dyn_weight, mcg_dyn_liveSignal_list = mcg_dyn.run(reading_lookback)
+        mcg_dyn_weightedSignal = generate_weightedList(mcg_dyn_liveSignal_list)
+        mcg_dyn_weight = weight_adjust(mcg_dyn_weight)
+
+        kelt_chnl = KeltnerChannel(dataframe_input = df_input, lookback_period = lookback)
+        kelt_chnl_weight, kelt_chnl_liveSignal_list = kelt_chnl.run(reading_lookback)
+        kelt_chnl_weightedSignal = generate_weightedList(kelt_chnl_liveSignal_list)
+        kelt_chnl_weight = weight_adjust(kelt_chnl_weight)
+
+        lin_reg = LinearRegression(dataframe_input = df_input, lookback_period = lookback)
+        lin_reg_weight, lin_reg_liveSignal_list = lin_reg.run(reading_lookback)
+        lin_reg_weightedSignal = generate_weightedList(lin_reg_liveSignal_list)
+        lin_reg_weight = weight_adjust(lin_reg_weight)
+
+        mass = MassIndex(dataframe_input = df_input, lookback_period = lookback)
+        mass_weight, mass_liveSignal_list = mass.run(reading_lookback)
+        mass_weightedSignal = generate_weightedList(mass_liveSignal_list)
+        mass_weight = weight_adjust(mass_weight)
+
+        mom_osc = MomentumOscillator(dataframe_input = df_input, lookback_period = lookback)
+        mom_osc_weight, mom_osc_liveSignal_list = mom_osc.run(reading_lookback)
+        mom_osc_weightedSignal = generate_weightedList(mom_osc_liveSignal_list)
+        mom_osc_weight = weight_adjust(mom_osc_weight)
+
+        mom_osc_rev = MomentumOscillatorReversal(dataframe_input = df_input, lookback_period = lookback)
+        mom_osc_rev_weight, mom_osc_rev_liveSignal_list = mom_osc_rev.run(reading_lookback)
+        mom_osc_rev_weightedSignal = generate_weightedList(mom_osc_rev_liveSignal_list)
+        mom_osc_rev_weight = weight_adjust(mom_osc_rev_weight)
+
+        mon_flo = MoneyFlowReversal(dataframe_input = df_input, lookback_period = lookback)
+        mon_flo_weight, mon_flo_liveSignal_list = mon_flo.run(reading_lookback)
+        mon_flo_weightedSignal = generate_weightedList(mon_flo_liveSignal_list)
+        mon_flo_weight = weight_adjust(mon_flo_weight)
+
+        macd = MovingAverageConvergenceDivergence(dataframe_input = df_input, lookback_period = lookback)
+        macd_weight, macd_liveSignal_list = macd.run(reading_lookback)
+        macd_weightedSignal = generate_weightedList(macd_liveSignal_list)
+        macd_weight = weight_adjust(macd_weight)
+
+        obv = OnBalanceVolume(dataframe_input = df_input, lookback_period = lookback)
+        obv_weight, obv_liveSignal_list = obv.run(reading_lookback)
+        obv_weightedSignal = generate_weightedList(obv_liveSignal_list)
+        obv_weight = weight_adjust(_weight)
+
+        pvt_pnt = PivotPoint(dataframe_input = df_input, lookback_period = lookback)
+        pvt_pnt_weight, pvt_pnt_liveSignal_list = pvt_pnt.run(reading_lookback)
+        pvt_pnt_weightedSignal = generate_weightedList(pvt_pnt_liveSignal_list)
+        pvt_pnt_weight = weight_adjust(pvt_pnt_weight)
+
+        pvt = PriceVolumeTrend(dataframe_input = df_input, lookback_period = lookback)
+        pvt_weight, pvt_liveSignal_list = pvt.run(reading_lookback)
+        pvt_weightedSignal = generate_weightedList(pvt_liveSignal_list)
+        pvt_weight = weight_adjust(pvt_weight)
+
+        pvt_rev = PriceVolumeTrendReversal(dataframe_input = df_input, lookback_period = lookback)
+        pvt_rev_weight, _liveSignal_list = pvt_rev.run(reading_lookback)
+        pvt_rev_weightedSignal = generate_weightedList(pvt_rev_liveSignal_list)
+        pvt_rev_weight = weight_adjust(pvt_rev_weight)
+
+        roc = RateOfChange(dataframe_input = df_input, lookback_period = lookback)
+        roc_weight, _liveSignal_list = roc.run(reading_lookback)
+        roc_weightedSignal = generate_weightedList(roc_liveSignal_list)
+        roc_weight = weight_adjust(roc_weight)
+
+        rsi = RelativeStrengthIndex(dataframe_input = df_input, lookback_period = lookback)
+        rsi_weight, rsi_liveSignal_list = rsi.run(reading_lookback)
+        rsi_weightedSignal = generate_weightedList(rsi_liveSignal_list)
+        rsi_weight = weight_adjust(rsi_weight)
+
+        sma_osc = SimpleMovingAverageOscillator(dataframe_input = df_input, lookback_period = lookback)
+        sma_osc_weight, sma_osc_liveSignal_list = sma_osc.run(reading_lookback)
+        sma_osc_weightedSignal = generate_weightedList(sma_osc_liveSignal_list)
+        sma_osc_weight = weight_adjust(sma_osc_weight)
+
+        smi_erg = SMIErgodic(dataframe_input = df_input, lookback_period = lookback)
+        smi_erg_weight, smi_erg_liveSignal_list = smi_erg.run(reading_lookback)
+        smi_erg_weightedSignal = generate_weightedList(smi_erg_liveSignal_list)
+        smi_erg_weight = weight_adjust(smi_erg_weight)
+
+        stoch_osc = StochasticOscillator(dataframe_input = df_input, lookback_period = lookback)
+        stoch_osc_weight, stoch_osc_liveSignal_list = stoch_osc.run(reading_lookback)
+        stoch_osc_weightedSignal = generate_weightedList(stoch_osc_liveSignal_list)
+        stoch_osc_weight = weight_adjust(stoch_osc_weight)
+
+        stoch_osc_rev = StochasticOscillatorReversal(dataframe_input = df_input, lookback_period = lookback)
+        stoch_osc_rev_weight, stoch_osc_rev_liveSignal_list = stoch_osc_rev.run(reading_lookback)
+        stoch_osc_rev_weightedSignal = generate_weightedList(stoch_osc_rev_liveSignal_list)
+        stoch_osc_rev_weight = weight_adjust(stoch_osc_rev_weight)
+
+        wma = WeightedMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2= lookback + 3)
+        wma_weight, wma_liveSignal_list = wma.run(reading_lookback)
+        wma_weightedSignal = generate_weightedList(wma_liveSignal_list)
+        wma_weight = weight_adjust(wma_weight)
+
+        trix = TRIX(dataframe_input = df_input, lookback_period = lookback)
+        trix_weight, trix_liveSignal_list = trix.run(reading_lookback)
+        trix_weightedSignal = generate_weightedList(trix_liveSignal_list)
+        trix_weight = weight_adjust(trix_weight)
+
+        tsi = TrueStrengthIndicator(dataframe_input = df_input, lookback_period = lookback)
+        tsi_weight, tsi_liveSignal_list = tsi.run(reading_lookback)
+        tsi_weightedSignal = generate_weightedList(tsi_liveSignal_list)
+        tsi_weight = weight_adjust(tsi_weight)
+
+        vol_osc = VolumeOscillator(dataframe_input = df_input, lookback_period = lookback)
+        _weight, _liveSignal_list = .run(reading_lookback)
+        _weightedSignal = generate_weightedList(_liveSignal_list)
+        _weight = weight_adjust(_weight)
+
+        vor_osc = VortexOscillator(dataframe_input = df_input, lookback_period = lookback)
+        vor_osc_weight, vor_osc_liveSignal_list = vor_osc.run(reading_lookback)
+        vor_osc_weightedSignal = generate_weightedList(vor_osc_liveSignal_list)
+        vor_osc_weight = weight_adjust(vor_osc_weight)
+
+        will_r = WilliamsPercentR(dataframe_input = df_input, lookback_period = lookback)
+        will_r_weight, will_r_liveSignal_list = will_r.run(reading_lookback)
+        will_r_weightedSignal = generate_weightedList(will_r_liveSignal_list)
+        will_r_weight = weight_adjust(will_r_weight)
 
         
+
 
     def generate_longShortStrength():
     """

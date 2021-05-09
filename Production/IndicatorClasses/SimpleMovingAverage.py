@@ -46,7 +46,7 @@ import matplotlib.text
 
 class SimpleMovingAverage:
 
-    def __init__(self, dataframe_input, lookback_period, sensitivity = 1, absolute_sensitivity = 50):
+    def __init__(self, dataframe_input, lookback_period1, lookback_period2, sensitivity = 1, absolute_sensitivity = 50):
         df_generatedIndicators = pd.DataFrame() #Generated from indicator_generator
 
         df_generatedSignal = pd.DataFrame() #Generated from signal_generation
@@ -56,7 +56,8 @@ class SimpleMovingAverage:
         return_potential_ratio = 0
 
         self.dataframe_input = dataframe_input
-        self.lookback_period = lookback_period
+        self.lookback_period1 = lookback_period1
+        self.lookback_period2 = lookback_period2
         self.sensitivity = sensitivity
         self.absolute_sensitivity = absolute_sensitivity
 

@@ -51,9 +51,7 @@ from IndicatorClasses.VortexOscillator import VortexOscillator
 from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
-from Engines.engine_test import run
 
-run()
 # stock_data = SingleStockData(5,False)
 # stock_data.generate_dataframe()
 

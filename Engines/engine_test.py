@@ -52,13 +52,13 @@ from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
 
-# stock_data = SingleStockData(5,False)
-# stock_data.generate_dataframe()
+stock_data = SingleStockData(5,False)
+stock_data.generate_dataframe()
 
-# obj = TradingRange(dataframe_input = stock_data.df, lookback_period = 100)
-# x = obj.run(20)
-# print(x)
-bynd = yf.Ticker("XRP-USD")
+obj = TradingRange(dataframe_input = stock_data.df, lookback_period = 100)
+x = obj.run(20)
+print(x)
+# bynd = yf.Ticker("XRP-USD")
 
-hist = bynd.history(period = '1d', interval="1m")
-print(hist)
+# hist = bynd.history(period = '1d', interval="1m")
+# print(hist)

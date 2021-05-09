@@ -51,14 +51,15 @@ from IndicatorClasses.VortexOscillator import VortexOscillator
 from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
+from Engines.engine_test import run
 
-def run():
-    stock_data = SingleStockData(5,False)
-    stock_data.generate_dataframe()
+run()
+# stock_data = SingleStockData(5,False)
+# stock_data.generate_dataframe()
 
-    obj = TradingRange(dataframe_input = stock_data.df, lookback_period = 100)
-    x = obj.run(20)
-    print(x)
+# obj = TradingRange(dataframe_input = stock_data.df, lookback_period = 100)
+# x = obj.run(20)
+# print(x)
 # bynd = yf.Ticker("XRP-USD")
 
 # hist = bynd.history(period = '1d', interval="1m")

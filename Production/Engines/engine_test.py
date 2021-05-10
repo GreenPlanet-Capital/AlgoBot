@@ -80,8 +80,8 @@ class Engine1:
         :returns: a list of lookbacks
         """
         # Generate the array of lookback Periods that we use based on the base lookback
-        for i in range(width):
-            yield (base_lookback + i + 1)
+        for i in range(width + 1):
+            yield (base_lookback + i)
 
 
     def generate_weightedList(self, input_list):

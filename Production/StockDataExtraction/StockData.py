@@ -102,7 +102,7 @@ class BasketStockData:
 def main():
     stock_data = BasketStockData(True)
     x = stock_data.generate_dict(['AAPL', 'MSFT'])
-    print(x['MSFT'])
+    print(x['MSFT']['OPEN'])
 
 if __name__ == '__main__':
     main()

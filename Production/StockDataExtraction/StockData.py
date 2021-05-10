@@ -6,6 +6,7 @@
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
+import yfinance as yf
 
 class SingleStockData:
     def __init__(self,sheet_number = 0,require_small_data = True, back_limit = 100):
@@ -71,12 +72,42 @@ class SingleStockData:
         self.df['CLOSE'] = self.df['CLOSE'].astype(float)
         self.df['VOLUME'] = self.df['VOLUME'].astype(float)
 
+class BasketStockData:
+    def __init__(self,require_small_data = True, back_limit = 100):
+        self.back_limit = back_limit
+        self.require_small_data = require_small_data
+        self.out_dict = {}
+
+    def generate_dict(self, list_of_tickers):
+        for i in list_of_tickers:
+            yf_obj = yf.Ticker(i)
+            df1 = yf_obj.history(period = 'max', interval="1d")
+
+            df_out = pd.DataFrame()
+            df_out['OPEN'] = df1['Open']
+            df_out['HIGH'] = df1['High']
+            df_out['LOW'] = df1['Low']
+            df_out['CLOSE'] = df1['Close']
+            df_out['VOLUME'] = df1['Volume']
+
+            if (self.require_small_data):
+                df_out = df_out.iloc[-self.back_limit:]
+            
+            self.out_dict[i] = df_out
+        return self.out_dict
+
+    def __str__():
+        return (self.out_dict.to_string())
+
 def main():
-    stock_data = SingleStockData(0,True)
-    stock_data.generate_dataframe()
-    print(stock_data.df)
+    stock_data = BasketStockData(True)
+    x = stock_data.generate_dict(['AAPL', 'MSFT'])
+    print(x['MSFT'])
 
 if __name__ == '__main__':
     main()
+
+
+
 
 

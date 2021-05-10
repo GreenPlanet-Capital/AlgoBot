@@ -35,7 +35,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -68,7 +67,6 @@ class BalanceOfPower:
         df = self.dataframe_input
         
         df_indicators = pd.DataFrame()
-        df_indicators['DATE'] = df['DATE']
         df_indicators['BOP'] =  (df['CLOSE'] - df['OPEN'])/(df['HIGH'] - df['LOW'])  
 
         self.df_generatedIndicators = df_indicators
@@ -98,7 +96,6 @@ class BalanceOfPower:
                 out_list.append(0)
                 
         df_out = pd.DataFrame()
-        df_out['DATE'] = df['DATE']
         df_out['BOP SIGNAL'] = out_list
         self.df_generatedSignal = df_out
 #######################

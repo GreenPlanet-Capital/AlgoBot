@@ -39,7 +39,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -78,9 +77,7 @@ class EnvelopeEMA:
         df['TYP PRICE'] =  (df['CLOSE'] +  df['LOW'] +  df['HIGH'] +  df['OPEN'])/4
         
         df_indicators = pd.DataFrame()
-        
-        df_indicators['DATE'] = df['DATE']
-        
+                
         temp_list = [None for i in range(len(df))]
         indic_columnhead = 'ENVEMA ' + str(n) + ' ' + str(m)
         df_indicators[indic_columnhead] = temp_list
@@ -189,7 +186,6 @@ class EnvelopeEMA:
             scaled_interest_list_out.append(scaled_val)
             
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out['ENVEMA SIGNAL ' + str(n) + ' ' + str(m)] = scaled_interest_list_out
         
         #signum truth table construction

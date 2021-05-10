@@ -36,7 +36,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -72,7 +71,6 @@ class OnBalanceVolume:
         n = self.lookback_period
         
         df_indicators = pd.DataFrame()
-        df_indicators['DATE'] =  df['DATE'] 
         obv = []
         
         df_shifted = df.shift(1)
@@ -101,7 +99,6 @@ class OnBalanceVolume:
         n = self.lookback_period
         
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n - 1:]
@@ -130,7 +127,6 @@ class OnBalanceVolume:
             scaled_signal_list.append(scaled_val)
         
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
         
         #signum truth table construction

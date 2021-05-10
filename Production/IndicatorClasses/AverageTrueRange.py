@@ -38,7 +38,6 @@ Outputs: live_signal (scaled)
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -68,9 +67,7 @@ class AverageTrueRange:
         n = self.lookback_period
         
         df_indicators = pd.DataFrame()
-        
-        df_indicators['DATE'] = df['DATE']
-        
+                
         temp_list = [None for i in range(len(df))]
         indic_columnhead = 'ATR ' + str(n)
         df_indicators[indic_columnhead] = temp_list
@@ -118,7 +115,6 @@ class AverageTrueRange:
         indic_df = self.df_generatedIndicators
     
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n:]

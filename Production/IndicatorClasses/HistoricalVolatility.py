@@ -26,7 +26,6 @@ Outputs: value of hist_volatility
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -50,7 +49,6 @@ class HistoricalVolatility:
         df = self.dataframe_input
         
         df_indicators = pd.DataFrame()
-        df_indicators['DATE'] = df['DATE']
         df_indicators['TYP PRICE'] =  (df['CLOSE'] + df['OPEN'] + df['HIGH'] + df['LOW'])/4
         hist_vol = df_indicators['TYP PRICE'].std()
 

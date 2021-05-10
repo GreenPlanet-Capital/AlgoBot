@@ -41,7 +41,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -77,7 +76,6 @@ class KeltnerChannel:
         n = self.lookback_period
 
         df_indicators = pd.DataFrame()
-        df_indicators['DATE'] = df['DATE']
         
         def atr(dataframe_input, lookback_period):
             df = dataframe_input
@@ -233,7 +231,6 @@ class KeltnerChannel:
             scaled_interest_list_out.append(scaled_val)
             
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out['KELT SIGNAL ' + str(n)] = scaled_interest_list_out
         
         

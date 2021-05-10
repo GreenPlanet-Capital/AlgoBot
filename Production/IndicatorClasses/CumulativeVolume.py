@@ -43,7 +43,6 @@ Outputs: live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -73,8 +72,6 @@ class CumulativeVolume:
         n = self.lookback_period
         
         df_indicators = pd.DataFrame()
-        
-        df_indicators['DATE'] = df['DATE']
         
         temp_list = [None for i in range(len(df))]
         indic_columnhead = 'CUMULATIVE VOLUME ' + str(n)
@@ -106,7 +103,6 @@ class CumulativeVolume:
         n = self.lookback_period
         indic_df = self.df_generatedIndicators
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n:]

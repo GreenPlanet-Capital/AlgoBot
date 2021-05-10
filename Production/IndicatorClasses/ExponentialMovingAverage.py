@@ -34,7 +34,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -75,8 +74,6 @@ class ExponentialMovingAverage:
             
             df_indicators = pd.DataFrame()
             
-            df_indicators['DATE'] = df['DATE']
-            
             temp_list = [None for i in range(len(df))]
             indic_columnhead = 'EMA ' + str(lookback_period)
             df_indicators[indic_columnhead] = temp_list
@@ -116,8 +113,7 @@ class ExponentialMovingAverage:
         shorterterm_df = ema(df, short_lookback)
         longerterm_df = ema(df, long_lookback)
         shortindic_name = 'EMA'
-        longindic_name = 'EMA'
-        osc_df['DATE'] = shorterterm_df['DATE']        
+        longindic_name = 'EMA'    
         
         short_name = shortindic_name + ' ' + str(short_lookback)
         long_name = longindic_name + ' ' + str(long_lookback)
@@ -144,7 +140,6 @@ class ExponentialMovingAverage:
         indic_df = osc_df
 
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n - 1:]
@@ -173,7 +168,6 @@ class ExponentialMovingAverage:
             scaled_signal_list.append(scaled_val)
         
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
         
         #signum truth table construction

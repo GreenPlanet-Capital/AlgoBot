@@ -38,7 +38,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -78,8 +77,6 @@ class WeightedMovingAverage:
             df['TYP PRICE'] =  (df['CLOSE'] +  df['LOW'] +  df['HIGH'] +  df['OPEN'])/4
             
             df_indicators = pd.DataFrame()
-            
-            df_indicators['DATE'] = df['DATE']
             
             temp_list = [None for i in range(len(df))]
             indic_columnhead = 'WMA ' + str(lookback_period)
@@ -122,8 +119,7 @@ class WeightedMovingAverage:
         shorterterm_df = wma(df, short_lookback)
         longerterm_df = wma(df, long_lookback)
         shortindic_name = 'WMA'
-        longindic_name = 'WMA'
-        osc_df['DATE'] = shorterterm_df['DATE']        
+        longindic_name = 'WMA'     
         
         short_name = shortindic_name + ' ' + str(short_lookback)
         long_name = longindic_name + ' ' + str(long_lookback)
@@ -149,7 +145,6 @@ class WeightedMovingAverage:
         indic_df = osc_df
         
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n - 1:]
@@ -178,7 +173,6 @@ class WeightedMovingAverage:
             scaled_signal_list.append(scaled_val)
         
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
         
         #signum truth table construction

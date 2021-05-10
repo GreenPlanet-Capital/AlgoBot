@@ -35,7 +35,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -71,7 +70,6 @@ class VolumeOscillator:
         n = self.lookback_period
     
         df_indicators = pd.DataFrame()
-        df_indicators['DATE'] =  df['DATE'] 
         df_indicators['VOLUME'] =  df['VOLUME']  
         df_indicators['VOLUMESMA ' + str(n)] = df_indicators['VOLUME'].rolling(n).mean()
         df_indicators['VOLUMESMA ' + str(2*n)] = df_indicators['VOLUME'].rolling(2*n).mean()
@@ -89,7 +87,6 @@ class VolumeOscillator:
         n = self.lookback_period
         
         df_internal = pd.DataFrame()
-        df_internal['DATE'] = indic_df['DATE']
         
         indic_list = list(indic_df[indic_name + ' ' + str(n)])
         indic_list = indic_list[n - 1:]
@@ -118,7 +115,6 @@ class VolumeOscillator:
             scaled_signal_list.append(scaled_val)
         
         df_out = pd.DataFrame()
-        df_out['DATE'] = indic_df['DATE']
         df_out[indic_name + ' SIGNAL' + ' ' + str(n)] = scaled_signal_list
         
         #signum truth table construction

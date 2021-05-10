@@ -36,7 +36,6 @@ Outputs: weight, live_signal
 import math
 import pandas as pd
 import json 
-import datetime
 import numpy as np
 import sys
 import oauth2client
@@ -85,9 +84,7 @@ class Aroon:
         n = self.lookback_period
         
         df_indicators = pd.DataFrame()
-        
-        df_indicators['DATE'] = df['DATE']
-        
+                
         temp_list = [None for i in range(len(df))]
         indic_columnhead1 = 'AROONUP ' + str(n)
         indic_columnhead2 = 'AROONDOWN ' + str(n)
@@ -131,7 +128,6 @@ class Aroon:
         n = self.lookback_period
         
         df_signal = pd.DataFrame()
-        df_signal['DATE'] = df['DATE']
         
         df_signal['UP SHORT'] = (df['AROONUP ' + str(n)] == df['AROONUP ' + str(n)].max())
         df_signal['UP LONG'] = (df['AROONUP ' + str(n)] == df['AROONUP ' + str(n)].min())
@@ -168,7 +164,6 @@ class Aroon:
         df_signal['AROON SIGNAL ' + str(n)] = out
         
         df_out = pd.DataFrame()
-        df_out['DATE'] = df_signal['DATE']
         df_out['AROON SIGNAL ' + str(n)] = df_signal['AROON SIGNAL ' + str(n)]
         self.df_generatedSignal = df_out
         

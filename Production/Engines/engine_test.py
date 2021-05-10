@@ -530,6 +530,7 @@ class Engine1:
         """
         # Generate the dictionary based on order of precendence
         
+        num = self.number_of_readings
         in_dict = self.dict_of_dataframes
         num = self.number_of_readings
         generated_dict = {}
@@ -537,11 +538,23 @@ class Engine1:
         for ticker, data in in_dict.items():
             generated_dict[ticker] = self.generate_longShortStrength(data)
 
+        copy_dict_list = generated_dict.items()
 
-        sorted_dictionary = sorted(generated_dict.items(), key = lambda kv: kv[1])
+        copy_dict = {}
+        for ticker, data in copy_dict_list:
+            copy_dict[ticker] = abs(data)
+
+        sorted_dictionary = sorted(copy_dict.items(), key = lambda kv: kv[1])
         sorted_dict = dict(sorted_dictionary)
 
-        return sorted_dict
+        ticker_list = [i for i in sorted_dict] 
+
+        out_dict = {}
+        for i in reversed(ticker_list[-num:]):
+            out_dict[i] = generated_dict[i]
+
+        return out_dict
+
 
 
 

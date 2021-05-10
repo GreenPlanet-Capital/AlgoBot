@@ -51,15 +51,14 @@ from IndicatorClasses.VortexOscillator import VortexOscillator
 from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
+from StockDataExtraction.StockData import BasketStockData
+from Engines.engine_test import Engine1
 
-stock_data = SingleStockData(5,True, 200)
-stock_data.generate_dataframe()
+# stock_data = BasketStockData(True)
+# dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM'])
 
-obj = SimpleMovingAverage(dataframe_input = stock_data.df, lookback_period1 = 5, lookback_period2= 7)
-x,y = obj.run(3)
-print(x)
-print(y)
-# bynd = yf.Ticker("XRP-USD")
+# eng_obj = Engine1(dict_of_dataframes = dict1, base_lookback = 5, width = 1, reading_lookback = 3, number_of_readings = 2)
+# print(eng_obj.generate())
 
-# hist = bynd.history(period = '1d', interval="1m")
-# print(hist)
+msft = yf.Ticker("MSFT")
+print(msft.history(period="1y").head())

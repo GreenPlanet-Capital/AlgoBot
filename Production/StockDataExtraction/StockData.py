@@ -84,6 +84,7 @@ class BasketStockData:
             df1 = yf_obj.history(period = 'max', interval="1d")
 
             df_out = pd.DataFrame()
+            df_out['DATE'] = df1['Date']
             df_out['OPEN'] = df1['Open']
             df_out['HIGH'] = df1['High']
             df_out['LOW'] = df1['Low']

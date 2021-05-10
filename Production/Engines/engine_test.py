@@ -72,7 +72,7 @@ class Engine1:
         self.number_of_readings = number_of_readings
         self.width = width
 
-    def lookback_lexicon(self, base_lookback = self.base_lookback, width = self.width):
+    def lookback_lexicon(self):
         """
         #Generator
         :params: base_lookback: the input that is passed through as lookback into each indicator
@@ -80,6 +80,8 @@ class Engine1:
         :returns: a list of lookbacks
         """
         # Generate the array of lookback Periods that we use based on the base lookback
+        base_lookback = self.base_lookback
+        width = self.width
         for i in range(width + 1):
             yield (base_lookback + i)
 
@@ -521,25 +523,28 @@ class Engine1:
         return strength
         # take the generator of the lookback_lexicon and run it through the long 
     
-    def generate_listOfTickers(in_dict = self.dict_of_dataframes):
+    def generate_listOfTickers(self):
         """
         :params: dictionary_input for the basket of securities
         :returns: the list of tickers used 
         """
         # Generate the list of tickers by extracting from the dictionary that is passed into the function
+        in_dict = self.dict_of_dataframes
         ticker_list = []
         for ticker in in_dict:
             ticker.append(ticker)
         
         return ticker_list
 
-    def generate(self, in_dict = self.dict_of_dataframes, num = self.number_of_readings): 
+    def generate(self): 
         """
         :params: dictionary_input for the basket of securities, 
         :returns: The recommendations for the trained period
         """
         # Generate the dictionary based on order of precendence
         
+        in_dict = self.dict_of_dataframes
+        num = self.number_of_readings
         generated_dict = {}
 
         for ticker, data in in_dict.items():

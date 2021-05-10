@@ -54,10 +54,10 @@ import yfinance as yf
 from StockDataExtraction.StockData import BasketStockData
 from Engines.engine_test import Engine1
 
-stock_data = BasketStockData(True)
-dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM'])
+stock_data = BasketStockData(True, 100)
+dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB', 'GOOGL', 'JNJ', 'DIS', 'CSCO', 'INTC', 'ABT', 'KO', 'ABBV'])
 
-eng_obj = Engine1(dict_of_dataframes = dict1, base_lookback = 5, width = 1, reading_lookback = 3, number_of_readings = 2)
+eng_obj = Engine1(dict_of_dataframes = dict1, base_lookback = 5, reading_lookback = 1, number_of_readings = 2)
 print(eng_obj.generate())
 
 # msft = yf.Ticker("MSFT")

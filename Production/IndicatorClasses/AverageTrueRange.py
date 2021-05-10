@@ -125,10 +125,13 @@ class AverageTrueRange:
         a_dash = 0
         scaled_signal_list = [None for i in range(n)]
         for i in indic_list:
-            frac = (i - a)/(b - a)
-            val1 = frac*(b_dash - a_dash)
-            scaled_val = val1 + a_dash
-            scaled_signal_list.append(scaled_val)
+            try:
+                frac = (i - a)/(b - a)
+                val1 = frac*(b_dash - a_dash)
+                scaled_val = val1 + a_dash
+                scaled_signal_list.append(scaled_val)
+            except:
+                scaled_signal_list.append(0)
         
         df_internal[indic_name + ' SIGNAL ' + str(n)] = scaled_signal_list
         

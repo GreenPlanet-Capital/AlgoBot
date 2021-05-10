@@ -142,10 +142,13 @@ class CommodityChannelIndex:
         a_dash = -100
         scaled_signal_list = [None for i in range(n)]
         for i in signal_list:
-            frac = (i - a)/(b - a)
-            val1 = frac*(b_dash - a_dash)
-            scaled_val = val1 + a_dash
-            scaled_signal_list.append(scaled_val)
+            try: 
+                frac = (i - a)/(b - a)
+                val1 = frac*(b_dash - a_dash)
+                scaled_val = val1 + a_dash
+                scaled_signal_list.append(scaled_val)
+            except:
+                scaled_signal_list.append(0)
         
         df_out = pd.DataFrame()
         df_out[indic_name + ' SIGNAL' + ' ' + str(n) + ' ' + str(m)] = scaled_signal_list

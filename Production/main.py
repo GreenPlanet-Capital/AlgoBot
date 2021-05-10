@@ -60,5 +60,3 @@ dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB
 eng_obj = Engine1(dict_of_dataframes = dict1, base_lookback = 5, reading_lookback = 1, number_of_readings = 4)
 print(eng_obj.generate())
 
-# msft = yf.Ticker("MSFT")
-# print(msft.history(period="1y").head())

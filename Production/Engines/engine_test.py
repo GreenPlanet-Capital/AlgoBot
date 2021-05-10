@@ -140,10 +140,14 @@ class Engine1:
         bol_sma_weight = self.weight_adjust(bol_sma_weight)
 
         #Chaikin Oscillator
-        chaik_osc = ChaikinOscillator(dataframe_input = df_input, lookback_period = lookback)
-        chaik_osc_weight, chaik_osc_liveSignal_list = chaik_osc.run(reading_lookback)
-        chaik_osc_weightedSignal = self.generate_weightedList(chaik_osc_liveSignal_list)
-        chaik_osc_weight = self.weight_adjust(chaik_osc_weight)
+        try:
+            chaik_osc = ChaikinOscillator(dataframe_input = df_input, lookback_period = lookback)
+            chaik_osc_weight, chaik_osc_liveSignal_list = chaik_osc.run(reading_lookback)
+            chaik_osc_weightedSignal = self.generate_weightedList(chaik_osc_liveSignal_list)
+            chaik_osc_weight = self.weight_adjust(chaik_osc_weight)
+        except:
+            chaik_osc_weight = 0
+            chaik_osc_weightedSignal = 0
 
         #Commodity Channel Index 
         cci = CommodityChannelIndex(dataframe_input = df_input, lookback_period = lookback)

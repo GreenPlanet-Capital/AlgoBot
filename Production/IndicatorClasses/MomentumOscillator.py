@@ -124,10 +124,13 @@ class MomentumOscillator:
         a_dash = -100
         scaled_indic_list = []
         for i in indic_list:
-            frac = (i - a)/(b - a)
-            val1 = frac*(b_dash - a_dash)
-            scaled_val = val1 + a_dash
-            scaled_indic_list.append(scaled_val)
+            try: 
+                frac = (i - a)/(b - a)
+                val1 = frac*(b_dash - a_dash)
+                scaled_val = val1 + a_dash
+                scaled_indic_list.append(scaled_val)
+            except:
+                scaled_indic_list.append(0)
         
         signal_append = 0
         signal_list = [None for i in range(n + 1)]

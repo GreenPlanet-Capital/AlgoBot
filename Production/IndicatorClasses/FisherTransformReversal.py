@@ -86,10 +86,12 @@ class FisherTransformReversal:
             current_price = df['TYP PRICE'].iloc[initial_end_ctr]
             
             X = ((current_price - min_price)*2/(max_price - min_price)) - 1
-            frac = abs((1 - X)/(1 + X))
-            transform_val = 0.5*math.log(frac)*100
-            
-            fisher_transform.append(transform_val)
+            try:
+                frac = abs((1 - X)/(1 + X))
+                transform_val = 0.5*math.log(frac)*100
+                fisher_transform.append(transform_val)
+            except:
+                fisher_transform.append(0)
 
             initial_start_ctr += 1
             initial_end_ctr += 1

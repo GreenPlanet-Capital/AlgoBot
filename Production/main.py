@@ -53,13 +53,27 @@ from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
 from StockDataExtraction.StockData import BasketStockData
 from Engines.engine_test import Engine1
+from StockDataExtraction.yfinanceDataPull import extract
+import time
 
-stock_data = BasketStockData(True, 200)
-dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB', 'GOOGL', 'JNJ', 'DIS', 'CSCO', 'INTC', 'ABT', 'KO', 'ABBV'])
+# stock_data = BasketStockData(True, 200)
+# dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB', 'GOOGL', 'JNJ', 'DIS', 'CSCO', 'INTC', 'ABT', 'KO', 'ABBV'])
+def main():
+    list_stok = ['BALRAMCHIN.BO', 'ADANIPOWER.NS', 'ADANIPORTS.NS', 'BIOCON.NS', 'TCS.NS', 'DOGE-INR', 'GODREJCP.NS', 'WIPRO.NS']
+    begin = time.time()
+    x = extract(list_stok)
+    # stock_data = BasketStockData(True, 100)
+    # x = stock_data.generate_dict(['BALRAMCHIN.BO', 'ADANIPOWER.NS', 'ADANIPORTS.NS', 'BIOCON.NS', 'TCS.NS', 'DOGE-INR', 'GODREJCP.NS', 'WIPRO.NS'])
+    end = time.time()
+    print(f"Time taken to extract data: {end - begin}")
 
-eng_obj = Engine1(dict_of_dataframes = dict1, base_lookback = 5, reading_lookback = 3, number_of_readings = 4)
-print(eng_obj.generate())
+    begin1 = time.time()
+    eng_obj = Engine1(dict_of_dataframes = x, base_lookback = 5, reading_lookback = 3, number_of_readings = 8)
+    print(eng_obj.generate())
+    end1 = time.time()
+    print(f"Time taken to compute data: {end1 - begin1}")
 
-# stock_data = BasketStockData(True, 100)
-# dict1 = stock_data.generate_dict(['FB'])
+if __name__ == '__main__':
+    main()
+# ['FB'])
 # print(dict1)

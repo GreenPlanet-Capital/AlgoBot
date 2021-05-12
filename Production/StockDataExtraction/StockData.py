@@ -94,6 +94,7 @@ class BasketStockData:
                 df_out = df_out.iloc[-self.back_limit:]
             
             self.out_dict[i] = df_out
+            print("Done")
         return self.out_dict
 
     def __str__():

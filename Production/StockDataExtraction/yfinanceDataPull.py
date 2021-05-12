@@ -17,7 +17,7 @@ def gen_df(ticker):
     return df_out.iloc[-training_period:]
 
 def retrieve(list_tickers):
-    p = multiprocessing.Pool(processes = len(list_tickers))
+    p = multiprocessing.Pool(processes = 63)
     result = p.map(gen_df, [i for i in list_tickers])
     return result
 

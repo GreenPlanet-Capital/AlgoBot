@@ -105,8 +105,8 @@ class Engine1:
         :params: input_weight: takes in the weight returned by the code and returns 0.01 if it is lower than that value
         :return: either 0.01 or input_weight
         """
-        if (input_weight <= 0.01):
-            return 0.01
+        if (input_weight <= 0.1):
+            return 0.1
         else:
             return input_weight
 
@@ -518,10 +518,12 @@ class Engine1:
         :returns: long/short strength based on the lexicon of the lookback_period
         """
         #strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        range_ticker = TradingRange(df_input, 30)
-        x = range_ticker.run()
+        range_ticker_30 = TradingRange(df_input, 30)
+        x1 = range_ticker_30.run()
+        range_ticker_5 = TradingRange(df_input, 5)
+        x2 = range_ticker_5.run()
         strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        strength = strength*x
+        strength = strength*(x1+x2)
         #strength += self.long_short_singlelexicon(df_input, self.base_lookback - 1)
 
         return strength
@@ -549,8 +551,10 @@ class Engine1:
         
         num = self.number_of_readings
         in_dict = self.dict_of_dataframes
-        num = self.number_of_readings
         generated_dict = {}
+
+        if (num >= len(in_dict)/2):
+            raise TypeError("The number of readings is too high, reduce to less than half the length of the input")
 
         for ticker, data in in_dict.items():
             generated_dict[ticker] = self.generate_longShortStrength(data)
@@ -566,11 +570,26 @@ class Engine1:
 
         ticker_list = [i for i in sorted_dict] 
 
-        out_dict = {}
-        for i in reversed(ticker_list[-num:]):
-            out_dict[i] = generated_dict[i]
+        long_book = {}
+        short_book = {}
+        long_ctr = 0
+        short_ctr = 0
 
-        return out_dict
+        for i in reversed(ticker_list):
+            if (long_ctr >= num):
+                break
+            if (generated_dict[i] > 0):
+                long_book[i] = generated_dict[i]
+                long_ctr += 1
+
+        for i in reversed(ticker_list):
+            if (short_ctr >= num):
+                break
+            if (generated_dict[i] < 0):
+                short_book[i] = generated_dict[i]
+                short_ctr += 1 
+
+        return long_book, short_book
 
 
 

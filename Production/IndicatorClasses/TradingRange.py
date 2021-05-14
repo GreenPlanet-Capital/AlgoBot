@@ -63,7 +63,7 @@ class TradingRange:
         df_highlist = list(df['HIGH'])
         df_lowlist = list(df['LOW'])
 
-        trading_range = max(df_highlist[-n:]) - min(df_lowlist[-n:])
+        trading_range = (max(df_highlist[-n:]) - min(df_lowlist[-n:]))/(df['CLOSE'].iloc[-1])
         self.trading_range = trading_range
 
 #######################

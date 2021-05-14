@@ -68,7 +68,7 @@ def main():
     print(f"Time taken to extract data: {end - begin}")
 
     begin1 = time.time()
-    eng_obj = Engine1(dict_of_dataframes = x, base_lookback = 5, reading_lookback = 3, number_of_readings = 8)
+    eng_obj = Engine1(dict_of_dataframes = x, base_lookback = 5, reading_lookback = 1, number_of_readings = 100)
     print(eng_obj.generate())
     end1 = time.time()
     print(f"Time taken to compute data: {end1 - begin1}")

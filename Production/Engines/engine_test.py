@@ -63,6 +63,17 @@ from IndicatorClasses.VolumeOscillator import VolumeOscillator
 from IndicatorClasses.VortexOscillator import VortexOscillator
 from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
+from numba import float64
+from numba import jit
+from numba.experimental import jitclass
+
+
+class_data = [
+    ('dict_of_dataframes', dict),
+    ('base_lookback', int),
+    ('reading_lookback', int),
+    ('number_of_readings', int),
+]
 
 class Engine1:
     def __init__(self, dict_of_dataframes, base_lookback, reading_lookback, number_of_readings):
@@ -98,7 +109,6 @@ class Engine1:
             return 0.01
         else:
             return input_weight
-
 
     def long_short_singlelexicon(self, df_input, lookback):
         """
@@ -507,9 +517,12 @@ class Engine1:
         :params: df_input is dataframe for a single security with cols - 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOLUME' 
         :returns: long/short strength based on the lexicon of the lookback_period
         """
+        #strength = self.long_short_singlelexicon(df_input, self.base_lookback)
+        range_ticker = TradingRange(df_input, 30)
+        x = range_ticker.run()
         strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        strength += self.long_short_singlelexicon(df_input, self.base_lookback + 1)
-        strength += self.long_short_singlelexicon(df_input, self.base_lookback - 1)
+        strength = strength*x
+        #strength += self.long_short_singlelexicon(df_input, self.base_lookback - 1)
 
         return strength
         # take the generator of the lookback_lexicon and run it through the long 

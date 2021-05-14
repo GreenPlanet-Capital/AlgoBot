@@ -5,7 +5,7 @@ import concurrent.futures
 
 def gen_df(ticker):
     yf_obj = yf.Ticker(ticker)
-    df1 = yf_obj.history(period = 'max', interval="1d")
+    df1 = yf_obj.history(interval="1d", start="2020-04-01", end="2020-12-30")
 
     df_out = pd.DataFrame()
     df_out['OPEN'] = df1['Open']
@@ -17,7 +17,7 @@ def gen_df(ticker):
     return df_out.iloc[-training_period:]
 
 def retrieve(list_tickers):
-    p = multiprocessing.Pool(processes = 63)
+    p = multiprocessing.Pool(processes = len(list_tickers))
     result = p.map(gen_df, [i for i in list_tickers])
     return result
 

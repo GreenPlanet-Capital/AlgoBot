@@ -105,8 +105,8 @@ class Engine1:
         :params: input_weight: takes in the weight returned by the code and returns 0.01 if it is lower than that value
         :return: either 0.01 or input_weight
         """
-        if (input_weight <= 0.1):
-            return 0.1
+        if (input_weight <= 0.02):
+            return 0.02
         else:
             return input_weight
 
@@ -423,50 +423,93 @@ class Engine1:
             vor_osc_weight+ 
             will_r_weight
         )
+        
+        print()
+        print("acc_dist_weight :" + str(acc_dist_weight))
+        print("aroon_weight :" + str(aroon_weight))
+        print("bop_weight :" + str(bop_weight))
+        print("bol_ema_weight :" + str(bol_ema_weight))
+        print("bol_sma_weight :" + str(bol_sma_weight))
+        print("chaik_osc_weight :" + str(chaik_osc_weight))
+        print("cci_weight :" + str(cci_weight))
+        print("con_rsi_weight :" + str(cop_cur_weight))
+        print("dir_mov_weight :" + str(dir_mov_weight))
+        print("donch_weight :" + str(donch_weight))
+        print("el_force_weight :" + str(el_force_weight))
+        print("env_ema_weight :" + str(env_ema_weight))
+        print("env_sma_weight :" + str(env_sma_weight))
+        print("ema_weight :" + str(ema_weight))
+        print("sma_weight :" + str(sma_weight))
+        print("fish_transform_weight :" + str(fish_transform_weight))
+        print("fish_trans_rev_weight :" + str(fish_trans_rev_weight))
+        print("mcg_dyn_weight :" + str(mcg_dyn_weight))
+        print("kelt_chnl_weight :" + str(kelt_chnl_weight))
+        print("lin_reg_weight :" + str(lin_reg_weight))
+        print("mom_osc_weight :" + str(mom_osc_weight))
+        print("mom_osc_rev_weight :" + str(mom_osc_rev_weight))
+        print("mon_flo_weight :" + str(mon_flo_weight))
+        print("macd_weight :" + str(macd_weight))
+        print("obv_weight :" + str(obv_weight))
+        print("pvt_pnt_weight :" + str(pvt_pnt_weight))
+        print("pvt_rev_weight :" + str(pvt_rev_weight))
+        print("pvt_weight :" + str(pvt_weight))
+        print("roc_weight :" + str(roc_weight))
+        print("rsi_weight :" + str(rsi_weight))
+        print("sma_osc_weight :" + str(sma_osc_weight))
+        print("smi_erg_weight :" + str(smi_erg_weight))
+        print("stoch_osc_weight :" + str(stoch_osc_weight))
+        print("stoch_osc_rev_weight :" + str(stoch_osc_rev_weight))
+        print("wma_weight :" + str(wma_weight))
+        print("trix_weight :" + str(trix_weight))
+        print("tsi_weight :" + str(tsi_weight))
+        print("vol_osc_weight :" + str(vol_osc_weight))
+        print("vor_osc_weight :" + str(vor_osc_weight))
+        print("will_r_weight :" + str(will_r_weight))
+        print('\n\n\n')
 
         # Extra Variables for future research purposes 
-        acc_dist_weight = acc_dist_weight/total_weight
-        aroon_weight = aroon_weight/total_weight
-        bop_weight = bop_weight/total_weight
-        bol_ema_weight = bol_ema_weight/total_weight
-        bol_sma_weight = bol_sma_weight/total_weight
-        chaik_osc_weight = chaik_osc_weight/total_weight
-        cci_weight = cci_weight/total_weight
-        con_rsi_weight = con_rsi_weight/total_weight
-        cop_cur_weight = cop_cur_weight/total_weight
-        dir_mov_weight = dir_mov_weight/total_weight
-        donch_weight = donch_weight/total_weight
-        el_force_weight = el_force_weight/total_weight
-        env_ema_weight = env_ema_weight/total_weight
-        env_sma_weight = env_sma_weight/total_weight
-        ema_weight = ema_weight/total_weight
-        sma_weight = sma_weight/total_weight
-        fish_transform_weight = fish_transform_weight/total_weight
-        fish_trans_rev_weight = fish_trans_rev_weight/total_weight
-        mcg_dyn_weight = mcg_dyn_weight/total_weight
-        kelt_chnl_weight = kelt_chnl_weight/total_weight
-        lin_reg_weight = lin_reg_weight/total_weight
-        #mass_weight = mass_weight/total_weight
-        mom_osc_weight = mom_osc_weight/total_weight
-        mom_osc_rev_weight = mom_osc_rev_weight/total_weight
-        mon_flo_weight = mon_flo_weight/total_weight
-        macd_weight = macd_weight/total_weight
-        obv_weight = obv_weight/total_weight
-        pvt_pnt_weight = pvt_pnt_weight/total_weight
-        pvt_weight = pvt_weight/total_weight
-        pvt_rev_weight = pvt_rev_weight/total_weight
-        roc_weight = roc_weight/total_weight
-        rsi_weight = rsi_weight/total_weight
-        sma_osc_weight = sma_osc_weight/total_weight
-        smi_erg_weight = smi_erg_weight/total_weight
-        stoch_osc_weight = stoch_osc_weight/total_weight
-        stoch_osc_rev_weight = stoch_osc_rev_weight/total_weight
-        wma_weight = wma_weight/total_weight
-        trix_weight = trix_weight/total_weight
-        tsi_weight = tsi_weight/total_weight
-        vol_osc_weight = vol_osc_weight/total_weight
-        vor_osc_weight = vor_osc_weight/total_weight
-        will_r_weight = will_r_weight/total_weight
+        # acc_dist_weight = acc_dist_weight/total_weight
+        # aroon_weight = aroon_weight/total_weight
+        # bop_weight = bop_weight/total_weight
+        # bol_ema_weight = bol_ema_weight/total_weight
+        # bol_sma_weight = bol_sma_weight/total_weight
+        # chaik_osc_weight = chaik_osc_weight/total_weight
+        # cci_weight = cci_weight/total_weight
+        # con_rsi_weight = con_rsi_weight/total_weight
+        # cop_cur_weight = cop_cur_weight/total_weight
+        # dir_mov_weight = dir_mov_weight/total_weight
+        # donch_weight = donch_weight/total_weight
+        # el_force_weight = el_force_weight/total_weight
+        # env_ema_weight = env_ema_weight/total_weight
+        # env_sma_weight = env_sma_weight/total_weight
+        # ema_weight = ema_weight/total_weight
+        # sma_weight = sma_weight/total_weight
+        # fish_transform_weight = fish_transform_weight/total_weight
+        # fish_trans_rev_weight = fish_trans_rev_weight/total_weight
+        # mcg_dyn_weight = mcg_dyn_weight/total_weight
+        # kelt_chnl_weight = kelt_chnl_weight/total_weight
+        # lin_reg_weight = lin_reg_weight/total_weight
+        # #mass_weight = mass_weight/total_weight
+        # mom_osc_weight = mom_osc_weight/total_weight
+        # mom_osc_rev_weight = mom_osc_rev_weight/total_weight
+        # mon_flo_weight = mon_flo_weight/total_weight
+        # macd_weight = macd_weight/total_weight
+        # obv_weight = obv_weight/total_weight
+        # pvt_pnt_weight = pvt_pnt_weight/total_weight
+        # pvt_weight = pvt_weight/total_weight
+        # pvt_rev_weight = pvt_rev_weight/total_weight
+        # roc_weight = roc_weight/total_weight
+        # rsi_weight = rsi_weight/total_weight
+        # sma_osc_weight = sma_osc_weight/total_weight
+        # smi_erg_weight = smi_erg_weight/total_weight
+        # stoch_osc_weight = stoch_osc_weight/total_weight
+        # stoch_osc_rev_weight = stoch_osc_rev_weight/total_weight
+        # wma_weight = wma_weight/total_weight
+        # trix_weight = trix_weight/total_weight
+        # tsi_weight = tsi_weight/total_weight
+        # vol_osc_weight = vol_osc_weight/total_weight
+        # vor_osc_weight = vor_osc_weight/total_weight
+        # will_r_weight = will_r_weight/total_weight
 
         final_reading = (
             acc_dist_weight * acc_dist_weightedSignal + 
@@ -522,12 +565,10 @@ class Engine1:
         :returns: long/short strength based on the lexicon of the lookback_period
         """
         #strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        range_ticker_30 = TradingRange(df_input, 30)
-        x1 = range_ticker_30.run()
-        range_ticker_5 = TradingRange(df_input, 5)
-        x2 = range_ticker_5.run()
+        range_ticker_15 = TradingRange(df_input, 15)
+        x1 = range_ticker_15.run()
         strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        strength = strength*(x1+x2)
+        strength = strength*(x1)
         #strength += self.long_short_singlelexicon(df_input, self.base_lookback - 1)
 
         return strength
@@ -561,6 +602,7 @@ class Engine1:
             raise TypeError("The number of readings is too high, reduce to less than half the length of the input")
 
         for ticker, data in in_dict.items():
+            print (ticker)
             generated_dict[ticker] = self.generate_longShortStrength(data)
 
         copy_dict_list = generated_dict.items()

@@ -178,7 +178,7 @@ class Engine1:
         cop_cur_weight = self.weight_adjust(cop_cur_weight)
 
         #Directional Movement
-        dir_mov = DirectionalMovement(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        dir_mov = DirectionalMovement(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
         dir_mov_weight, dir_mov_liveSignal_list = dir_mov.run(reading_lookback)
         dir_mov_weightedSignal = self.generate_weightedList(dir_mov_liveSignal_list)
         dir_mov_weight = self.weight_adjust(dir_mov_weight)
@@ -208,13 +208,13 @@ class Engine1:
         env_sma_weight = self.weight_adjust(env_sma_weight)
 
         #Exponential Moving Average
-        ema = ExponentialMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        ema = ExponentialMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
         ema_weight, ema_liveSignal_list = ema.run(reading_lookback)
         ema_weightedSignal = self.generate_weightedList(ema_liveSignal_list)
         ema_weight = self.weight_adjust(ema_weight)
 
         #Simple Moving Average
-        sma = SimpleMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = lookback + 3)
+        sma = SimpleMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
         sma_weight, sma_liveSignal_list = sma.run(reading_lookback)
         sma_weightedSignal = self.generate_weightedList(sma_liveSignal_list)
         sma_weight = self.weight_adjust(sma_weight)
@@ -340,7 +340,7 @@ class Engine1:
         stoch_osc_rev_weight = self.weight_adjust(stoch_osc_rev_weight)
 
         #Weighted Moving Average
-        wma = WeightedMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2= lookback + 3)
+        wma = WeightedMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2= int(lookback*1.5) )
         wma_weight, wma_liveSignal_list = wma.run(reading_lookback)
         wma_weightedSignal = self.generate_weightedList(wma_liveSignal_list)
         wma_weight = self.weight_adjust(wma_weight)

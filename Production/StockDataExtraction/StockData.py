@@ -79,6 +79,7 @@ class BasketStockData:
         self.out_dict = {}
 
     def generate_dict(self, list_of_tickers):
+        ctr = 1
         for i in list_of_tickers:
             yf_obj = yf.Ticker(i)
             df1 = yf_obj.history(period = 'max', interval="1d")
@@ -94,7 +95,8 @@ class BasketStockData:
                 df_out = df_out.iloc[-self.back_limit:]
             
             self.out_dict[i] = df_out
-            print("Done")
+            print("Done " + str(ctr))
+            ctr += 1
         return self.out_dict
 
     def __str__():

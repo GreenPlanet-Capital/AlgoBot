@@ -178,10 +178,14 @@ class Engine1:
         cop_cur_weight = self.weight_adjust(cop_cur_weight)
 
         #Directional Movement
-        dir_mov = DirectionalMovement(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
-        dir_mov_weight, dir_mov_liveSignal_list = dir_mov.run(reading_lookback)
-        dir_mov_weightedSignal = self.generate_weightedList(dir_mov_liveSignal_list)
-        dir_mov_weight = self.weight_adjust(dir_mov_weight)
+        try:
+            dir_mov = DirectionalMovement(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
+            dir_mov_weight, dir_mov_liveSignal_list = dir_mov.run(reading_lookback)
+            dir_mov_weightedSignal = self.generate_weightedList(dir_mov_liveSignal_list)
+            dir_mov_weight = self.weight_adjust(dir_mov_weight)
+        except:
+            dir_mov_weight = 0
+            dir_mov_weightedSignal = 0
 
         #Donchian Channels
         donch = DonchianChannels(dataframe_input = df_input, lookback_period = lookback)

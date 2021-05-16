@@ -55,6 +55,7 @@ from StockDataExtraction.StockData import BasketStockData
 from Engines.parallel_engine import Engine1
 from StockDataExtraction.yfinanceDataPull import extract
 import time
+import sys
 
 # stock_data = BasketStockData(True, 200)
 # dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB', 'GOOGL', 'JNJ', 'DIS', 'CSCO', 'INTC', 'ABT', 'KO', 'ABBV'])
@@ -63,7 +64,12 @@ def main():
     begin = time.time()
     #x = extract(list_stok)
     stock_data = BasketStockData(True, 100)
-    x = stock_data.generate_dict(list_stok)
+    if len(sys.argv)>1:
+        if sys.argv[1]=='--update':
+            update_data = True
+    else:
+        update_data = False
+    x = stock_data.generate_dict(list_stok,update_data=update_data)
     end = time.time()
     print(f"Time taken to extract data: {end - begin}")
 

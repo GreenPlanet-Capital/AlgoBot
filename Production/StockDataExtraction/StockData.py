@@ -80,20 +80,20 @@ class BasketStockData:
 
     def generate_dict(self, list_of_tickers):
         ctr = 1
-        basket_data = yf.download(
-        tickers = list_of_tickers,
-        period = '1y',
-        interval = '1d',
-        group_by = 'ticker',
-        auto_adjust = False,
-        prepost = False,
-        threads = True,
-        proxy = None
-        )
-        basket_data = basket_data.T
+        # basket_data = yf.download(
+        # tickers = list_of_tickers,
+        # period = '1y',
+        # interval = '1d',
+        # group_by = 'ticker',
+        # auto_adjust = False,
+        # prepost = False,
+        # threads = True,
+        # proxy = None
+        # )
+        # basket_data = basket_data.T
 
-        for ticker in list_of_tickers:
-            basket_data.loc[(ticker,),].T.to_csv('Indicator_CSVs/' + ticker + '.csv', sep=',', encoding='utf-8')
+        # for ticker in list_of_tickers:
+        #     basket_data.loc[(ticker,),].T.to_csv('Indicator_CSVs/' + ticker + '.csv', sep=',', encoding='utf-8')
 
 
         for i in list_of_tickers:
@@ -110,7 +110,7 @@ class BasketStockData:
                 df_out = df_out.iloc[-self.back_limit:]
             
             self.out_dict[i] = df_out
-            # print("Done " + str(ctr))
+            print("Done " + str(ctr))
             ctr += 1
         return self.out_dict
 

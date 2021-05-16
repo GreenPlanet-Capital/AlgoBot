@@ -69,9 +69,9 @@ def main():
 
     begin1 = time.time()
     dict_of_dataframes = x
-    base_lookback = 5
-    reading_lookback = 1
-    number_of_readings = 10
+    base_lookback = 6
+    reading_lookback = 3
+    number_of_readings = 20
 
     eng_obj = Engine1(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, reading_lookback = reading_lookback, number_of_readings = number_of_readings)
     longs, shorts = eng_obj.generate()
@@ -84,6 +84,7 @@ def main():
     print()
 
     end1 = time.time()
+
     print(f"Time taken to compute data: {end1 - begin1}")
 
 if __name__ == '__main__':

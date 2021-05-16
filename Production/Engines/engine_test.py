@@ -616,7 +616,13 @@ class Engine1:
 
         return strength
         # take the generator of the lookback_lexicon and run it through the long 
-    
+        
+    def generate_parallel(self, ticker):
+        data_var = self.dict_of_dataframes[ticker]
+        output = self.generate_longShortStrength(data_var)
+
+        return output
+
     def generate_listOfTickers(self):
         """
         :params: dictionary_input for the basket of securities
@@ -644,6 +650,7 @@ class Engine1:
         if (num >= len(in_dict)/2):
             raise TypeError("The number of readings is too high, reduce to less than half the length of the input")
 
+        iterable_for_pll = self.generate_listOfTickers()
         for ticker, data in in_dict.items():
             print (ticker)
             generated_dict[ticker] = self.generate_longShortStrength(data)

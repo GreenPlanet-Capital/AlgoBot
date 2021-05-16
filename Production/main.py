@@ -71,7 +71,7 @@ def main():
         update_data = False
     x = stock_data.generate_dict(list_stok,update_data=update_data)
     end = time.time()
-    print(f"Time taken to extract data: {end - begin}")
+    print(f'Time taken to extract data: {end - begin}')
 
     begin1 = time.time()
     dict_of_dataframes = x

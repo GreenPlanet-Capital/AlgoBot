@@ -426,7 +426,6 @@ class Engine1:
             will_r_weight
         )
 
-        print(0)
         # Extra Variables for future research purposes 
         acc_dist_weight = acc_dist_weight/total_weight
         aroon_weight = aroon_weight/total_weight
@@ -611,20 +610,11 @@ class Engine1:
         generated_dict = {}
 
         if (num >= len(in_dict)/2):
-            raise TypeError("The number of readings is too high, reduce to less than half the length of the input")
-
-        """ for ticker, data in in_dict.items():
-            print (ticker)
-            generated_dict[ticker] = self.generate_longShortStrength(data) """
-
+            raise IndexError("The number of readings is too high, reduce to less than half the length of the input")
 
         pool = mp.Pool(mp.cpu_count())
-        # generated_dict = {ticker: pool.apply(self.generate_longShortStrength,data) for ticker, data in in_dict.items()}
-
         generated_dict = dict(pool.map(self.generate_parallel, [ticker for ticker in self.generate_listOfTickers()]))
         pool.close()
-        print(generated_dict)
-        # generated_dict = {ticker: self.generate_longShortStrength(data) for ticker, data in in_dict.items()}
 
 
         copy_dict_list = generated_dict.items()

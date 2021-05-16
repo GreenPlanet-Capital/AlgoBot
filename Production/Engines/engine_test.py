@@ -105,10 +105,10 @@ class Engine1:
         :params: input_weight: takes in the weight returned by the code and returns 0.01 if it is lower than that value
         :return: either 0.01 or input_weight
         """
-        if (input_weight <= 0.02):
-            return 0.02
-        else:
-            return input_weight
+        # if (input_weight <= 0.02):
+        #     return 0.02
+        # else:
+        return input_weight
 
     def long_short_singlelexicon(self, df_input, lookback):
         """
@@ -511,6 +511,49 @@ class Engine1:
         # vor_osc_weight = vor_osc_weight/total_weight
         # will_r_weight = will_r_weight/total_weight
 
+        # acc_dist_weight = 1
+        # aroon_weight = 1
+        # bop_weight = 1
+        # bol_ema_weight = 1
+        # bol_sma_weight = 1
+        # chaik_osc_weight = 1
+        # cci_weight = 1
+        # con_rsi_weight = 1
+        # cop_cur_weight = 1
+        # dir_mov_weight = 1
+        # donch_weight = 1
+        # el_force_weight = 1
+        # env_ema_weight = 1
+        # env_sma_weight = 1
+        # ema_weight = 1
+        # sma_weight = 1
+        # fish_transform_weight = 1
+        # fish_trans_rev_weight = 1
+        # mcg_dyn_weight = 1
+        # kelt_chnl_weight = 1
+        # lin_reg_weight = 1
+        # # mass_weight = mass_weight/total_weight
+        # mom_osc_weight = 1
+        # mom_osc_rev_weight = 1
+        # mon_flo_weight = 1
+        # macd_weight = 1
+        # obv_weight = 1
+        # pvt_pnt_weight = 1
+        # pvt_weight = 1
+        # pvt_rev_weight = 1
+        # roc_weight = 1
+        # rsi_weight = 1
+        # sma_osc_weight = 1
+        # smi_erg_weight = 1
+        # stoch_osc_weight = 1
+        # stoch_osc_rev_weight = 1
+        # wma_weight = 1
+        # trix_weight = 1
+        # tsi_weight = 1
+        # vol_osc_weight = 1
+        # vor_osc_weight = 1
+        # will_r_weight = 1
+
         final_reading = (
             acc_dist_weight * acc_dist_weightedSignal + 
             aroon_weight * aroon_weightedSignal +
@@ -565,8 +608,8 @@ class Engine1:
         :returns: long/short strength based on the lexicon of the lookback_period
         """
         #strength = self.long_short_singlelexicon(df_input, self.base_lookback)
-        range_ticker_15 = TradingRange(df_input, 15)
-        x1 = range_ticker_15.run()
+        range_ticker_30 = TradingRange(df_input, 30)
+        x1 = range_ticker_30.run()
         strength = self.long_short_singlelexicon(df_input, self.base_lookback)
         strength = strength*(x1)
         #strength += self.long_short_singlelexicon(df_input, self.base_lookback - 1)

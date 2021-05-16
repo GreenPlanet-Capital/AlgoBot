@@ -52,7 +52,7 @@ from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
 from StockDataExtraction.StockData import BasketStockData
-from Engines.engine_test import Engine1
+from Engines.parallel_engine import Engine1
 from StockDataExtraction.yfinanceDataPull import extract
 import time
 

@@ -80,10 +80,25 @@ class BasketStockData:
 
     def generate_dict(self, list_of_tickers):
         ctr = 1
-        for i in list_of_tickers:
-            yf_obj = yf.Ticker(i)
-            df1 = yf_obj.history(period = 'max', interval="1d")
+        basket_data = yf.download(
+        tickers = list_of_tickers,
+        period = '1y',
+        interval = '1d',
+        group_by = 'ticker',
+        auto_adjust = False,
+        prepost = False,
+        threads = True,
+        proxy = None
+        )
+        basket_data = basket_data.T
 
+        for ticker in list_of_tickers:
+            basket_data.loc[(ticker,),].T.to_csv('Indicator_CSVs/' + ticker + '.csv', sep=',', encoding='utf-8')
+
+
+        for i in list_of_tickers:
+            df1 = pd.read_csv("Indicator_CSVs/" + f"{i}.csv")
+            
             df_out = pd.DataFrame()
             df_out['OPEN'] = df1['Open']
             df_out['HIGH'] = df1['High']
@@ -95,7 +110,7 @@ class BasketStockData:
                 df_out = df_out.iloc[-self.back_limit:]
             
             self.out_dict[i] = df_out
-            print("Done " + str(ctr))
+            # print("Done " + str(ctr))
             ctr += 1
         return self.out_dict
 
@@ -105,7 +120,7 @@ class BasketStockData:
 def main():
     stock_data = BasketStockData(True)
     x = stock_data.generate_dict(['AAPL', 'MSFT'])
-    print(x['MSFT'])
+    
 
 if __name__ == '__main__':
     main()

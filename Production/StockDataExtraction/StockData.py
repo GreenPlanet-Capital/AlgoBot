@@ -7,6 +7,8 @@ import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 import yfinance as yf
+import os
+from pathlib import Path
 
 class SingleStockData:
     def __init__(self,sheet_number = 0,require_small_data = True, back_limit = 100):
@@ -78,26 +80,29 @@ class BasketStockData:
         self.require_small_data = require_small_data
         self.out_dict = {}
 
-    def generate_dict(self, list_of_tickers):
+    def generate_dict(self, list_of_tickers, update_data=True):
         ctr = 1
-        # basket_data = yf.download(
-        # tickers = list_of_tickers,
-        # period = '1y',
-        # interval = '1d',
-        # group_by = 'ticker',
-        # auto_adjust = False,
-        # prepost = False,
-        # threads = True,
-        # proxy = None
-        # )
-        # basket_data = basket_data.T
+        Indicator_CSVs = Path(os.getcwd()) / 'Indicator_CSVs'
 
-        # for ticker in list_of_tickers:
-        #     basket_data.loc[(ticker,),].T.to_csv('Indicator_CSVs/' + ticker + '.csv', sep=',', encoding='utf-8')
+        if update_data:        
+            basket_data = yf.download(
+            tickers = list_of_tickers,
+            period = '1y',
+            interval = '1d',
+            group_by = 'ticker',
+            auto_adjust = False,
+            prepost = False,
+            threads = True,
+            proxy = None
+            )
+            basket_data = basket_data.T
+
+            for ticker in list_of_tickers:
+                basket_data.loc[(ticker,),].T.to_csv((Indicator_CSVs / f'{ticker}.csv'), sep=',', encoding='utf-8')
 
 
-        for i in list_of_tickers:
-            df1 = pd.read_csv("Indicator_CSVs/" + f"{i}.csv")
+        for ticker in list_of_tickers:
+            df1 = pd.read_csv(Indicator_CSVs / f"{ticker}.csv")
             
             df_out = pd.DataFrame()
             df_out['OPEN'] = df1['Open']
@@ -109,9 +114,7 @@ class BasketStockData:
             if (self.require_small_data):
                 df_out = df_out.iloc[-self.back_limit:]
             
-            self.out_dict[i] = df_out
-            print("Done " + str(ctr))
-            ctr += 1
+            self.out_dict[ticker] = df_out
         return self.out_dict
 
     def __str__():

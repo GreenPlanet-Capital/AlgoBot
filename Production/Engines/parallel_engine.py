@@ -613,8 +613,11 @@ class Engine1:
             raise IndexError("The number of readings is too high, reduce to less than half the length of the input")
 
         pool = mp.Pool(mp.cpu_count())
-        generated_dict = dict(pool.map(self.generate_parallel, [ticker for ticker in self.generate_listOfTickers()]))
-        pool.close()
+        try:
+            generated_dict = dict(pool.map(self.generate_parallel, [ticker for ticker in self.generate_listOfTickers()]))
+        except ValueError as e:
+            pool.close()
+            raise e
 
 
         copy_dict_list = generated_dict.items()

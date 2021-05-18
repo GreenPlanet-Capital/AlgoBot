@@ -61,9 +61,10 @@ import sys
 # dict1 = stock_data.generate_dict(['AAPL', 'MSFT', 'JPM', 'GS', 'GM', 'TSLA', 'FB', 'GOOGL', 'JNJ', 'DIS', 'CSCO', 'INTC', 'ABT', 'KO', 'ABBV'])
 def main():
     list_stok = ['AAPL', 'MSFT', 'ETSY', 'AMZN', 'FB', 'GOOGL', 'GOOG', 'TSLA', 'JPM', 'JNJ', 'V', 'UNH', 'HD', 'NVDA', 'PG', 'DIS', 'MA', 'BAC', 'PYPL', 'XOM', 'CMCSA', 'VZ', 'INTC', 'ADBE', 'T', 'CSCO', 'NFLX', 'PFE', 'KO', 'ABT', 'CVX', 'ABBV', 'PEP', 'CRM', 'MRK', 'WMT', 'WFC', 'TMO', 'ACN', 'AVGO', 'MCD', 'MDT', 'NKE', 'TXN', 'COST', 'DHR', 'HON', 'C', 'LIN', 'QCOM', 'UPS', 'LLY', 'UNP', 'PM', 'LOW', 'ORCL', 'AMGN', 'NEE', 'BMY', 'SBUX', 'IBM', 'MS', 'CAT', 'RTX', 'BA', 'GS', 'BLK', 'DE', 'AMAT', 'MMM', 'GE', 'CVS', 'AMT', 'INTU', 'SCHW', 'TGT', 'AXP', 'ISRG', 'CHTR', 'LMT', 'NOW', 'ANTM', 'MU', 'FIS', 'AMD', 'SPGI', 'BKNG', 'MO', 'CI', 'LRCX', 'MDLZ', 'TJX', 'PLD', 'PNC', 'USB', 'GILD', 'ADP', 'SYK', 'TFC', 'TMUS', 'ZTS', 'CSX', 'CCI', 'CB', 'DUK', 'FDX', 'COP', 'GM', 'CME', 'NSC', 'ATVI', 'COF', 'FISV', 'MMC', 'BDX', 'CL', 'SO', 'SHW', 'ITW', 'EL', 'APD', 'ICE', 'D', 'ADSK', 'EQIX', 'FCX', 'PGR', 'BSX', 'HUM', 'GPN', 'ETN', 'AON', 'NOC', 'ADI', 'EW', 'ECL', 'EMR', 'HCA', 'VRTX', 'WM', 'ILMN', 'NEM', 'DG', 'NXPI', 'MCO', 'REGN', 'DOW', 'MET', 'KLAC', 'ROP', 'JCI', 'KMB', 'ROST', 'F', 'IDXX', 'EOG', 'TEL', 'GD', 'LHX', 'IQV', 'BAX', 'DD', 'HPQ', 'AEP', 'SYY', 'EXC', 'AIG', 'TT', 'SLB', 'TWTR', 'TROW', 'PPG', 'ALGN', 'DLR', 'PRU', 'PSA', 'BK', 'BIIB', 'SRE', 'STZ', 'PH', 'EA', 'TRV', 'SPG', 'A', 'ALL', 'APH', 'INFO', 'CTSH', 'CMG', 'MCHP', 'ORLY', 'CMI', 'MSCI', 'WBA', 'GIS', 'MPC', 'APTV', 'EBAY', 'MAR', 'CNC', 'XEL', 'PSX', 'ALXN', 'ADM', 'IFF', 'YUM', 'SNPS', 'DFS', 'CARR', 'CTVA', 'ZBH', 'AFL', 'LUV', 'CDNS', 'MNST', 'GLW', 'SWK', 'WLTW', 'DXCM', 'KMI', 'DHI', 'PXD', 'HLT', 'AZO', 'VLO', 'TDG', 'FRC', 'PAYX', 'PCAR', 'OTIS', 'SBAC', 'MSI', 'PEG', 'AME', 'ROK', 'CTAS', 'WEC', 'AMP', 'STT', 'WELL', 'MTD', 'FAST', 'WMB', 'SIVB', 'XLNX', 'FITB', 'BLL', 'MCK', 'LYB', 'WY', 'LEN', 'SWKS', 'ES', 'EFX', 'AJG', 'ANSS', 'VFC', 'KR', 'DAL', 'CBRE', 'NUE', 'VRSK', 'RMD', 'FTNT', 'KHC', 'AWK', 'BBY', 'DTE', 'DLTR', 'LH', 'AVB', 'KSU', 'ED', 'KEYS', 'MXIM', 'CPRT', 'ODFL', 'VMC', 'EQR', 'O', 'ZBRA', 'NTRS', 'URI', 'HSY', 'FTV', 'WST', 'SYF', 'CDW', 'IP', 'HIG', 'FLT', 'OKE', 'RSG', 'CLX', 'MLM', 'TSN', 'CERN', 'TSCO', 'EXPE', 'MKC', 'ARE', 'VIAC', 'EIX', 'OXY', 'VRSN', 'HES', 'PPL', 'KEY', 'DOV', 'RF', 'CHD', 'ETR', 'XYL', 'WDC', 'CZR', 'HPE', 'AEE', 'KMX', 'GRMN', 'TER', 'QRVO', 'MTB', 'CFG', 'CCL', 'IT', 'FE', 'VTR', 'GWW', 'GNRC', 'COO', 'HAL', 'ETSY', 'EXPD', 'AMCR', 'TTWO', 'CE', 'WAT', 'GPC', 'BR', 'TRMB', 'TFX', 'EXR', 'NDAQ', 'LVS', 'CAG', 'CMS', 'ESS', 'DRI', 'DGX', 'IR', 'AVY', 'OMC', 'STX', 'PEAK', 'J', 'AKAM', 'STE', 'CINF', 'ANET', 'ULTA', 'MAA', 'ALB', 'NVR', 'RCL', 'CTLT', 'POOL', 'ABC', 'NTAP', 'K', 'IEX', 'DRE', 'AES', 'MAS', 'UAL', 'PFG', 'EMN', 'BKR', 'VTRS', 'HOLX', 'RJF', 'DPZ', 'MKTX', 'CAH', 'TYL', 'PHM', 'TDY', 'PAYC', 'HBAN', 'MGM', 'WRK', 'WHR', 'INCY', 'PKI', 'LB', 'ENPH', 'TXT', 'BXP', 'FBHS', 'FMC', 'SJM', 'DVN', 'CTXS', 'FANG', 'XRAY', 'JBHT', 'PKG', 'WAB', 'EVRG', 'MPWR', 'LNT', 'LDOS', 'PTC', 'LKQ', 'PWR', 'UDR', 'SNA', 'AAP', 'ABMD', 'CNP', 'HRL', 'MHK', 'LUMN', 'L', 'AAL', 'CHRW', 'ATO', 'TPR', 'BIO', 'WYNN', 'IPG', 'ALLE', 'HAS', 'HWM', 'FOXA', 'BWA', 'PENN', 'LNC', 'MOS', 'NLOK', 'HST', 'JKHY', 'UHS', 'IRM', 'CBOE', 'DISH', 'LW', 'HSIC', 'WRB', 'FFIV', 'TAP', 'PNR', 'CF', 'NWL', 'RE', 'CMA', 'LYV', 'IVZ', 'WU', 'NWSA', 'CPB', 'RHI', 'REG', 'NCLH', 'GL', 'NI', 'ZION', 'AOS', 'PNW', 'NLSN', 'AIZ', 'BEN', 'DISCK', 'MRO', 'KIM', 'DVA', 'JNPR', 'SEE', 'HII', 'DXC', 'NRG', 'ALK', 'ROL', 'PVH', 'APA', 'PBCT', 'FRT', 'FLIR', 'HBI', 'LEG', 'VNO', 'GPS', 'IPGP', 'COG', 'RL', 'NOV', 'UNM', 'DISCA']
+    #list_stok = list_stok[-100:]
     begin = time.time()
     #x = extract(list_stok)
-    stock_data = BasketStockData(True, 100)
+    stock_data = BasketStockData(True, 1000)
     if len(sys.argv)>1:
         if sys.argv[1]=='--update':
             update_data = True
@@ -75,8 +76,8 @@ def main():
 
     begin1 = time.time()
     dict_of_dataframes = x
-    base_lookback = 20
-    reading_lookback = 6
+    base_lookback = 30
+    reading_lookback = 3
     number_of_readings = 20
 
     eng_obj = Engine1(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, reading_lookback = reading_lookback, number_of_readings = number_of_readings)

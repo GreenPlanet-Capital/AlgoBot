@@ -140,16 +140,16 @@ class Engine1:
         bop_weight = self.weight_adjust(bop_weight)
 
         #Bollinger Bands - EMA
-        bol_ema = BollingerEMA(dataframe_input = df_input, lookback_period = lookback)
-        bol_ema_weight, bol_ema_liveSignal_list = bol_ema.run(reading_lookback)
-        bol_ema_weightedSignal = self.generate_weightedList(bol_ema_liveSignal_list)
-        bol_ema_weight = self.weight_adjust(bol_ema_weight)
+        # bol_ema = BollingerEMA(dataframe_input = df_input, lookback_period = lookback)
+        # bol_ema_weight, bol_ema_liveSignal_list = bol_ema.run(reading_lookback)
+        # bol_ema_weightedSignal = self.generate_weightedList(bol_ema_liveSignal_list)
+        # bol_ema_weight = self.weight_adjust(bol_ema_weight)
 
         #Bollinger Bands - SMA
-        bol_sma = BollingerSMA(dataframe_input = df_input, lookback_period = lookback)
-        bol_sma_weight, bol_sma_liveSignal_list = bol_sma.run(reading_lookback)
-        bol_sma_weightedSignal = self.generate_weightedList(bol_sma_liveSignal_list)
-        bol_sma_weight = self.weight_adjust(bol_sma_weight)
+        # bol_sma = BollingerSMA(dataframe_input = df_input, lookback_period = lookback)
+        # bol_sma_weight, bol_sma_liveSignal_list = bol_sma.run(reading_lookback)
+        # bol_sma_weightedSignal = self.generate_weightedList(bol_sma_liveSignal_list)
+        # bol_sma_weight = self.weight_adjust(bol_sma_weight)
 
         #Chaikin Oscillator
         try:
@@ -190,10 +190,10 @@ class Engine1:
             dir_mov_weightedSignal = 0
 
         #Donchian Channels
-        donch = DonchianChannels(dataframe_input = df_input, lookback_period = lookback)
-        donch_weight, donch_liveSignal_list = donch.run(reading_lookback)
-        donch_weightedSignal = self.generate_weightedList(donch_liveSignal_list)
-        donch_weight = self.weight_adjust(donch_weight)
+        # donch = DonchianChannels(dataframe_input = df_input, lookback_period = lookback)
+        # donch_weight, donch_liveSignal_list = donch.run(reading_lookback)
+        # donch_weightedSignal = self.generate_weightedList(donch_liveSignal_list)
+        # donch_weight = self.weight_adjust(donch_weight)
 
         #Elders Force
         el_force = EldersForce(dataframe_input = df_input, lookback_period = lookback)
@@ -202,16 +202,16 @@ class Engine1:
         el_force_weight = self.weight_adjust(el_force_weight)
 
         #Envelope - EMA
-        env_ema = EnvelopeEMA(dataframe_input = df_input, lookback_period = lookback)
-        env_ema_weight, env_ema_liveSignal_list = env_ema.run(reading_lookback)
-        env_ema_weightedSignal = self.generate_weightedList(env_ema_liveSignal_list)
-        env_ema_weight = self.weight_adjust(env_ema_weight)
+        # env_ema = EnvelopeEMA(dataframe_input = df_input, lookback_period = lookback)
+        # env_ema_weight, env_ema_liveSignal_list = env_ema.run(reading_lookback)
+        # env_ema_weightedSignal = self.generate_weightedList(env_ema_liveSignal_list)
+        # env_ema_weight = self.weight_adjust(env_ema_weight)
 
         #Envelope - SMA
-        env_sma = EnvelopeSMA(dataframe_input = df_input, lookback_period = lookback)
-        env_sma_weight, env_sma_liveSignal_list = env_sma.run(reading_lookback)
-        env_sma_weightedSignal = self.generate_weightedList(env_sma_liveSignal_list)
-        env_sma_weight = self.weight_adjust(env_sma_weight)
+        # env_sma = EnvelopeSMA(dataframe_input = df_input, lookback_period = lookback)
+        # env_sma_weight, env_sma_liveSignal_list = env_sma.run(reading_lookback)
+        # env_sma_weightedSignal = self.generate_weightedList(env_sma_liveSignal_list)
+        # env_sma_weight = self.weight_adjust(env_sma_weight)
 
         #Exponential Moving Average
         ema = ExponentialMovingAverage(dataframe_input = df_input, lookback_period1 = lookback, lookback_period2 = int(lookback*1.5))
@@ -244,10 +244,10 @@ class Engine1:
         mcg_dyn_weight = self.weight_adjust(mcg_dyn_weight)
 
         #Keltner Channel
-        kelt_chnl = KeltnerChannel(dataframe_input = df_input, lookback_period = lookback)
-        kelt_chnl_weight, kelt_chnl_liveSignal_list = kelt_chnl.run(reading_lookback)
-        kelt_chnl_weightedSignal = self.generate_weightedList(kelt_chnl_liveSignal_list)
-        kelt_chnl_weight = self.weight_adjust(kelt_chnl_weight)
+        # kelt_chnl = KeltnerChannel(dataframe_input = df_input, lookback_period = lookback)
+        # kelt_chnl_weight, kelt_chnl_liveSignal_list = kelt_chnl.run(reading_lookback)
+        # kelt_chnl_weightedSignal = self.generate_weightedList(kelt_chnl_liveSignal_list)
+        # kelt_chnl_weight = self.weight_adjust(kelt_chnl_weight)
 
         #Linear Regression
         lin_reg = LinearRegression(dataframe_input = df_input, lookback_period = lookback)
@@ -385,8 +385,8 @@ class Engine1:
             acc_dist_weight + 
             aroon_weight +
             bop_weight +
-            bol_ema_weight +
-            bol_sma_weight +
+            #bol_ema_weight +
+            #bol_sma_weight +
             chaik_osc_weight +
             cci_weight + 
             con_rsi_weight + 
@@ -394,14 +394,14 @@ class Engine1:
             dir_mov_weight + 
             donch_weight + 
             el_force_weight + 
-            env_ema_weight +
-            env_sma_weight +
+            #env_ema_weight +
+            #env_sma_weight +
             ema_weight + 
             sma_weight + 
             fish_transform_weight + 
             fish_trans_rev_weight + 
             mcg_dyn_weight + 
-            kelt_chnl_weight + 
+            #kelt_chnl_weight + 
             lin_reg_weight + 
             #mass_weight +
             mom_osc_weight + 
@@ -430,23 +430,23 @@ class Engine1:
         acc_dist_weight = acc_dist_weight/total_weight
         aroon_weight = aroon_weight/total_weight
         bop_weight = bop_weight/total_weight
-        bol_ema_weight = bol_ema_weight/total_weight
-        bol_sma_weight = bol_sma_weight/total_weight
+        #bol_ema_weight = bol_ema_weight/total_weight
+        #bol_sma_weight = bol_sma_weight/total_weight
         chaik_osc_weight = chaik_osc_weight/total_weight
         cci_weight = cci_weight/total_weight
         con_rsi_weight = con_rsi_weight/total_weight
         cop_cur_weight = cop_cur_weight/total_weight
         dir_mov_weight = dir_mov_weight/total_weight
-        donch_weight = donch_weight/total_weight
+        #donch_weight = donch_weight/total_weight
         el_force_weight = el_force_weight/total_weight
-        env_ema_weight = env_ema_weight/total_weight
-        env_sma_weight = env_sma_weight/total_weight
+        #env_ema_weight = env_ema_weight/total_weight
+        #env_sma_weight = env_sma_weight/total_weight
         ema_weight = ema_weight/total_weight
         sma_weight = sma_weight/total_weight
         fish_transform_weight = fish_transform_weight/total_weight
         fish_trans_rev_weight = fish_trans_rev_weight/total_weight
         mcg_dyn_weight = mcg_dyn_weight/total_weight
-        kelt_chnl_weight = kelt_chnl_weight/total_weight
+        #kelt_chnl_weight = kelt_chnl_weight/total_weight
         lin_reg_weight = lin_reg_weight/total_weight
         #mass_weight = mass_weight/total_weight
         mom_osc_weight = mom_osc_weight/total_weight
@@ -517,23 +517,23 @@ class Engine1:
             acc_dist_weight * acc_dist_weightedSignal + 
             aroon_weight * aroon_weightedSignal +
             bop_weight * bop_weightedSignal +
-            bol_ema_weight * bol_ema_weightedSignal +
-            bol_sma_weight * bol_sma_weightedSignal +
+            #bol_ema_weight * bol_ema_weightedSignal +
+            #bol_sma_weight * bol_sma_weightedSignal +
             chaik_osc_weight * chaik_osc_weightedSignal + 
             cci_weight * cci_weightedSignal +
             con_rsi_weight * con_rsi_weightedSignal +
             cop_cur_weight * cop_cur_weightedSignal +
             dir_mov_weight * dir_mov_weightedSignal + 
-            donch_weight * donch_weightedSignal + 
+            #donch_weight * donch_weightedSignal + 
             el_force_weight * el_force_weightedSignal + 
-            env_ema_weight * env_ema_weightedSignal + 
-            env_sma_weight * env_sma_weightedSignal + 
+            #env_ema_weight * env_ema_weightedSignal + 
+            #env_sma_weight * env_sma_weightedSignal + 
             ema_weight * ema_weightedSignal + 
             sma_weight * sma_weightedSignal + 
             fish_transform_weight * fish_transform_weightedSignal + 
             fish_trans_rev_weight * fish_trans_rev_weightedSignal + 
             mcg_dyn_weight * mcg_dyn_weightedSignal + 
-            kelt_chnl_weight * kelt_chnl_weightedSignal + 
+            #kelt_chnl_weight * kelt_chnl_weightedSignal + 
             lin_reg_weight * lin_reg_weightedSignal + 
             #mass_weight * mass_weightedSignal + 
             mom_osc_weight * mom_osc_weightedSignal + 
@@ -568,8 +568,8 @@ class Engine1:
         """
         #strength = self.long_short_singlelexicon(df_input, self.base_lookback)
         try:
-            range_ticker_5 = TradingRange(df_input, 5)
-            x1 = range_ticker_5.run()
+            range_ticker = TradingRange(df_input, 30)
+            x1 = range_ticker.run()
             strength = self.long_short_singlelexicon(df_input, self.base_lookback)
             strength = strength*(x1)
         except ZeroDivisionError as e:

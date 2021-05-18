@@ -615,7 +615,7 @@ class Engine1:
         pool = mp.Pool(mp.cpu_count())
         try:
             generated_dict = dict(pool.map(self.generate_parallel, [ticker for ticker in self.generate_listOfTickers()]))
-        except ValueError as e:
+        except Exception as e:
             pool.close()
             raise e
 

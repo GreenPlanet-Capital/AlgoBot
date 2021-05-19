@@ -81,12 +81,13 @@ class BasketStockData:
         self.out_dict = {}
 
     def generate_dict(self, list_of_tickers, update_data=True):
+        ctr = 1
         Indicator_CSVs = Path(os.getcwd()) / 'Indicator_CSVs'
 
         if update_data:        
             basket_data = yf.download(
             tickers = list_of_tickers,
-            period = '1y',
+            period = 'max',
             interval = '1d',
             group_by = 'ticker',
             auto_adjust = False,
@@ -116,7 +117,7 @@ class BasketStockData:
             self.out_dict[ticker] = df_out
         return self.out_dict
 
-    def __str__(self):
+    def __str__():
         return (self.out_dict.to_string())
 
 def main():

@@ -392,7 +392,7 @@ class Engine1:
             con_rsi_weight + 
             cop_cur_weight +
             dir_mov_weight + 
-            # donch_weight + 
+            donch_weight + 
             el_force_weight + 
             #env_ema_weight +
             #env_sma_weight +

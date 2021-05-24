@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class McG_McG_Osc:
+class DM_DM_Osc:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -29,32 +29,21 @@ class McG_McG_Osc:
         self.long_cash = 0
         self.short_cash = 0
 
-    def mcg_mcg_osc_gen(self):
+    def dm_dm_osc_gen(self):
         price_array = self.price_array
         short_lookback = self.short_lookback
         long_lookback = self.long_lookback
 
         out_array = np.array([None for i in range(long_lookback)])
-
-        def mcg(price_array, lookback):
+        def dm(price_array, lookback):
             out_array = np.array([None for i in range(lookback)])
-
-            sum_var = np.sum(price_array[0:lookback])
-            base_val = (sum_var/lookback)
-            out_array = np.append(out_array,base_val)
-
-            for i in range(price_array.size - lookback - 1):
-                price_t = price_array[i + lookback + 1]
-                add_val = (price_t - base_val)
-                frac = (price_t/base_val)**4 
-                denom = frac*lookback
-                out_val = base_val + add_val/denom
-
+            for i in range(price_array.size - lookback):
+                present_price = math.log(price_array[i+lookback],10)
+                lookback_price = math.log(price_array[i],10)
+                out_val = (present_price - lookback_price)*1000/lookback
                 out_array = np.append(out_array,out_val)
-                base_val = out_val
             return out_array
-
-        out_arr = np.subtract(mcg(price_array, short_lookback)[long_lookback:], mcg(price_array, long_lookback)[long_lookback:])
+        out_arr = np.subtract(dm(price_array, short_lookback)[long_lookback:], dm(price_array, long_lookback)[long_lookback:])
         out_array = np.append(out_array,out_arr)
         
         self.osc_array = out_array
@@ -77,7 +66,7 @@ class McG_McG_Osc:
     
     def signum_generation(self):
         signal_array = self.signal_array
-        sensitivity = 1.5
+        sensitivity = 1.3
         out_arr = np.empty(0)
         std = np.std(signal_array)
         for i in signal_array:
@@ -206,7 +195,7 @@ class McG_McG_Osc:
 
     def run(self):
         start = time.time()
-        self.mcg_mcg_osc_gen()
+        self.dm_dm_osc_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -275,7 +264,7 @@ class McG_McG_Osc:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: McGinley Dynamic Oscillator")
+        print("Indicator Name: Simple Moving Average Oscillator")
         print("Short Lookback: " + str(self.short_lookback))
         print("Long Lookback: " + str(self.long_lookback))
         print("Training Period: " + str(self.price_array.size))
@@ -315,7 +304,7 @@ def main():
     data = data.iloc[-50:]
     price_list = np.array(data['Typical Price'])
 
-    indic_obj = McG_McG_Osc(price_list, 5, 8)
+    indic_obj = DM_DM_Osc(price_list, 5, 8)
     x = indic_obj.run()
     indic_obj.diagnostics()
 

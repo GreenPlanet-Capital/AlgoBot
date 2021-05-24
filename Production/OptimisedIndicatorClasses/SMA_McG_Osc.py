@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class McG_McG_Osc:
+class SMA_McG_Osc:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -29,12 +29,19 @@ class McG_McG_Osc:
         self.long_cash = 0
         self.short_cash = 0
 
-    def mcg_mcg_osc_gen(self):
+    def sma_mcg_osc_gen(self):
         price_array = self.price_array
         short_lookback = self.short_lookback
         long_lookback = self.long_lookback
 
         out_array = np.array([None for i in range(long_lookback)])
+
+        def sma(price_array, lookback):
+            out_array = np.array([None for i in range(lookback)])
+            for i in range(price_array.size - lookback):
+                out_val = (np.sum(price_array[i:i+lookback])/lookback)
+                out_array = np.append(out_array,out_val)
+            return out_array
 
         def mcg(price_array, lookback):
             out_array = np.array([None for i in range(lookback)])
@@ -54,7 +61,7 @@ class McG_McG_Osc:
                 base_val = out_val
             return out_array
 
-        out_arr = np.subtract(mcg(price_array, short_lookback)[long_lookback:], mcg(price_array, long_lookback)[long_lookback:])
+        out_arr = np.subtract(sma(price_array, short_lookback)[long_lookback:], mcg(price_array, long_lookback)[long_lookback:])
         out_array = np.append(out_array,out_arr)
         
         self.osc_array = out_array
@@ -206,7 +213,7 @@ class McG_McG_Osc:
 
     def run(self):
         start = time.time()
-        self.mcg_mcg_osc_gen()
+        self.sma_mcg_osc_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -275,7 +282,7 @@ class McG_McG_Osc:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: McGinley Dynamic Oscillator")
+        print("Indicator Name: Simple Moving Average/McGinley Dynamic Oscillator")
         print("Short Lookback: " + str(self.short_lookback))
         print("Long Lookback: " + str(self.long_lookback))
         print("Training Period: " + str(self.price_array.size))
@@ -315,7 +322,7 @@ def main():
     data = data.iloc[-50:]
     price_list = np.array(data['Typical Price'])
 
-    indic_obj = McG_McG_Osc(price_list, 5, 8)
+    indic_obj = SMA_McG_Osc(price_list, 5, 8)
     x = indic_obj.run()
     indic_obj.diagnostics()
 

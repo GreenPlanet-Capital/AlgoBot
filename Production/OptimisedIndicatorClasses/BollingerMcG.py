@@ -6,7 +6,7 @@ from matplotlib.pyplot import figure
 import yfinance as yf
 import threading
 
-class BollingerMcG():
+class BollingerMcG:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0

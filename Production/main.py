@@ -1,58 +1,8 @@
 from StockDataExtraction.StockData import SingleStockData
-from IndicatorClasses.AccumulationDistribution import AccumulationDistribution
-from IndicatorClasses.Aroon import Aroon
-from IndicatorClasses.AverageTrueRange import AverageTrueRange
-from IndicatorClasses.BalanceOfPower import BalanceOfPower
-from IndicatorClasses.BollingerEMA import BollingerEMA
-from IndicatorClasses.BollingerSMA import BollingerSMA
-from IndicatorClasses.ChakinOscillator import ChaikinOscillator
-from IndicatorClasses.ChoppinessIndex import ChoppinessIndex
-from IndicatorClasses.CommodityChannelIndex import CommodityChannelIndex
-from IndicatorClasses.ConnorsRSI import ConnorsRSI
-from IndicatorClasses.CoppockCurve import CoppockCurve
-from IndicatorClasses.CumulativeVolume import CumulativeVolume
-from IndicatorClasses.DetrendedPriceOscillator import DetrendedPriceOscillator
-from IndicatorClasses.DirectionalMovement import DirectionalMovement
-from IndicatorClasses.DonchianChannels import DonchianChannels
-from IndicatorClasses.EaseOfMovement import EaseOfMovement
-from IndicatorClasses.EldersForce import EldersForce
-from IndicatorClasses.EnvelopeEMA import EnvelopeEMA
-from IndicatorClasses.EnvelopeSMA import EnvelopeSMA
-from IndicatorClasses.ExponentialMovingAverage import ExponentialMovingAverage
-from IndicatorClasses.SimpleMovingAverage import SimpleMovingAverage
-from IndicatorClasses.FisherTransform import FisherTransform
-from IndicatorClasses.FisherTransformReversal import FisherTransformReversal
-from IndicatorClasses.McGinleyDynamic import McGinleyDynamic
-from IndicatorClasses.HistoricalVolatility import HistoricalVolatility
-from IndicatorClasses.KeltnerChannel import KeltnerChannel
-from IndicatorClasses.LinearRegression import LinearRegression
-from IndicatorClasses.LocalVolatility import LocalVolatility
-from IndicatorClasses.MassIndex import MassIndex
-from IndicatorClasses.MomentumOscillator import MomentumOscillator
-from IndicatorClasses.MomentumOscillatorReversal import MomentumOscillatorReversal
-from IndicatorClasses.MoneyFlowReversal import MoneyFlowReversal
-from IndicatorClasses.MovingAverageConvergenceDivergence import MovingAverageConvergenceDivergence
-from IndicatorClasses.OnBalanceVolume import OnBalanceVolume
-from IndicatorClasses.PivotPoint import PivotPoint
-from IndicatorClasses.PriceVolumeTrend import PriceVolumeTrend
-from IndicatorClasses.PriceVolumeTrendReversal import PriceVolumeTrendReversal
-from IndicatorClasses.RateOfChange import RateOfChange
-from IndicatorClasses.RelativeStrengthIndex import RelativeStrengthIndex
-from IndicatorClasses.SimpleMovingAverageOscillator import SimpleMovingAverageOscillator
-from IndicatorClasses.SMIErgodic import SMIErgodic
-from IndicatorClasses.StochasticOscillator import StochasticOscillator
-from IndicatorClasses.WeightedMovingAverage import WeightedMovingAverage
-from IndicatorClasses.StochasticOscillatorReversal import StochasticOscillatorReversal
-from IndicatorClasses.TRIX import TRIX
-from IndicatorClasses.TrueStrengthIndicator import TrueStrengthIndicator
-from IndicatorClasses.Volume import Volume
-from IndicatorClasses.VolumeOscillator import VolumeOscillator
-from IndicatorClasses.VortexOscillator import VortexOscillator
-from IndicatorClasses.WilliamsPercentR import WilliamsPercentR
 from IndicatorClasses.TradingRange import TradingRange
 import yfinance as yf
 from StockDataExtraction.StockData import BasketStockData
-from Engines.parallel_engine import Engine1
+from Engines.Engine1 import Engine1
 from StockDataExtraction.yfinanceDataPull import extract
 import time
 import sys
@@ -81,13 +31,12 @@ def main():
 
     begin1 = time.time()
     dict_of_dataframes = x
-    base_lookback = 10
-    reading_lookback = 3
-    number_of_readings = 20
+    base_lookback = 5
+    number_of_readings = 5
 
-    eng_obj = Engine1(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, reading_lookback = reading_lookback, number_of_readings = number_of_readings)
+    eng_obj = Engine1(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, number_of_readings = number_of_readings)
     longs, shorts = eng_obj.generate()
-    print ("Metrics " + '\n' + "Base Lookback: " + str(base_lookback) + '\n' + "Reading Lookback: " + str(reading_lookback) + '\n' + "Number of Readings: " + str(number_of_readings))
+    print ("Metrics " + '\n' + "Base Lookback: " + str(base_lookback) + '\n' + "Number of Readings: " + str(number_of_readings))
     print("Longs: ")
     print(longs)
     print()

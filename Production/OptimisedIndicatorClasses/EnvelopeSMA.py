@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class BollingerSMA:
+class EnvelopeSMA:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -27,7 +27,7 @@ class BollingerSMA:
         self.long_cash = 0
         self.short_cash = 0
 
-    def bol_sma_gen(self):
+    def env_sma_gen(self):
         price_array = self.price_array
         lookback = self.lookback
         multiplier = self.multiplier
@@ -43,9 +43,8 @@ class BollingerSMA:
         
         sma_arr = sma(price_array, lookback)
         for i in range(price_array.size - lookback):
-            std = np.std(price_array[i:i+lookback])
-            up_bound_array[i+lookback] = sma_arr[i+lookback] + (std*multiplier)
-            down_bound_array[i+lookback] = sma_arr[i+lookback] - (std*multiplier)
+            up_bound_array[i+lookback] = sma_arr[i+lookback] + (sma_arr[i+lookback]*multiplier)
+            down_bound_array[i+lookback] = sma_arr[i+lookback] - (sma_arr[i+lookback]*multiplier)
 
         self.up_bound_array = up_bound_array
         self.sma_arr = sma_arr
@@ -161,7 +160,7 @@ class BollingerSMA:
 
     def run(self):
         start = time.time()
-        self.bol_sma_gen()
+        self.env_sma_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -219,7 +218,7 @@ class BollingerSMA:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: Bollinger Bands for Simple Moving Average")
+        print("Indicator Name: Envelope Bands for Simple Moving Average")
         print("Lookback: " + str(self.lookback))
         print("Training Period: " + str(self.price_array.size))
         print("Multiplier: " + str(self.multiplier))
@@ -257,7 +256,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = BollingerSMA(price_list, 5, 1)
+indic_obj = EnvelopeSMA(price_list, 5, 0.02)
 x = indic_obj.run()
 indic_obj.diagnostics()
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class BollingerWMA:
+class EnvelopeWMA:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -27,7 +27,7 @@ class BollingerWMA:
         self.long_cash = 0
         self.short_cash = 0
 
-    def bol_wma_gen(self):
+    def env_wma_gen(self):
         price_array = self.price_array
         lookback = self.lookback
         multiplier = self.multiplier
@@ -47,9 +47,8 @@ class BollingerWMA:
         
         wma_arr = wma(price_array, lookback)
         for i in range(price_array.size - lookback):
-            std = np.std(price_array[i:i+lookback])
-            up_bound_array[i+lookback] = wma_arr[i+lookback] + (std*multiplier)
-            down_bound_array[i+lookback] = wma_arr[i+lookback] - (std*multiplier)
+            up_bound_array[i+lookback] = wma_arr[i+lookback] + (wma_arr[i+lookback]*multiplier)
+            down_bound_array[i+lookback] = wma_arr[i+lookback] - (wma_arr[i+lookback]*multiplier)
 
         self.up_bound_array = up_bound_array
         self.wma_arr = wma_arr
@@ -165,7 +164,7 @@ class BollingerWMA:
 
     def run(self):
         start = time.time()
-        self.bol_wma_gen()
+        self.env_wma_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -223,7 +222,7 @@ class BollingerWMA:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: Bollinger Bands for Weighted Moving Average")
+        print("Indicator Name: Envelope Bands for Weighted Moving Average")
         print("Lookback: " + str(self.lookback))
         print("Training Period: " + str(self.price_array.size))
         print("Multiplier: " + str(self.multiplier))
@@ -261,7 +260,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = BollingerWMA(price_list, 5, 1)
+indic_obj = EnvelopeWMA(price_list, 5, 0.02)
 x = indic_obj.run()
 indic_obj.diagnostics()
 

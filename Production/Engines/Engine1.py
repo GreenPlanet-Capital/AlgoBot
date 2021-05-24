@@ -111,7 +111,7 @@ class Engine1:
 
         copy_dict = {}
         for ticker, data in copy_dict_list:
-            copy_dict[ticker] = abs(data)
+            copy_dict[ticker] = abs(data.round(4))
 
         sorted_dictionary = sorted(copy_dict.items(), key = lambda kv: kv[1])
         sorted_dict = dict(sorted_dictionary)

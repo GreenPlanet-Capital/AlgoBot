@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class SMA_SMA_Osc:
+class WMA_SMA_Osc:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -29,7 +29,7 @@ class SMA_SMA_Osc:
         self.long_cash = 0
         self.short_cash = 0
 
-    def sma_sma_osc_gen(self):
+    def wma_sma_osc_gen(self):
         price_array = self.price_array
         short_lookback = self.short_lookback
         long_lookback = self.long_lookback
@@ -41,7 +41,18 @@ class SMA_SMA_Osc:
                 out_val = (np.sum(price_array[i:i+lookback])/lookback)
                 out_array = np.append(out_array,out_val)
             return out_array
-        out_arr = np.subtract(sma(price_array, short_lookback)[long_lookback:], sma(price_array, long_lookback)[long_lookback:])
+        
+        def wma(price_array, lookback):
+            out_array = np.array([None for i in range(lookback)])
+            for i in range(price_array.size - lookback):
+                in_array = (price_array[i:i+lookback])
+                sum_val = 0
+                for j in range(lookback):
+                    sum_val += in_array[j]*(j+1)
+                out_val = sum_val*2/(lookback*(lookback+1))
+                out_array = np.append(out_array,out_val)
+            return out_array
+        out_arr = np.subtract(wma(price_array, short_lookback)[long_lookback:], sma(price_array, long_lookback)[long_lookback:])
         out_array = np.append(out_array,out_arr)
         
         self.osc_array = out_array
@@ -193,7 +204,7 @@ class SMA_SMA_Osc:
 
     def run(self):
         start = time.time()
-        self.sma_sma_osc_gen()
+        self.wma_sma_osc_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -262,7 +273,7 @@ class SMA_SMA_Osc:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: Simple Moving Average Oscillator")
+        print("Indicator Name: Weighted Moving Average/Simple Moving Average Oscillator")
         print("Short Lookback: " + str(self.short_lookback))
         print("Long Lookback: " + str(self.long_lookback))
         print("Training Period: " + str(self.price_array.size))
@@ -302,7 +313,7 @@ def main():
     data = data.iloc[-50:]
     price_list = np.array(data['Typical Price'])
 
-    indic_obj = SMA_SMA_Osc(price_list, 5, 8)
+    indic_obj = WMA_SMA_Osc(price_list, 5, 8)
     x = indic_obj.run()
     indic_obj.diagnostics()
 

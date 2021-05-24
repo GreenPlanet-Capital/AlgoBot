@@ -5,6 +5,7 @@ from OptimisedIndicatorClasses.EnvelopeMcG import EnvelopeMcG
 from OptimisedIndicatorClasses.EnvelopeSMA import EnvelopeSMA
 from OptimisedIndicatorClasses.EnvelopeWMA import EnvelopeWMA
 from OptimisedIndicatorClasses.SMA_SMA_Osc import SMA_SMA_Osc
+from OptimisedIndicatorClasses.WMA_SMA_Osc import WMA_SMA_Osc
 import yfinance as yf
 import numpy as np
 
@@ -14,7 +15,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = SMA_SMA_Osc(price_list, 5, 8)
+indic_obj = WMA_SMA_Osc(price_list, 5, 8)
 x = indic_obj.run()
 print(x)
 indic_obj.graphing()

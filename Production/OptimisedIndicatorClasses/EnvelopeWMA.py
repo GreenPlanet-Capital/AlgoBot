@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class BollingerMcG:
+class BollingerWMA:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
@@ -19,7 +19,7 @@ class BollingerMcG:
         self.lookback = lookback 
         self.multiplier = multiplier
         self.up_bound_array = np.array([])
-        self.mcg_arr = np.array([])
+        self.wma_arr = np.array([])
         self.down_bound_array = np.array([])
         self.bias_array = np.array([])
         self.long_book = np.array([])
@@ -27,39 +27,32 @@ class BollingerMcG:
         self.long_cash = 0
         self.short_cash = 0
 
-    def bol_mcg_gen(self):
+    def bol_wma_gen(self):
         price_array = self.price_array
         lookback = self.lookback
         multiplier = self.multiplier
         up_bound_array = np.array([None for i in range(price_array.size)])
         down_bound_array = np.array([None for i in range(price_array.size)])
         
-        def mcg(price_array, lookback):
+        def wma(price_array, lookback):
             out_array = np.array([None for i in range(lookback)])
-
-            sum_var = np.sum(price_array[0:lookback])
-            base_val = (sum_var/lookback)
-            out_array = np.append(out_array,base_val)
-
-            for i in range(price_array.size - lookback - 1):
-                price_t = price_array[i + lookback + 1]
-                add_val = (price_t - base_val)
-                frac = (price_t/base_val)**4 
-                denom = frac*lookback
-                out_val = base_val + add_val/denom
-
+            for i in range(price_array.size - lookback):
+                in_array = (price_array[i:i+lookback])
+                sum_val = 0
+                for j in range(lookback):
+                    sum_val += in_array[j]*(j+1)
+                out_val = sum_val*2/(lookback*(lookback+1))
                 out_array = np.append(out_array,out_val)
-                base_val = out_val
             return out_array
-    
-        mcg_arr = mcg(price_array, lookback)
+        
+        wma_arr = wma(price_array, lookback)
         for i in range(price_array.size - lookback):
             std = np.std(price_array[i:i+lookback])
-            up_bound_array[i+lookback] = mcg_arr[i+lookback] + (std*multiplier)
-            down_bound_array[i+lookback] = mcg_arr[i+lookback] - (std*multiplier)
+            up_bound_array[i+lookback] = wma_arr[i+lookback] + (std*multiplier)
+            down_bound_array[i+lookback] = wma_arr[i+lookback] - (std*multiplier)
 
         self.up_bound_array = up_bound_array
-        self.mcg_arr = mcg_arr
+        self.wma_arr = wma_arr
         self.down_bound_array = down_bound_array
 
     def current_bias(self):
@@ -172,7 +165,7 @@ class BollingerMcG:
 
     def run(self):
         start = time.time()
-        self.bol_mcg_gen()
+        self.bol_wma_gen()
         end = time.time()
         self.indic_runtime = end - start 
 
@@ -194,7 +187,7 @@ class BollingerMcG:
         plot_width = self.plot_width
         plot_length = self.plot_length
         price_list = self.price_array
-        mcg_array = self.mcg_arr
+        wma_array = self.wma_arr
         up_bol = self.up_bound_array
         down_bol = self.down_bound_array
         bias_array = self.bias_array
@@ -207,12 +200,12 @@ class BollingerMcG:
 
         figure(figsize=(plot_width, plot_length))
         ax2 = plt.subplot()
-        plt.plot(np.arange(mcg_array.size), mcg_array, color = 'black')
+        plt.plot(np.arange(wma_array.size), wma_array, color = 'black')
 
         figure(figsize=(plot_width, plot_length))
         ax3 = plt.subplot()
         plt.plot(np.arange(up_bol.size), up_bol, color = 'black')
-        plt.plot(np.arange(mcg_array.size), mcg_array, color = 'orange')
+        plt.plot(np.arange(wma_array.size), wma_array, color = 'orange')
         plt.plot(np.arange(down_bol.size), down_bol, color = 'black')
         plt.plot(np.arange(price_list.size), price_list, color = 'blue')
 
@@ -230,7 +223,7 @@ class BollingerMcG:
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: Bollinger Bands for McGinley Dynamic")
+        print("Indicator Name: Bollinger Bands for Weighted Moving Average")
         print("Lookback: " + str(self.lookback))
         print("Training Period: " + str(self.price_array.size))
         print("Multiplier: " + str(self.multiplier))
@@ -268,7 +261,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = BollingerMcG(price_list, 5, 1)
+indic_obj = BollingerWMA(price_list, 5, 1)
 x = indic_obj.run()
 indic_obj.diagnostics()
 

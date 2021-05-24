@@ -10,6 +10,7 @@ from OptimisedIndicatorClasses.WMA_WMA_Osc import WMA_WMA_Osc
 from OptimisedIndicatorClasses.WMA_McG_Osc import WMA_McG_Osc
 from OptimisedIndicatorClasses.SMA_McG_Osc import SMA_McG_Osc
 from OptimisedIndicatorClasses.DM_DM_Osc import DM_DM_Osc
+from OptimisedIndicatorClasses.Lin_Reg import Lin_Reg
 import yfinance as yf
 import numpy as np
 
@@ -19,7 +20,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = DM_DM_Osc(price_list, 5, 8)
+indic_obj = Lin_Reg(price_list,8)
 x = indic_obj.run()
 print(x)
 indic_obj.graphing()

@@ -261,14 +261,17 @@ class BollingerMcG:
 
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
 
+def main():
+    extract_obj = yf.Ticker("AAPL")
+    data = extract_obj.history(period="1y")
+    data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round(2)
+    data = data.iloc[-50:]
+    price_list = np.array(data['Typical Price'])
 
-extract_obj = yf.Ticker("AAPL")
-data = extract_obj.history(period="1y")
-data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round(2)
-data = data.iloc[-50:]
-price_list = np.array(data['Typical Price'])
+    indic_obj = BollingerMcG(price_list, 5, 1)
+    x = indic_obj.run()
+    indic_obj.diagnostics()
 
-indic_obj = BollingerMcG(price_list, 5, 1)
-x = indic_obj.run()
-indic_obj.diagnostics()
+if __name__ == '__main__':
+    main()
 

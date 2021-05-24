@@ -5,77 +5,110 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import yfinance as yf
 
-class EnvelopeSMA:
+class SMA_SMA_Osc:
     plot_width = 5
     plot_length = 3
     indic_runtime = 0
+    signal_runtime = 0
+    signum_runtime = 0
     bias_runtime = 0
     efficacy_runtime = 0
     live_output = 0
     efficacy_value = 0
 
-    def __init__(self, price_array, lookback, multiplier = 1.2):
+    def __init__(self, price_array, short_lookback, long_lookback):
         self.price_array = price_array
-        self.lookback = lookback 
-        self.multiplier = multiplier
-        self.up_bound_array = np.array([])
-        self.sma_arr = np.array([])
-        self.down_bound_array = np.array([])
+        self.short_lookback = short_lookback 
+        self.long_lookback = long_lookback
+        self.osc_array = np.array([])
+        self.signal_array = np.array([])
+        self.signum_array = np.array([])
         self.bias_array = np.array([])
         self.long_book = np.array([])
         self.short_book = np.array([])
         self.long_cash = 0
         self.short_cash = 0
 
-    def env_sma_gen(self):
+    def sma_sma_osc_gen(self):
         price_array = self.price_array
-        lookback = self.lookback
-        multiplier = self.multiplier
-        up_bound_array = np.array([None for i in range(price_array.size)])
-        down_bound_array = np.array([None for i in range(price_array.size)])
-        
+        short_lookback = self.short_lookback
+        long_lookback = self.long_lookback
+
+        out_array = np.array([None for i in range(long_lookback)])
         def sma(price_array, lookback):
             out_array = np.array([None for i in range(lookback)])
             for i in range(price_array.size - lookback):
                 out_val = (np.sum(price_array[i:i+lookback])/lookback)
                 out_array = np.append(out_array,out_val)
             return out_array
+        out_arr = np.subtract(sma(price_array, short_lookback)[long_lookback:], sma(price_array, long_lookback)[long_lookback:])
+        out_array = np.append(out_array,out_arr)
         
-        sma_arr = sma(price_array, lookback)
-        for i in range(price_array.size - lookback):
-            up_bound_array[i+lookback] = sma_arr[i+lookback] + (sma_arr[i+lookback]*multiplier)
-            down_bound_array[i+lookback] = sma_arr[i+lookback] - (sma_arr[i+lookback]*multiplier)
+        self.osc_array = out_array
 
-        self.up_bound_array = up_bound_array
-        self.sma_arr = sma_arr
-        self.down_bound_array = down_bound_array
+    def signal_generation(self):
+        oscillator_array = self.osc_array
+        long_lookback = self.long_lookback
+
+        out_array = np.array([0 for i in range(long_lookback + 1)])
+        start_val = long_lookback + 1
+        for i in range(start_val, oscillator_array.size):
+            append_val = 0
+            if (oscillator_array[i] > 0 and oscillator_array[i - 1]  <= 0):
+                append_val = oscillator_array[i] - oscillator_array[i - 1]
+            elif (oscillator_array[i] < 0 and oscillator_array[i - 1]  >= 0):
+                append_val = oscillator_array[i] - oscillator_array[i - 1]
+            out_array = np.append(out_array, append_val)
+        
+        self.signal_array = out_array
+    
+    def signum_generation(self):
+        signal_array = self.signal_array
+        sensitivity = 1.5
+        out_arr = np.empty(0)
+        std = np.std(signal_array)
+        for i in signal_array:
+            append_val = 0
+            if (i > std*sensitivity):
+                append_val = 100
+            elif (i < -std*sensitivity):
+                append_val = -100
+            out_arr = np.append(out_arr, append_val)
+        
+        self.signum_array = out_arr
 
     def current_bias(self):
-        price_array = self.price_array
-        up_bound_array = self.up_bound_array
-        down_bound_array = self.down_bound_array
-
+        signal_array = self.signal_array
+        signum_array = self.signum_array
         bias = 0
         bias_list = []
-        for i,j,k in zip(price_array,up_bound_array, down_bound_array):
-            try: 
-                if(i >= j):
+        for i,j in zip(signal_array,signum_array):
+            if (bias == 0):
+                if (j == 100):
                     bias = 100
-                elif(i <= k):
+                elif(j == -100):
                     bias = -100
-                elif(i > k and i < j):
+            elif(bias == -100):
+                if (j == 100 and i > 0):
+                    bias = 100
+                elif(j != 100 and i > 0):
                     bias = 0
-            except TypeError:
-                bias = 0
+            elif(bias == 100):
+                if (j == -100 and i < 0):
+                    bias = -100
+                elif (j != -100 and i < 0):
+                    bias = 0
             bias_list.append(bias)
         bias_array = np.array(bias_list)
+
         self.bias_array = bias_array
 
-    def efficacy_generator(self):
+    def efficacy_generator (self):
         price_array = self.price_array
+        signum_array = self.signum_array
         bias_array = self.bias_array
         stop_loss_percent = 0.3
-        
+
         long_book = [0 for i in range(price_array.size)]
         short_book = [0 for i in range(price_array.size)]
         long_pos = []
@@ -88,11 +121,11 @@ class EnvelopeSMA:
         short_position_flag = False
         long_position_flag = False
         sub_stop = (max(price_array) - min(price_array))*stop_loss_percent
-            
+        
         ctr = 0
-        for i,j in zip(price_array, bias_array):
+        for i,j,k in zip(price_array, bias_array,signum_array):
             if (stop_loss_flag):
-                if(j == 100 or j == -100):
+                if(k == 100 or k == -100):
                     stop_loss_flag = False                 
             elif (stop_loss_flag == False  and short_position_flag == False and long_position_flag == False):
                 if(j == 100):
@@ -136,21 +169,21 @@ class EnvelopeSMA:
                     long_position_flag = False
                     short_position_flag = True
                     long_positions.append(long_pos)
-                    long_pos = []           
+                    long_pos = []
+                    
             ctr += 1
-                
+            
         if (long_pos != []):
             long_positions.append(long_pos)
         if (short_pos != []):
             short_positions.append(short_pos)
-            
+        
         for i in long_positions:
             long_cash += (i[-1] - i[0])
         for i in short_positions:
             short_cash += (i[0] - i[-1])
-            
+        
         efficacy_val = (long_cash+short_cash)/sub_stop
-
         self.long_book = long_book
         self.short_book = short_book
         self.long_cash = long_cash
@@ -160,9 +193,19 @@ class EnvelopeSMA:
 
     def run(self):
         start = time.time()
-        self.env_sma_gen()
+        self.sma_sma_osc_gen()
         end = time.time()
         self.indic_runtime = end - start 
+
+        start = time.time()
+        self.signal_generation()
+        end = time.time()
+        self.signal_runtime = end - start
+
+        start = time.time()
+        self.signum_generation()
+        end = time.time()
+        self.signum_runtime = end - start
 
         start = time.time()
         self.current_bias()
@@ -182,9 +225,9 @@ class EnvelopeSMA:
         plot_width = self.plot_width
         plot_length = self.plot_length
         price_list = self.price_array
-        sma_array = self.sma_arr
-        up_bol = self.up_bound_array
-        down_bol = self.down_bound_array
+        osc_array = self.osc_array 
+        sign_gen = self.signal_array
+        signum_gen = self.signum_array
         bias_array = self.bias_array
         long_book = self.long_book
         short_book = self.short_book
@@ -195,33 +238,34 @@ class EnvelopeSMA:
 
         figure(figsize=(plot_width, plot_length))
         ax2 = plt.subplot()
-        plt.plot(np.arange(sma_array.size), sma_array, color = 'black')
+        plt.plot(np.arange(osc_array .size), osc_array, color = 'darkgreen')
 
         figure(figsize=(plot_width, plot_length))
         ax3 = plt.subplot()
-        plt.plot(np.arange(up_bol.size), up_bol, color = 'black')
-        plt.plot(np.arange(sma_array.size), sma_array, color = 'orange')
-        plt.plot(np.arange(down_bol.size), down_bol, color = 'black')
-        plt.plot(np.arange(price_list.size), price_list, color = 'blue')
+        plt.plot(np.arange(sign_gen.size), sign_gen, color = 'orange')
 
         figure(figsize=(plot_width, plot_length))
         ax4 = plt.subplot()
-        plt.plot(np.arange(bias_array.size), bias_array, color = 'green')
+        plt.plot(np.arange(signum_gen.size), signum_gen, color = 'orange')
 
         figure(figsize=(plot_width, plot_length))
         ax5 = plt.subplot()
-        plt.bar(np.arange(bias_array.size), long_book, color = 'green')
-        plt.bar(np.arange(bias_array.size), short_book, color = 'red')
+        plt.plot(np.arange(bias_array.size), bias_array, color = 'green')
+
+        figure(figsize=(plot_width, plot_length))
+        ax6 = plt.subplot()
+        plt.bar(np.arange(bias_array.size), long_book , color = 'green')
+        plt.bar(np.arange(bias_array.size), short_book , color = 'red')
 
         plt.show()
 
     def diagnostics(self):
         print("\n" + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" "\n")
         print("Note: Run diagnostics only after calling self.run() function")
-        print("Indicator Name: Envelope Bands for Simple Moving Average")
-        print("Lookback: " + str(self.lookback))
+        print("Indicator Name: Simple Moving Average Oscillator")
+        print("Short Lookback: " + str(self.short_lookback))
+        print("Long Lookback: " + str(self.long_lookback))
         print("Training Period: " + str(self.price_array.size))
-        print("Multiplier: " + str(self.multiplier))
         print("=========================================")
         print("Current Reading: " + str(self.live_output))
         print("Efficacy Value: " + str(self.efficacy_value) )
@@ -242,6 +286,8 @@ class EnvelopeSMA:
         print(
             "Diagnostics \n" +
             "Indicator Generations Time: " + str(self.indic_runtime) + "\n" + 
+            "Signal Generations Time: " + str(self.signal_runtime) + "\n" + 
+            "Signum Generations Time: " + str(self.signum_runtime) + "\n" + 
             "Bias Load Time: " + str(self.bias_runtime) + "\n" + 
             "Efficacy Value Load time: " + str(self.efficacy_runtime) + "\n"
             "Total Time: " + str(self.indic_runtime + self.bias_runtime + self.efficacy_runtime)
@@ -256,7 +302,7 @@ def main():
     data = data.iloc[-50:]
     price_list = np.array(data['Typical Price'])
 
-    indic_obj = EnvelopeSMA(price_list, 5, 0.02)
+    indic_obj = SMA_SMA_Osc(price_list, 5, 8)
     x = indic_obj.run()
     indic_obj.diagnostics()
 

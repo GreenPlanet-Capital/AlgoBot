@@ -91,7 +91,10 @@ class PriceVolumeTrend:
             percent_change = (start_price - end_price)*100/end_price
             
             cum_volume = sum(list(df['VOLUME'].iloc[initial_start_ctr : initial_end_ctr]))
-            scale = 10**math.floor(math.log10(cum_volume))
+            try:
+                scale = 10**math.floor(math.log10(abs(cum_volume)))
+            except ValueError as e:
+                scale = 1
             vol_mult = cum_volume/scale
             pric_vol.append(vol_mult*percent_change)
             

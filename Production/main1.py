@@ -1,0 +1,14 @@
+from OptimisedIndicatorClasses.BollingerSMA import BollingerSMA
+import yfinance as yf
+import numpy as np
+
+extract_obj = yf.Ticker("AAPL")
+data = extract_obj.history(period="1y")
+data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round(2)
+data = data.iloc[-50:]
+price_list = np.array(data['Typical Price'])
+
+indic_obj = BollingerSMA(price_list, 5, 2)
+x = indic_obj.run()
+print(x)
+indic_obj.graphing()

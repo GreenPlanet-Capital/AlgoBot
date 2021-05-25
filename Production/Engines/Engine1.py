@@ -107,34 +107,16 @@ class Engine1:
             pool.close()
             raise e
 
-        copy_dict_list = generated_dict.items()
+        short_book = []
+        long_book = []
 
-        copy_dict = {}
-        for ticker, data in copy_dict_list:
-            copy_dict[ticker] = abs(data.round(4))
-
-        sorted_dictionary = sorted(copy_dict.items(), key = lambda kv: kv[1])
-        sorted_dict = dict(sorted_dictionary)
-
-        ticker_list = [i for i in sorted_dict] 
-
-        long_book = {}
-        short_book = {}
-        long_ctr = 0
-        short_ctr = 0
-
-        for i in reversed(ticker_list):
-            if (long_ctr >= num):
+        sorted_list = sorted(generated_dict.items(),key = lambda kv: kv[1])
+        for i, ((short_ticker,short_data),(long_ticker,long_data)) in enumerate(zip(sorted_list,reversed(sorted_list))):
+            if(i==num):
                 break
-            if (generated_dict[i] > 0):
-                long_book[i] = generated_dict[i]
-                long_ctr += 1
-
-        for i in reversed(ticker_list):
-            if (short_ctr >= num):
-                break
-            if (generated_dict[i] < 0):
-                short_book[i] = generated_dict[i]
-                short_ctr += 1 
+            if(short_data<0):
+                short_book.append((short_ticker, short_data))
+            if(long_data>0):
+                long_book.append((long_ticker,long_data))
 
         return long_book, short_book

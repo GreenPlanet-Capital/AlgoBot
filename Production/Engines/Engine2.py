@@ -68,7 +68,7 @@ class Engine2:
         lin_reg_abs = lin_reg_obj.linreg_array[-1]
 
         total_breakout = bol_mcg_reading + bol_sma_reading + bol_wma_reading + env_mcg_reading + env_sma_reading + env_wma_reading 
-        if (abs(total_breakout) < 500):
+        if (abs(total_breakout) < 400):
             print("Throwing Value")
             return 0
 

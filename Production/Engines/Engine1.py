@@ -38,23 +38,23 @@ class Engine1:
         bol_mcg_reading, bol_mcg_weight = bol_mcg_obj.run()
         bol_mcg_weight = self.weight_adjust(bol_mcg_weight)
 
-        bol_sma_obj = BollingerSMA(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        bol_sma_obj = BollingerSMA(price_array = price_list , lookback = lookback1, multiplier = 1.7)
         bol_sma_reading, bol_sma_weight = bol_sma_obj.run()
         bol_sma_weight = self.weight_adjust(bol_sma_weight)
 
-        bol_wma_obj = BollingerWMA(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        bol_wma_obj = BollingerWMA(price_array = price_list , lookback = lookback1, multiplier = 1.5)
         bol_wma_reading, bol_wma_weight = bol_wma_obj.run()
         bol_wma_weight = self.weight_adjust(bol_wma_weight)
 
-        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 0.02)
         env_mcg_reading, env_mcg_weight = env_mcg_obj.run()
         env_mcg_weight = self.weight_adjust(env_mcg_weight)
 
-        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 0.02)
         env_sma_reading, env_sma_weight = env_sma_obj.run()
         env_sma_weight = self.weight_adjust(env_sma_weight)
 
-        env_wma_obj = EnvelopeWMA(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        env_wma_obj = EnvelopeWMA(price_array = price_list , lookback = lookback1, multiplier = 0.02)
         env_wma_reading, env_wma_weight = env_wma_obj.run()
         env_wma_weight = self.weight_adjust(env_wma_weight)
 

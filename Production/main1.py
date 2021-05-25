@@ -14,13 +14,13 @@ from OptimisedIndicatorClasses.Lin_Reg import Lin_Reg
 import yfinance as yf
 import numpy as np
 
-extract_obj = yf.Ticker("AAPL")
+extract_obj = yf.Ticker("AIZ")
 data = extract_obj.history(period="1y")
 data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round(2)
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = Lin_Reg(price_list,8)
+indic_obj = BollingerMcG(price_list,8, 1.2)
 x = indic_obj.run()
 print(x)
 indic_obj.graphing()

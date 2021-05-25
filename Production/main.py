@@ -29,8 +29,8 @@ def main():
 
     begin1 = time.time()
     dict_of_dataframes = x
-    base_lookback = 10
-    number_of_readings = 100
+    base_lookback = 5
+    number_of_readings = 10
 
     eng_obj = Engine1(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, number_of_readings = number_of_readings)
     longs, shorts = eng_obj.generate()

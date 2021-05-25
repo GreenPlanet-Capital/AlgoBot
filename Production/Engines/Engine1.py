@@ -9,12 +9,14 @@ from OptimisedIndicatorClasses.WMA_SMA_Osc import WMA_SMA_Osc
 from OptimisedIndicatorClasses.WMA_WMA_Osc import WMA_WMA_Osc
 from OptimisedIndicatorClasses.WMA_McG_Osc import WMA_McG_Osc
 from OptimisedIndicatorClasses.SMA_McG_Osc import SMA_McG_Osc
+from OptimisedIndicatorClasses.McG_McG_Osc import McG_McG_Osc
 from OptimisedIndicatorClasses.DM_DM_Osc import DM_DM_Osc
 from OptimisedIndicatorClasses.Lin_Reg import Lin_Reg
 import yfinance as yf
 import numpy as np
 import pandas as pd
 import multiprocessing as mp
+import math
 
 
 class Engine1:
@@ -33,24 +35,25 @@ class Engine1:
         df_input['Typical Price'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
         price_list = np.array(df_input['Typical Price'])
         lookback1 = self.base_lookback
+        multiplier1 = 2
 
-        bol_mcg_obj = BollingerMcG(price_array = price_list , lookback = lookback1, multiplier = 1.2)
+        bol_mcg_obj = BollingerMcG(price_array = price_list , lookback = lookback1, multiplier = 2)
         bol_mcg_reading, bol_mcg_weight = bol_mcg_obj.run()
         bol_mcg_weight = self.weight_adjust(bol_mcg_weight)
 
-        bol_sma_obj = BollingerSMA(price_array = price_list , lookback = lookback1, multiplier = 1.7)
+        bol_sma_obj = BollingerSMA(price_array = price_list , lookback = lookback1, multiplier = 1.5)
         bol_sma_reading, bol_sma_weight = bol_sma_obj.run()
         bol_sma_weight = self.weight_adjust(bol_sma_weight)
 
-        bol_wma_obj = BollingerWMA(price_array = price_list , lookback = lookback1, multiplier = 1.5)
+        bol_wma_obj = BollingerWMA(price_array = price_list , lookback = lookback1, multiplier = 1)
         bol_wma_reading, bol_wma_weight = bol_wma_obj.run()
         bol_wma_weight = self.weight_adjust(bol_wma_weight)
 
-        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 0.02)
+        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 0.03)
         env_mcg_reading, env_mcg_weight = env_mcg_obj.run()
         env_mcg_weight = self.weight_adjust(env_mcg_weight)
 
-        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 0.02)
+        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 0.025)
         env_sma_reading, env_sma_weight = env_sma_obj.run()
         env_sma_weight = self.weight_adjust(env_sma_weight)
 
@@ -58,24 +61,74 @@ class Engine1:
         env_wma_reading, env_wma_weight = env_wma_obj.run()
         env_wma_weight = self.weight_adjust(env_wma_weight)
 
-        total = (
+        dm_dm_obj = DM_DM_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        dm_dm_reading, dm_dm_weight = dm_dm_obj.run()
+        dm_dm_weight = self.weight_adjust(dm_dm_weight)
+
+        mcg_mcg_obj = McG_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        mcg_mcg_reading, mcg_mcg_weight = mcg_mcg_obj.run()
+        mcg_mcg_weight = self.weight_adjust(mcg_mcg_weight)
+
+
+        sma_mcg_obj = SMA_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        sma_mcg_reading, sma_mcg_weight = sma_mcg_obj.run()
+        sma_mcg_weight = self.weight_adjust(sma_mcg_weight)
+        
+        sma_sma_obj = SMA_SMA_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        sma_sma_reading, sma_sma_weight = sma_sma_obj.run()
+        sma_sma_weight = self.weight_adjust(sma_sma_weight)
+        
+        wma_mcg_obj = WMA_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_mcg_reading, wma_mcg_weight = wma_mcg_obj.run()
+        wma_mcg_weight = self.weight_adjust(wma_mcg_weight)
+        
+        wma_sma_obj = WMA_SMA_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_sma_reading, wma_sma_weight = wma_sma_obj.run()
+        wma_sma_weight = self.weight_adjust(wma_sma_weight)
+        
+        wma_wma_obj = WMA_WMA_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_wma_reading, wma_wma_weight = wma_wma_obj.run()
+        wma_wma_weight = self.weight_adjust(wma_wma_weight)
+
+        lin_reg_obj = Lin_Reg(price_array = price_list, lookback = lookback1)
+        lin_reg_reading, lin_reg_weight = lin_reg_obj.run()
+        lin_reg_weight = self.weight_adjust(lin_reg_weight)
+        lin_reg_abs = lin_reg_obj.linreg_array[-1]
+
+        total1 = (
                 bol_mcg_weight + 
                 bol_sma_weight +
                 bol_wma_weight +
                 env_sma_weight +
                 env_mcg_weight +
-                env_wma_weight
+                env_wma_weight + 
+                dm_dm_weight + 
+                mcg_mcg_weight + 
+                sma_mcg_weight + 
+                sma_sma_weight + 
+                wma_mcg_weight + 
+                wma_sma_weight +
+                wma_wma_weight
                 )
         
-        reading = (
-                bol_mcg_reading * bol_mcg_weight +
+        reading1 = (
+                (bol_mcg_reading * bol_mcg_weight +
                 bol_sma_reading * bol_sma_weight +
                 bol_wma_reading * bol_wma_weight + 
                 env_mcg_reading * bol_mcg_weight +
                 env_sma_reading * bol_sma_weight +
-                env_wma_reading * bol_wma_weight  
-                )
-        reading = reading/total
+                env_wma_reading * bol_wma_weight)*1.5 + 
+                (dm_dm_reading * dm_dm_weight +
+                sma_sma_reading * sma_sma_weight +
+                wma_wma_reading * wma_wma_weight + 
+                mcg_mcg_reading * mcg_mcg_weight +
+                sma_mcg_reading * sma_mcg_weight +
+                wma_sma_reading * wma_sma_weight + 
+                wma_mcg_reading * wma_mcg_weight) + 
+                lin_reg_reading * lin_reg_weight
+                )  
+        reading = reading1/total1
+
         return reading
 
     def generate_listOfTickers(self):
@@ -98,7 +151,7 @@ class Engine1:
         generated_dict = {}
 
         if (num >= len(in_dict)):
-            raise IndexError("The number of readings is too high, reduce to less than half the length of the input")
+            raise IndexError("The number of readings is too high, reduce to less than the length of the input")
 
         pool = mp.Pool(mp.cpu_count())
         try:

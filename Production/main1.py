@@ -15,7 +15,7 @@ from OptimisedIndicatorClasses.Lin_Reg import Lin_Reg
 import yfinance as yf
 import numpy as np
 
-extract_obj = yf.Ticker("AIZ")
+extract_obj = yf.Ticker("TTKPRESTIG.NS")
 data = extract_obj.history(period="1y")
 data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round(2)
 data = data.iloc[-50:]

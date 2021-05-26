@@ -4,12 +4,13 @@ import pandas as pd
 
 """
 Data Format for Positions
-[(TICKER, LONG/SHORT, Number_Of_Shares_Traded, Entry_Price, Exit_Price, Days_Since_Entry)]
+[(TICKER, LONG/SHORT, Number_Of_Shares_Traded, Entry_Price, maximum_position_value, Days_Since_Entry)]
 
 
 """
 class SwingBacktest:
     initial_capital = 100000
+    current_account_size = initial_capital
     cash = initial_capital
     position_list = []
     transaction_cost_per_trade = 20
@@ -73,16 +74,11 @@ class SwingBacktest:
                 present_price = ((datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3).round(2)
                 ticker = i[0]
                 strength = i[1].round(1)
-                print("Ticker:" + ticker)
                 pcnt_pos = abs(strength/total_short_strength)
-                print("Percent Position: " + str(pcnt_pos))
                 allocation = (pcnt_pos*pcnt_allocation_longs*account_size).round(1)
-                print("Allocation: " + str(allocation))
                 num_of_shares = int((allocation/present_price).round(0))
                 num_of_shares = int(num_of_shares - num_of_shares*0.05)
-                print("Number of Shares: " + str(num_of_shares))
-                print()
-                self.position_list.append((ticker, "LONG", num_of_shares, present_price, 0, 1))
+                self.position_list.append((ticker, "LONG", num_of_shares, present_price, present_price, 1))
                 self.cash -= num_of_shares*present_price
 
             for i in shorts:
@@ -90,19 +86,17 @@ class SwingBacktest:
                 present_price = ((datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3).round(2)
                 ticker = i[0]
                 strength = i[1].round(1)
-                print("Ticker:" + ticker)
                 pcnt_pos = abs(strength/total_short_strength)
-                print("Percent Position: " + str(pcnt_pos))
                 allocation = (pcnt_pos*pcnt_allocation_shorts*account_size).round(1)
-                print("Allocation: " + str(allocation))
                 num_of_shares = int((allocation/present_price).round(0))
                 num_of_shares = int(num_of_shares - num_of_shares*0.05)
-                print("Number of Shares: " + str(num_of_shares))
-                print()
-                self.position_list.append((ticker, "SHORT", num_of_shares, present_price, 0, 1))
+                self.position_list.append((ticker, "SHORT", num_of_shares, present_price, present_price, 1))
                 self.cash -= num_of_shares*present_price
 
-        def portfolio_maintenance():
+            self.cash -= self.transaction_cost_per_trade*self.number_of_live_positions
+            self.current_account_size -= self.transaction_cost_per_trade*self.number_of_live_positions
+
+        def portfolio_maintenance(position_list, todays_dataframe):
             #if(self.cash >  self.initial_capital/self.max_positions):
             pass
         def exit_positions():
@@ -119,3 +113,4 @@ class SwingBacktest:
         initial_generate_positions(self.input_dict)
         print(self.position_list)
         print(self.cash)
+        print(self.current_account_size)

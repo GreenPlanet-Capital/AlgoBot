@@ -4,6 +4,7 @@ from OptimisedIndicatorClasses.BollingerMcG import BollingerMcG
 from OptimisedIndicatorClasses.EnvelopeMcG import EnvelopeMcG
 from OptimisedIndicatorClasses.EnvelopeSMA import EnvelopeSMA
 from OptimisedIndicatorClasses.EnvelopeWMA import EnvelopeWMA
+from OptimisedIndicatorClasses.McG_McG_Osc import McG_McG_Osc
 from OptimisedIndicatorClasses.SMA_SMA_Osc import SMA_SMA_Osc
 from OptimisedIndicatorClasses.WMA_SMA_Osc import WMA_SMA_Osc
 from OptimisedIndicatorClasses.WMA_WMA_Osc import WMA_WMA_Osc
@@ -20,7 +21,7 @@ data['Typical Price'] = ((data['High'] + data['Low'] + data['Close']) / 3).round
 data = data.iloc[-50:]
 price_list = np.array(data['Typical Price'])
 
-indic_obj = BollingerMcG(price_list,8, 1.2)
+indic_obj = SMA_McG_Osc(price_list, 8, 1.2)
 x = indic_obj.run()
 print(x)
 indic_obj.graphing()

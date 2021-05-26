@@ -35,7 +35,7 @@ class Engine2:
         df_input['Typical Price'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
         price_list = np.array(df_input['Typical Price'])
         lookback1 = self.base_lookback
-        multiplier1 = 1.7
+        multiplier1 = 1.5
         reading1 = 0
 
         bol_mcg_obj = BollingerMcG(price_array = price_list , lookback = lookback1, multiplier = 2)
@@ -62,32 +62,28 @@ class Engine2:
         env_wma_reading, env_wma_weight = env_wma_obj.run()
         env_wma_weight = self.weight_adjust(env_wma_weight)
 
-        lin_reg_obj = Lin_Reg(price_array = price_list, lookback = 3)
+        lin_reg_obj = Lin_Reg(price_array = price_list, lookback = 5)
         lin_reg_reading, lin_reg_weight = lin_reg_obj.run()
         lin_reg_weight = self.weight_adjust(lin_reg_weight)
         lin_reg_abs = lin_reg_obj.linreg_array[-1]
 
         total_breakout = bol_mcg_reading + bol_sma_reading + bol_wma_reading + env_mcg_reading + env_sma_reading + env_wma_reading 
         if (abs(total_breakout) < 400):
-            print("Throwing Value")
             return 0
-
         if (lin_reg_reading >= 0 and total_breakout > 0):
             reading1 = 1
         elif (lin_reg_reading >= 0 and total_breakout < 0):
-            print("Contradiction")
             return 0
         elif (lin_reg_reading <= 0 and total_breakout > 0):
-            print("Contradiction")
             return 0
         elif (lin_reg_reading <= 0 and total_breakout < 0):
             reading1 = 1
 
-        mcg_mcg_obj = McG_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        mcg_mcg_obj = McG_McG_Osc(price_array = price_list , short_lookback = lookback1 - 2, long_lookback = math.ceil(lookback1 * multiplier1) - 2)
         mcg_mcg_reading, mcg_mcg_weight = mcg_mcg_obj.run()
         mcg_mcg_weight = self.weight_adjust(mcg_mcg_weight)
 
-        sma_mcg_obj = SMA_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        sma_mcg_obj = SMA_McG_Osc(price_array = price_list , short_lookback = lookback1 - 2, long_lookback = math.ceil(lookback1 * multiplier1))
         sma_mcg_reading, sma_mcg_weight = sma_mcg_obj.run()
         sma_mcg_weight = self.weight_adjust(sma_mcg_weight)
         
@@ -95,15 +91,15 @@ class Engine2:
         sma_sma_reading, sma_sma_weight = sma_sma_obj.run()
         sma_sma_weight = self.weight_adjust(sma_sma_weight)
         
-        wma_mcg_obj = WMA_McG_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_mcg_obj = WMA_McG_Osc(price_array = price_list , short_lookback = lookback1 - 2, long_lookback = math.ceil(lookback1 * multiplier1) + 1)
         wma_mcg_reading, wma_mcg_weight = wma_mcg_obj.run()
         wma_mcg_weight = self.weight_adjust(wma_mcg_weight)
         
-        wma_sma_obj = WMA_SMA_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_sma_obj = WMA_SMA_Osc(price_array = price_list , short_lookback = lookback1 + 5, long_lookback = math.ceil(lookback1 * multiplier1) + 5)
         wma_sma_reading, wma_sma_weight = wma_sma_obj.run()
         wma_sma_weight = self.weight_adjust(wma_sma_weight)
         
-        wma_wma_obj = WMA_WMA_Osc(price_array = price_list , short_lookback = lookback1, long_lookback = math.ceil(lookback1 * multiplier1))
+        wma_wma_obj = WMA_WMA_Osc(price_array = price_list , short_lookback = lookback1 + 3, long_lookback = math.ceil(lookback1 * multiplier1) + 3)
         wma_wma_reading, wma_wma_weight = wma_wma_obj.run()
         wma_wma_weight = self.weight_adjust(wma_wma_weight)
 
@@ -130,10 +126,8 @@ class Engine2:
         if (reading >= 0 and total_breakout > 0):
             return reading
         elif (reading >= 0 and total_breakout < 0):
-            print("Contradiction1")
             return 0
         elif (reading <= 0 and total_breakout > 0):
-            print("Contradiction1")
             return 0
         elif (reading <= 0 and total_breakout < 0):
             return reading

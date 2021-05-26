@@ -90,7 +90,7 @@ class Engine1:
         wma_wma_reading, wma_wma_weight = wma_wma_obj.run()
         wma_wma_weight = self.weight_adjust(wma_wma_weight)
 
-        lin_reg_obj = Lin_Reg(price_array = price_list, lookback = 3)
+        lin_reg_obj = Lin_Reg(price_array = price_list, lookback = lookback1)
         lin_reg_reading, lin_reg_weight = lin_reg_obj.run()
         lin_reg_weight = self.weight_adjust(lin_reg_weight)
         lin_reg_abs = lin_reg_obj.linreg_array[-1]

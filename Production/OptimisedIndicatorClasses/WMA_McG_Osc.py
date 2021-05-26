@@ -54,7 +54,7 @@ class WMA_McG_Osc:
             base_val = (sum_var/lookback)
             out_array = np.append(out_array,base_val)
 
-            for i in range(price_array.size - lookback - 1):
+            for i in range(price_array.size - lookback):
                 price_t = price_array[i + lookback]
                 add_val = (price_t - base_val)
                 frac = (price_t/base_val)**4 

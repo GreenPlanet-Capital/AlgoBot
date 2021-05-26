@@ -27,18 +27,25 @@ class SwingBacktest:
 
     def clean_dictionary(self):
         input_dict = self.input_dict
-        list_tickers = list(input_dict.keys)
+        list_tickers = list(input_dict.keys())
 
         requirement_length = self.training_period + self.test_period
         for i in list_tickers:
-            if len(input_dict[i] <= requirement_length):
+            if (len(input_dict[i]) <= requirement_length):
+                print(len(input_dict[i]))
                 print("Deleting Ticker: " + i + " due to insufficient data")
-                del input_dict[i]
+                del self.input_dict[i]
+            self.input_dict[i] = self.input_dict[i].iloc[-requirement_length:]
 
     def test(self):
         def initial_generate_positions(input_dictionary):
             eng_obj = Engine2(dict_of_dataframes = input_dictionary, base_lookback = self.base_lookback, number_of_readings = self.number_of_readings)
             longs, shorts = eng_obj.generate(absolute_list = False)
+            print("Longs: ")
+            print(longs)
+            print("Shorts: ")
+            print(longs)
+            
             account_size = self.initial_capital
 
             if(len(longs) <= self.number_of_readings):
@@ -60,7 +67,6 @@ class SwingBacktest:
             
             for i in longs:
                 datapoint_df = input_dictionary[i[0]].iloc[-1]
-                print(datapoint_df)
                 present_price = (datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3
                 ticker = i[0]
                 pcnt_pos = i[1]/total_long_strength
@@ -70,7 +76,7 @@ class SwingBacktest:
 
             for i in shorts:
                 datapoint_df = input_dictionary[i[0]].iloc[-1]
-                present_price = (datapoint_df['High'] + datapoint_df['Low'] + datapoint_df['Close'])/3
+                present_price = (datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3
                 ticker = i[0]
                 pcnt_pos = i[1]/total_short_strength
                 num_of_shares = int((pcnt_pos*pcnt_allocation_shorts*account_size)/present_price)

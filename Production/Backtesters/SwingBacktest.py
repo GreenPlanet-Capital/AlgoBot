@@ -10,7 +10,7 @@ Data Format for Positions
 """
 class SwingBacktest:
     initial_capital = 100000
-    cash = 0
+    cash = initial_capital
     position_list = []
     transaction_cost_per_trade = 20
     after_trade_profits = 0
@@ -44,8 +44,8 @@ class SwingBacktest:
             print("Longs: ")
             print(longs)
             print("Shorts: ")
-            print(longs)
-            
+            print(shorts)
+
             account_size = self.initial_capital
 
             if(len(longs) <= self.number_of_readings):
@@ -63,23 +63,42 @@ class SwingBacktest:
             total_short_strength = 0
 
             for i in longs:
-                total_long_strength += i[1]
+                total_long_strength += abs(i[1].round(1))
             
+            for i in shorts:
+                total_short_strength += abs(i[1].round(1))
+
             for i in longs:
                 datapoint_df = input_dictionary[i[0]].iloc[-1]
-                present_price = (datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3
+                present_price = ((datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3).round(2)
                 ticker = i[0]
-                pcnt_pos = i[1]/total_long_strength
-                num_of_shares = int((pcnt_pos*pcnt_allocation_longs*account_size)/present_price)
+                strength = i[1].round(1)
+                print("Ticker:" + ticker)
+                pcnt_pos = abs(strength/total_short_strength)
+                print("Percent Position: " + str(pcnt_pos))
+                allocation = (pcnt_pos*pcnt_allocation_longs*account_size).round(1)
+                print("Allocation: " + str(allocation))
+                num_of_shares = int((allocation/present_price).round(0))
+                num_of_shares = int(num_of_shares - num_of_shares*0.05)
+                print("Number of Shares: " + str(num_of_shares))
+                print()
                 self.position_list.append((ticker, "LONG", num_of_shares, present_price, 0, 1))
                 self.cash -= num_of_shares*present_price
 
             for i in shorts:
                 datapoint_df = input_dictionary[i[0]].iloc[-1]
-                present_price = (datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3
+                present_price = ((datapoint_df['HIGH'] + datapoint_df['LOW'] + datapoint_df['CLOSE'])/3).round(2)
                 ticker = i[0]
-                pcnt_pos = i[1]/total_short_strength
-                num_of_shares = int((pcnt_pos*pcnt_allocation_shorts*account_size)/present_price)
+                strength = i[1].round(1)
+                print("Ticker:" + ticker)
+                pcnt_pos = abs(strength/total_short_strength)
+                print("Percent Position: " + str(pcnt_pos))
+                allocation = (pcnt_pos*pcnt_allocation_shorts*account_size).round(1)
+                print("Allocation: " + str(allocation))
+                num_of_shares = int((allocation/present_price).round(0))
+                num_of_shares = int(num_of_shares - num_of_shares*0.05)
+                print("Number of Shares: " + str(num_of_shares))
+                print()
                 self.position_list.append((ticker, "SHORT", num_of_shares, present_price, 0, 1))
                 self.cash -= num_of_shares*present_price
 
@@ -99,3 +118,4 @@ class SwingBacktest:
         
         initial_generate_positions(self.input_dict)
         print(self.position_list)
+        print(self.cash)

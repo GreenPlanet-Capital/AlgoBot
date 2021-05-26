@@ -50,11 +50,11 @@ class Engine2:
         bol_wma_reading, bol_wma_weight = bol_wma_obj.run()
         bol_wma_weight = self.weight_adjust(bol_wma_weight)
 
-        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 0.029)
+        env_mcg_obj = EnvelopeMcG(price_array = price_list , lookback = lookback1, multiplier = 0.026)
         env_mcg_reading, env_mcg_weight = env_mcg_obj.run()
         env_mcg_weight = self.weight_adjust(env_mcg_weight)
 
-        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 0.025)
+        env_sma_obj = EnvelopeSMA(price_array = price_list , lookback = lookback1, multiplier = 0.023)
         env_sma_reading, env_sma_weight = env_sma_obj.run()
         env_sma_weight = self.weight_adjust(env_sma_weight)
        
@@ -68,7 +68,7 @@ class Engine2:
         lin_reg_abs = lin_reg_obj.linreg_array[-1]
 
         total_breakout = bol_mcg_reading + bol_sma_reading + bol_wma_reading + env_mcg_reading + env_sma_reading + env_wma_reading 
-        if (abs(total_breakout) < 400):
+        if (abs(total_breakout) < 300):
             return 0
         if (lin_reg_reading >= 0 and total_breakout > 0):
             reading1 = 1

@@ -265,7 +265,6 @@ class SwingLongShortBacktest:
 
         liquidate()
         logging(self.test_period)
-        print(self.cash)
         print(self.current_account_size)
 
 

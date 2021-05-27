@@ -8,7 +8,7 @@ Data Format for Positions
 [[TICKER, LONG/SHORT, Number_Of_Shares_Traded, Entry_Price, maximum_position_value, position_size, Days_Since_Entry]]
 """
 class SwingLongShortBacktest:
-    initial_capital = 100000
+    initial_capital = 1000000
     current_account_size = initial_capital
     cash = initial_capital
     position_list = []
@@ -16,7 +16,7 @@ class SwingLongShortBacktest:
     after_trade_profits = 0
     number_of_live_positions = 0
     base_lookback = 7
-    number_of_readings = 5
+    number_of_readings = 20
     pnl_list = []
     num_empty_positions = 0
     def __init__(self, input_dict, training_period, test_period, position_expiry, max_positions = 10, stop_loss_percent = 0.07):
@@ -173,12 +173,6 @@ class SwingLongShortBacktest:
                 eng_obj = Engine2(dict_of_dataframes = todays_dict_dataframe, base_lookback = self.base_lookback, number_of_readings = self.number_of_readings)
                 longs, shorts = eng_obj.generate(absolute_list = False)
                 potentials_list = []
-
-                print("Longs: ")
-                print(longs)
-                print("Shorts: ")
-                print(shorts)
-                
                 if(longs == []):
                     potentials_list = shorts
                 elif(shorts == []):
@@ -193,8 +187,6 @@ class SwingLongShortBacktest:
                         except IndexError as e:
                             break
                     
-                print("Potentials List: ")
-                print(potentials_list)
                 for x in potentials_list:
                     ticker = x[0]
                     df_input = todays_dict_dataframe[ticker]
@@ -202,7 +194,7 @@ class SwingLongShortBacktest:
                     price_array = np.array(df_input['Typical Price'])
                     present_price = price_array[-1]
 
-                    allocation = self.initial_capital/self.max_positions
+                    allocation = self.current_account_size/self.max_positions
                     num_of_shares = int(((allocation/present_price).round(0)))
                     num_of_shares = int(num_of_shares - num_of_shares*0.1)
 
@@ -225,6 +217,7 @@ class SwingLongShortBacktest:
             for i in self.position_list:
                 self.after_trade_profits += i[4]*i[2]
             self.after_trade_profits += self.cash
+            print(self.pnl_list)
 
         def log_pnl():
             self.pnl_list.append(self.current_account_size)

@@ -13,7 +13,7 @@ def main():
         update_data = False
     x = stock_data.generate_dict(list_stok,update_data=update_data)
 
-    backtest_obj = SwingLongShortBacktest(input_dict = x, training_period = 70, test_period = 150, position_expiry = 10, max_positions = 10, stop_loss_percent = 0.03)
+    backtest_obj = SwingLongShortBacktest(input_dict = x, training_period = 60, test_period = 40, position_expiry = 10, max_positions = 20, stop_loss_percent = 0.06)
     backtest_obj.clean_dictionary()
     backtest_obj.test()
 

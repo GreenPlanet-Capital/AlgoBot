@@ -168,7 +168,7 @@ class SwingLongShortBacktest:
                         print(i[0] + "|" + i[1] + "|No. of shares: " + str(i[2]) + "|Entry Price: " + str(i[3]) + "|Exit Price: " + str(i[4]) + "|Position Size: " + str(i[5]) + "|Days held: " + str(i[6]))
                         self.position_list.remove(i)
 
-            if(self.cash >  (self.initial_capital/self.max_positions)):
+            if(self.cash >  (self.current_account_size/self.max_positions)):
                 print("Adding Position Now")
                 eng_obj = Engine2(dict_of_dataframes = todays_dict_dataframe, base_lookback = self.base_lookback, number_of_readings = self.number_of_readings)
                 longs, shorts = eng_obj.generate(absolute_list = False)
@@ -218,8 +218,8 @@ class SwingLongShortBacktest:
                     if(self.cash < (self.initial_capital/self.max_positions)):
                         break
 
-                self.cash -= self.transaction_cost_per_trade * math.floor(self.cash/(self.initial_capital/self.max_positions))
-                self.current_account_size -= self.transaction_cost_per_trade* math.floor(self.cash/(self.initial_capital/self.max_positions))
+                self.cash -= self.transaction_cost_per_trade * math.floor(self.cash/(self.current_account_size/self.max_positions))
+                self.current_account_size -= self.transaction_cost_per_trade* math.floor(self.cash/(self.current_account_size/self.max_positions))
         
         def liquidate():
             for i in self.position_list:
@@ -231,6 +231,8 @@ class SwingLongShortBacktest:
 
         def logging(day_count):
             print("Day: " + str(day_count) + "\n")
+            ctr = 0
+            open_interest = 0
             for i in self.position_list:
                 print("Ticker: " + i[0])
                 print("Position Type: " + i[1])
@@ -239,10 +241,14 @@ class SwingLongShortBacktest:
                 print("Max Price: " + str(i[4]))
                 print("Position Size: " + str(i[5]))
                 print("Days Held: " + str(i[6]))
+                open_interest += i[5]
                 print("++++++++++++++++++++++++++")
+                ctr += 1
             print("Cash: " + str(self.cash))
             print("Account Size: " + str(self.current_account_size))
             print("PnL: " + str(self.after_trade_profits))
+            print("Number of positions: " + str(ctr))
+            print("Underestimated Open Interest: " + open_interest)
             print('==============================')
 
         def graphing():

@@ -241,7 +241,7 @@ class SwingLongShortBacktest:
             print("Account Size: " + str(self.current_account_size))
             print("PnL: " + str(self.after_trade_profits))
             print("Number of positions: " + str(ctr))
-            print("Underestimated Open Interest: " + open_interest)
+            print("Underestimated Open Interest: " + str(open_interest))
             print('==============================')
 
         def graphing():

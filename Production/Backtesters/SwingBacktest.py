@@ -104,6 +104,7 @@ class SwingLongShortBacktest:
             self.current_account_size -= self.transaction_cost_per_trade*self.number_of_live_positions
 
         def portfolio_maintenance(todays_dict_dataframe):
+            self.number_of_live_positions = 0
             for i in self.position_list:
                 df_input = todays_dict_dataframe[i[0]]
                 df_input['Typical Price'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
@@ -167,6 +168,7 @@ class SwingLongShortBacktest:
                         print("Exiting Position: Due to Stop Loss")
                         print(i[0] + "|" + i[1] + "|No. of shares: " + str(i[2]) + "|Entry Price: " + str(i[3]) + "|Exit Price: " + str(i[4]) + "|Position Size: " + str(i[5]) + "|Days held: " + str(i[6]))
                         self.position_list.remove(i)
+                self.number_of_live_positions += 1
 
             if(self.cash >  (self.current_account_size/self.max_positions)):
                 print("Adding Position Now")
@@ -194,7 +196,7 @@ class SwingLongShortBacktest:
                     price_array = np.array(df_input['Typical Price'])
                     present_price = price_array[-1]
 
-                    allocation = self.current_account_size/self.max_positions
+                    allocation = self.current_account_size/self.number_of_live_positions
                     num_of_shares = int(((allocation/present_price).round(0)))
                     num_of_shares = int(num_of_shares - num_of_shares*0.1)
 
@@ -207,7 +209,7 @@ class SwingLongShortBacktest:
                     self.position_list.append([ticker, position_type, num_of_shares, present_price, present_price, present_price*num_of_shares, 1])
                     self.cash -= num_of_shares*present_price
 
-                    if(self.cash < (self.initial_capital/self.max_positions)):
+                    if(self.cash < (self.current_account_size/self.number_of_live_positions)):
                         break
 
                 self.cash -= self.transaction_cost_per_trade * math.floor(self.cash/(self.current_account_size/self.max_positions))
@@ -240,7 +242,7 @@ class SwingLongShortBacktest:
             print("Cash: " + str(self.cash))
             print("Account Size: " + str(self.current_account_size))
             print("PnL: " + str(self.after_trade_profits))
-            print("Number of positions: " + str(ctr))
+            print("Number of positions: " + str(self.number_of_live_positions))
             print("Underestimated Open Interest: " + str(open_interest))
             print('==============================')
 

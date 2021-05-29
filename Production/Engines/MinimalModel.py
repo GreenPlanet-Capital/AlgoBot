@@ -9,6 +9,7 @@ output: ordered list
 class OptimisedModel: 
     def __init__(self, dict_of_dataframes, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, number_of_readings, filter_percentile = 75, filter_activation_flag = True, long_only_flag = False):
         self.base_lookback = base_lookback
+        self.dict_of_dataframes = dict_of_dataframes
         self.lin_reg_filter_multiplier = lin_reg_filter_multiplier
         self.multiplier1 = multiplier1
         self.multiplier2 = multiplier2
@@ -78,7 +79,7 @@ class OptimisedModel:
         return mcg_val
     
     def envelope_score(self, df_input):
-        present_price, lin_reg_array,main_lookback_array, multiplier1_lookback_array, multiplier2_lookback_array, fisher_transform_array = self.array_slicer(df_input)
+        present_price, lin_reg_array,main_lookback_array, multiplier1_lookback_array, multiplier2_lookback_array = self.array_slicer(df_input)
         
         bol_std_val1 = 1
         bol_std_val2 = 1.3

@@ -5,7 +5,7 @@ from StockDataExtraction.StockData import BasketStockData
 from Engines.Engine1 import Engine1
 from Engines.FilteredTrend import Engine2
 from StockDataExtraction.yfinanceDataPull import extract
-
+from Engines.MinimalModel import OptimisedModel
 import time
 import sys
 
@@ -41,7 +41,8 @@ def main():
     # print("Shorts: ")
     # print(shorts)
     # print()
-
+    obj = OptimisedModel(dict_of_dataframes = x, base_lookback = 5, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 3, number_of_readings = 1, filter_percentile = 75, filter_activation_flag = True, long_only_flag = False)
+    obj.run()
 
     end1 = time.time()
 

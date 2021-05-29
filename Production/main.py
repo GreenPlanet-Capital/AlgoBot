@@ -5,7 +5,7 @@ from StockDataExtraction.StockData import BasketStockData
 from Engines.Engine1 import Engine1
 from Engines.FilteredTrend import Engine2
 from StockDataExtraction.yfinanceDataPull import extract
-from Minimal
+
 import time
 import sys
 
@@ -28,19 +28,20 @@ def main():
     print(f'Time taken to extract data: {end - begin}')
 
     begin1 = time.time()
-    dict_of_dataframes = x
-    base_lookback = 7
-    number_of_readings = 20
+    # dict_of_dataframes = x
+    # base_lookback = 7
+    # number_of_readings = 20
 
-    eng_obj = Engine2(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, number_of_readings = number_of_readings)
-    longs, shorts = eng_obj.generate(absolute_list = False)
-    print ("Metrics " + '\n' + "Base Lookback: " + str(base_lookback) + '\n' + "Number of Readings: " + str(number_of_readings))
-    print("Longs: ")
-    print(longs)
-    print()
-    print("Shorts: ")
-    print(shorts)
-    print()
+    # eng_obj = Engine2(dict_of_dataframes = dict_of_dataframes, base_lookback = base_lookback, number_of_readings = number_of_readings)
+    # longs, shorts = eng_obj.generate(absolute_list = False)
+    # print ("Metrics " + '\n' + "Base Lookback: " + str(base_lookback) + '\n' + "Number of Readings: " + str(number_of_readings))
+    # print("Longs: ")
+    # print(longs)
+    # print()
+    # print("Shorts: ")
+    # print(shorts)
+    # print()
+
 
     end1 = time.time()
 

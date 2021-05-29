@@ -1,4 +1,4 @@
-import pandas as import pd
+import pandas as pd
 import numpy as np
 import math 
 
@@ -16,7 +16,7 @@ class OptimisedModel:
         self.filter_percentile = filter_percentile
         self.filter_activation_flag = filter_activation_flag
 
-    def array_slicer(self, df_input)
+    def array_slicer(self, df_input):
         df_input['Typical Price'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
         price_array = np.array(df_input['Typical Price'])
 
@@ -28,7 +28,6 @@ class OptimisedModel:
         main_lookback_array = price_array[-self.base_lookback:]
         multiplier1_lookback_array = price_array[-lookback1:]
         multiplier2_lookback_array = price_array[-lookback2:]
-        fisher_transform = price_array[-ft_lookback:]
         present_price = price_array[-1]
 
         return present_price, lin_reg_array,main_lookback_array, multiplier1_lookback_array, multiplier2_lookback_array
@@ -73,7 +72,7 @@ class OptimisedModel:
         base_val_array = price_array[:len_pa - 1]
         base_val = np.sum(base_val_array)/len(base_val_array)
         numer = (price_array[-1] - base_val)
-        denom = len_pa*((price_array[-1]/base_val)**4
+        denom = len_pa*((price_array[-1]/base_val)**4)
         frac = numer/denom
         mcg_val = frac + base_val
         return mcg_val
@@ -133,7 +132,7 @@ class OptimisedModel:
         long_iterator.append(self.sma(multiplier2_lookback_array) + (env_std_val2*self.sma(multiplier2_lookback_array)))
         long_iterator.append(self.sma(multiplier2_lookback_array) + (env_std_val3*self.sma(multiplier2_lookback_array)))
 
-        short_iterator.append(self.sma(multiplier2_lookback_array) - (bol_std_val1*self.std(multiplie21_lookback_array)))
+        short_iterator.append(self.sma(multiplier2_lookback_array) - (bol_std_val1*self.std(multiplier2_lookback_array)))
         short_iterator.append(self.sma(multiplier2_lookback_array) - (bol_std_val2*self.std(multiplier2_lookback_array)))
         short_iterator.append(self.sma(multiplier2_lookback_array) - (bol_std_val3*self.std(multiplier2_lookback_array)))
 

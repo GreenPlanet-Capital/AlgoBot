@@ -442,7 +442,7 @@ class OptimisedModel:
         
         return long_book, short_book
 
-    def unbiased_ordering():
+    def unbiased_ordering(self):
         self.data_generator()
         if (self.filter_activation_flag):
             self.percentile_limit_gen()
@@ -457,11 +457,22 @@ class OptimisedModel:
         for i in short_book:
             absolute_list.append(abs(i[1]))
 
-        sorted_abs_list = sorted(absolute_list)
-        return sorted_abs_list
+        sorted_abs_list = sorted(absolute_list, reverse = True)
+
+        out_list = []
+        for i in sorted_abs_list:
+            for x in long_book:
+                if(x[1] == i):
+                    out_list.append(x)
+            for y in short_book:
+                if(abs(y[1]) == i):
+                    out_list.append(y)
+
+        out_list = out_list[:self.number_of_readings]
+        return out_list
 
     def run(self):
-        print(unbiased_ordering())
+        print(self.unbiased_ordering())
 
             
 

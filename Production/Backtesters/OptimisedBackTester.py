@@ -1,7 +1,8 @@
 from Engines.MinimalModel import OptimisedModel
 import numpy as np
 import pandas as pd
-import math        
+import math   
+import time     
 
 '''
 data structure for portfolio maintenance: Dataframe
@@ -76,6 +77,7 @@ class OptimisedBackTester:
             self.cash -= self.transaction_cost_per_trade
             self.cash -= num_of_shares*present_price
             self.portfolio.loc[ticker] = [ticker, position_type, num_of_shares, present_price, present_price, present_price, self.day_count]
+            #DATAFRAME NOT UPDATING IN THE LINE ABOVE
 
     #columns = ['Ticker','LONG/SHORT' , 'NumOfShares', 'EntryPrice', 'Max/MinPrice', 'PresentPrice', 'EntryDay']
     def portfolio_update(self, dict_of_dataframes):
@@ -83,17 +85,18 @@ class OptimisedBackTester:
         self.current_account_size = 0
 
         def exit_position(ticker):
-            if(self.portfolio.loc[ticker]['LONG/SHORT'] == "LONG"):
-                self.cash += self.portfolio.loc[ticker]['NumOfShares']*self.portfolio.loc[ticker]['PresentPrice']
-            elif(self.portfolio.loc[ticker]['LONG/SHORT'] == "SHORT"):
-                self.cash += self.portfolio.loc[ticker]['NumOfShares']*(2*(self.portfolio.loc[ticker]['EntryPrice']) - self.portfolio.loc[ticker]['PresentPrice'])
-            number_of_days = self.day_count - self.portfolio.loc[ticker]['EntryDay']
-            print("Ticker: " + str(ticker) + "|Type: " + self.portfolio.loc[ticker]['LONG/SHORT'] + "|Entry: " + str(self.portfolio.loc[ticker]['EntryPrice']) + "|Exit: " + str(self.portfolio.loc[ticker]['PresentPrice']) + "|Days Held: " + str(number_of_days))
-            self.portfolio.drop(index = [ticker])
+            if(self.portfolio.loc[ticker,'LONG/SHORT'] == "LONG"):
+                self.cash += self.portfolio.loc[ticker,'NumOfShares']*self.portfolio.loc[ticker,'PresentPrice']
+            elif(self.portfolio.loc[ticker,'LONG/SHORT'] == "SHORT"):
+                self.cash += self.portfolio.loc[ticker,'NumOfShares']*(2*(self.portfolio.loc[ticker,'EntryPrice']) - self.portfolio.loc[ticker,'PresentPrice'])
+            number_of_days = self.day_count - self.portfolio.loc[ticker,'EntryDay']
+            self.cash -= self.transaction_cost_per_trade
+            print("Ticker: " + str(ticker) + "|Type: " + self.portfolio.loc[ticker,'LONG/SHORT'] + "|Entry: " + str(self.portfolio.loc[ticker,'EntryPrice']) + "|Exit: " + str(self.portfolio.loc[ticker,'PresentPrice']) + "|Days Held: " + str(number_of_days))
+            self.portfolio.drop(ticker,  inplace=True)
 
-        num_of_positions = len(self.portfolio)
-        for i in range(len(self.portfolio)):
-            ticker = self.portfolio.iloc[i]['Ticker']
+        tick_list = list(self.portfolio.index.values)
+        for i in tick_list:
+            ticker = i
 
             temp_df = dict_of_dataframes[ticker]
             temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
@@ -101,23 +104,23 @@ class OptimisedBackTester:
 
             present_price = price_list[-1]
             #Present Price Update
-            self.portfolio.loc[ticker]['PresentPrice'] = present_price
+            self.portfolio.loc[ticker,'PresentPrice'] = present_price
 
             #Max/Min Price Update
-            if (self.portfolio.loc[ticker]['LONG/SHORT'] == 'LONG'):
-                self.portfolio.loc[ticker]['Max/MinPrice'] = max(present_price,  self.portfolio.loc[ticker]['EntryPrice'])
-                self.current_account_size += self.portfolio.loc[ticker]['NumOfShares']*self.portfolio.loc[ticker]['PresentPrice']
-            elif (self.portfolio.loc[ticker]['LONG/SHORT'] == 'SHORT'):
-                self.portfolio.loc[ticker]['Max/MinPrice'] = min(present_price,  self.portfolio.loc[ticker]['EntryPrice'])
-                self.current_account_size += self.portfolio.loc[ticker]['NumOfShares']*(2*(self.portfolio.loc[ticker]['EntryPrice']) - self.portfolio.loc[ticker]['PresentPrice'])
+            if (self.portfolio.loc[ticker,'LONG/SHORT'] == 'LONG'):
+                self.portfolio.loc[ticker,'Max/MinPrice'] = max(present_price,  self.portfolio.loc[ticker,'EntryPrice'])
+                self.current_account_size += self.portfolio.loc[ticker,'NumOfShares']*self.portfolio.loc[ticker,'PresentPrice']
+            elif (self.portfolio.loc[ticker,'LONG/SHORT'] == 'SHORT'):
+                self.portfolio.loc[ticker,'Max/MinPrice'] = min(present_price,  self.portfolio.loc[ticker,'EntryPrice'])
+                self.current_account_size += self.portfolio.loc[ticker,'NumOfShares']*(2*(self.portfolio.loc[ticker,'EntryPrice']) - self.portfolio.loc[ticker,'PresentPrice'])
 
             #Checking for Long Exits
-            if(self.portfolio.loc[ticker]['LONG/SHORT'] == 'LONG'):
+            if(self.portfolio.loc[ticker,'LONG/SHORT'] == 'LONG'):
                 envma_val = sum(price_list[-self.base_lookback:])/self.base_lookback
                 #envma_val = (envma_val + envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)
-                stop_loss_trigger = self.portfolio.loc[ticker]['Max/MinPrice'] - trading_range*0.1
+                stop_loss_trigger = self.portfolio.loc[ticker,'Max/MinPrice'] - trading_range*0.1
 
                 if(present_price < envma_val):
                     #Closing Position for Trend Slowing
@@ -130,12 +133,12 @@ class OptimisedBackTester:
                     exit_position(ticker)
 
             #Checking for Short Exits
-            elif(self.portfolio.loc[ticker]['LONG/SHORT'] == 'SHORT'):
+            elif(self.portfolio.loc[ticker,'LONG/SHORT'] == 'SHORT'):
                 envma_val = sum(price_list[-self.base_lookback:])/self.base_lookback
                 #envma_val = (envma_val - envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)
-                stop_loss_trigger = self.portfolio.loc[ticker]['Max/MinPrice'] + trading_range*0.1
+                stop_loss_trigger = self.portfolio.loc[ticker,'Max/MinPrice'] + trading_range*0.1
 
                 if(present_price > envma_val):
                     #Closing Position for Trend Slowing
@@ -146,9 +149,11 @@ class OptimisedBackTester:
                     #Closing Position for stop loss trigger
                     print("Closing Position for Stop Loss")
                     exit_position(ticker)
-        
+
         if (self.cash > max_position_size):
+            # SOME ERROR IN THE LINE BELOW
             number_of_required_positions = math.floor((self.cash/max_position_size))
+            print("NUMER OF NEW POSITIONS: " + str(number_of_required_positions))
             self.newPosition(dict_of_dataframes = dict_of_dataframes, number_of_required_positions = number_of_required_positions)
 
         self.current_account_size += self.cash 
@@ -182,6 +187,7 @@ class OptimisedBackTester:
             end_val += 1
             out_dict = self.dictionary_grafting(self.dict_of_dataframes, start_val, end_val)
             self.portfolio_update(out_dict)
+            time.sleep(5.5)
             self.logging()
 
 

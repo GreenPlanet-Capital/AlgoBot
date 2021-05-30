@@ -41,7 +41,7 @@ def main():
     # print("Shorts: ")
     # print(shorts)
     # print()
-    obj = OptimisedModel(dict_of_dataframes = x, base_lookback = 5, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 20, filter_percentile = 80, filter_activation_flag = True, long_only_flag = True)
+    obj = OptimisedModel(dict_of_dataframes = x, base_lookback = 5, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 40, filter_percentile = 80, filter_activation_flag = True, long_only_flag = False)
     obj.run()
 
     end1 = time.time()

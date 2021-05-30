@@ -442,26 +442,27 @@ class OptimisedModel:
         
         return long_book, short_book
 
-    def unbiased_ordering():
-        self.data_generator()
-        if (self.filter_activation_flag):
-            self.percentile_limit_gen()
-            self.filters()
-        else:
-            self.pure_breakout_signal()
-        long_book, short_book = self.ordering()
-
-        absolute_list = []
-        for i in long_book:
-            absolute_list.append(abs(i[1]))
-        for i in short_book:
-            absolute_list.append(abs(i[1]))
-
-        sorted_abs_list = sorted(absolute_list)
-        return sorted_abs_list
+    
 
     def run(self):
-        print(unbiased_ordering())
+        def unbiased_ordering(self):
+            self.data_generator()
+            if (self.filter_activation_flag):
+                self.percentile_limit_gen()
+                self.filters()
+            else:
+                self.pure_breakout_signal()
+            long_book, short_book = self.ordering()
+
+            absolute_list = []
+            for i in long_book:
+                absolute_list.append(abs(i[1]))
+            for i in short_book:
+                absolute_list.append(abs(i[1]))
+
+            sorted_abs_list = sorted(absolute_list)
+            return sorted_abs_list
+        print(unbiased_ordering(self))
 
             
 

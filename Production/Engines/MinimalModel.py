@@ -426,8 +426,6 @@ class OptimisedModel:
             out_dict[i[0]] = i[3] + i[1]
         self.unordered_dict = out_dict
 
-#ticker_data_list format: (ticker, breakout_score, filter_linreg, ls_strength)
-
     def ordering(self):
         generated_dict = self.unordered_dict
         num = self.number_of_readings
@@ -452,11 +450,18 @@ class OptimisedModel:
         else:
             self.pure_breakout_signal()
         long_book, short_book = self.ordering()
-        
+
+        absolute_list = []
+        for i in long_book:
+            absolute_list.append(abs(i[1]))
+        for i in short_book:
+            absolute_list.append(abs(i[1]))
+
+        sorted_abs_list = sorted(absolute_list)
+        return sorted_abs_list
 
     def run(self):
-        
-        print()
+        print(unbiased_ordering())
 
             
 

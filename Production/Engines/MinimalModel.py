@@ -472,7 +472,7 @@ class OptimisedModel:
         return out_list
 
     def run(self):
-        print(self.unbiased_ordering())
+        return self.unbiased_ordering()
 
             
 

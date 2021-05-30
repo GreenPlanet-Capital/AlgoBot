@@ -441,16 +441,22 @@ class OptimisedModel:
                 short_book.append((short_ticker, short_data))
             if(long_data>0):
                 long_book.append((long_ticker,long_data))
+        
         return long_book, short_book
 
-    def run(self):
+    def unbiased_ordering():
         self.data_generator()
         if (self.filter_activation_flag):
             self.percentile_limit_gen()
             self.filters()
         else:
             self.pure_breakout_signal()
-        print(self.ordering())
+        long_book, short_book = self.ordering()
+        
+
+    def run(self):
+        
+        print()
 
             
 

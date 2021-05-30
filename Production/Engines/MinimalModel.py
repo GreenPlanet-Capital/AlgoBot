@@ -4,7 +4,16 @@ import math
 import multiprocessing as mp
 
 '''
-inputs: base_lookback, multiplier1, multiplier2, filter-percentile
+inputs: 
+    dict_of_dataframes
+    base_lookback
+    multiplier1
+    multiplier2
+    lin_reg_filter_multiplier
+    number_of_readings 
+    filter_percentile = 75
+    filter_activation_flag = True 
+    long_only_flag = False
 output: ordered list
 
 ticker_data_list format: (ticker, breakout_score, filter_linreg, ls_strength)
@@ -12,6 +21,7 @@ ticker_data_list format: (ticker, breakout_score, filter_linreg, ls_strength)
 class OptimisedModel: 
     ticker_data_list = []
     percentile_limit = 0
+    unordered_dict= {}
     def __init__(self, dict_of_dataframes, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, number_of_readings, filter_percentile = 75, filter_activation_flag = True, long_only_flag = False):
         self.base_lookback = base_lookback
         self.dict_of_dataframes = dict_of_dataframes
@@ -378,8 +388,6 @@ class OptimisedModel:
         percentile_limit = np.percentile(abs_percentile_array, self.filter_percentile)
         self.percentile_limit = percentile_limit
 
-# (ticker, breakout_score, filter_linreg, ls_strength)
-
     def filters(self):
         filtered_dict = {}
         for i in self.ticker_data_list:
@@ -410,12 +418,39 @@ class OptimisedModel:
                     filtered_dict[i[0]] = i[3] + i[1]
 
 
-        return filtered_dict
+        self.unordered_dict = filtered_dict
+
+    def pure_breakout_signal(self):
+        out_dict = {}
+        for i in self.ticker_data_list:
+            out_dict[i[0]] = i[3] + i[1]
+        self.unordered_dict = out_dict
+
+#ticker_data_list format: (ticker, breakout_score, filter_linreg, ls_strength)
+
+    def ordering(self):
+        generated_dict = self.unordered_dict
+        num = self.number_of_readings
+        short_book = []
+        long_book = []
+        sorted_list = sorted(generated_dict.items(),key = lambda kv: kv[1])
+        for i, ((short_ticker,short_data),(long_ticker,long_data)) in enumerate(zip(sorted_list,reversed(sorted_list))):
+            if(i==num):
+                break
+            if(short_data<0):
+                short_book.append((short_ticker, short_data))
+            if(long_data>0):
+                long_book.append((long_ticker,long_data))
+        return long_book, short_book
 
     def run(self):
         self.data_generator()
-        self.percentile_limit_gen()
-        print(self.filters())
+        if (self.filter_activation_flag):
+            self.percentile_limit_gen()
+            self.filters()
+        else:
+            self.pure_breakout_signal()
+        print(self.ordering())
 
             
 

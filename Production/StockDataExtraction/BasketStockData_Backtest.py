@@ -38,7 +38,6 @@ class BasketStockData_Backtest:
 
         for ticker in list_of_tickers:
             df1 = pd.read_csv(Indicator_CSVs / f"{ticker}.csv")
-            print(df1)
             df_out = pd.DataFrame()
             df_out['OPEN'] = df1['Open']
             df_out['HIGH'] = df1['High']
@@ -57,6 +56,7 @@ class BasketStockData_Backtest:
 def main():
     stock_data = BasketStockData_Backtest()
     x = stock_data.generate_dict(start="2020-01-01", end = "2021-01-01", list_of_tickers = ['AAPL', 'MSFT'], update_data=True)
+    print(x)
     
 
 if __name__ == '__main__':

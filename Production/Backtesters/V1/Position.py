@@ -13,10 +13,10 @@ class Position:
 
     def string_position(self, pnl):
         output_string = ''
-        output_string+= f'TICKER: {self.ticker}\t\t| UNIQUE ID: {self.unique_id}\n'
-        output_string+= f'TYPE: {self.position_type}\t\t| SHARES: {self.number_of_shares}\n'
+        output_string+= f'TICKER: {self.ticker}\t\t\t| UNIQUE ID: {self.unique_id}\n'
+        output_string+= f'TYPE: {self.position_type}\t\t\t| SHARES: {self.number_of_shares}\n'
         output_string+= f'ENTRY DATE: {self.dates[0]}\t| CURRENT DATE: {self.dates[-1]}\n'
-        output_string+= f'ENTRY PRICE: {self.prices[0]}\t| CURRENT PRICE: {self.prices[-1]}\n'
+        output_string+= f'ENTRY PRICE: {self.prices[0]}\t\t| CURRENT PRICE: {self.prices[-1]}\n'
         output_string+= f'P&L %: {pnl}%\n'
         return output_string
 

@@ -34,8 +34,8 @@ class OptimisedModel:
         self.long_only_flag = long_only_flag
 
     def array_slicer(self, df_input):
-        df_input['Typical Price'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
-        price_array = np.array(df_input['Typical Price'])
+        df_input['TYPICAL PRICE'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)
+        price_array = np.array(df_input['TYPICAL PRICE'])
 
         linreg_lookback = math.ceil(self.base_lookback*self.lin_reg_filter_multiplier)
         lookback1 = math.ceil(self.base_lookback*self.multiplier1)

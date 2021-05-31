@@ -18,7 +18,7 @@ class Portfolio:
             self.wallet += position.number_of_shares * (position.prices[0] - position.prices[-1])
         self.exits.append(unique_id)
 
-    def update_portfolio(self, NewStockDataDict: dict, current_date):
+    def update_portfolio(self, *, NewStockDataDict: dict, current_date):
         for unique_id, position in self.positions.items():
             do_we_abort = False
             if unique_id in self.exits:
@@ -77,7 +77,7 @@ class Portfolio:
             new_entry += '\n\n'
 
         new_entry += "EXITS:\n"
-        for unique_id in self.exits:
+        for unique_id in self.e= self.dictionary_grafting()xits:
             new_entry += self.positions[unique_id].get_current_position_status()
             new_entry += '\n\n'
 

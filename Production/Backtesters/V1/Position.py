@@ -1,5 +1,5 @@
 class Position:
-    def __init__(self,*,unique_id, ticker, entry_price, number_of_shares, entry_date, position_type) -> None:
+    def __init__(self, *, unique_id, ticker, entry_price, number_of_shares, entry_date, position_type) -> None:
         self.unique_id = unique_id
         self.ticker = ticker
         self.prices = [entry_price]

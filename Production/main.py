@@ -5,7 +5,7 @@ from StockDataExtraction.StockData import BasketStockData
 from Engines.Engine1 import Engine1
 from Engines.FilteredTrend import Engine2
 from StockDataExtraction.yfinanceDataPull import extract
-from Engines.MinimalModel import OptimisedModel
+from Engines.OptimisedModel import OptimisedModel
 import time
 import sys
 

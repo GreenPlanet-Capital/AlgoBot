@@ -1,5 +1,5 @@
 import math
-from Production.Backtesters.V1.BasketStockData_Backtest import BasketStockData_Backtest
+from Production.StockDataExtraction.BasketStockData_Backtest import BasketStockData_Backtest
 from Production.Backtesters.V1.Portfolio import Portfolio
 from Production.Backtesters.V1.Position import Position
 from Engines.OptimisedModel import OptimisedModel
@@ -7,10 +7,7 @@ import warnings
 
 class Backtester:
 
-    Test_period: Training_period to End_date
-    
-
-    def __init__(self, *, StockDataDict, list_stock, initial_capital, base_lookback, training_period, start_date, end_date, update_data = True percentRisk_PerTrade = 0.1):
+    def __init__(self, *, StockDataDict, list_stock, initial_capital, base_lookback, training_period, start_date, end_date, update_data = True, percentRisk_PerTrade = 0.1):
         self.StockDataDict = StockDataDict
         self.list_stock = list_stock
         self.initial_capital = initial_capital
@@ -31,9 +28,9 @@ class Backtester:
 
     def dictionary_grafting(self):
         out_dict = {}
-	    for i in self.list_stock:
-            out_dict[i] = self.StockDataDict[i].iloc[self.n_today-self.training_period: n_today]
-        	return out_dict
+        for i in self.list_stock:
+            out_dict[i] = self.StockDataDict[i].iloc[self.n_today-self.training_period: self.n_today]
+        return out_dict
 
     def get_str_date(self,n):
         return self.StockDataDict[self.list_stock[0]].loc[n,'DATE']
@@ -73,9 +70,9 @@ class Backtester:
         self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet = portfolio.wallet, today=today)
         self.n_today += 1
         
-        while get_current_position_status(self.n_today) != get_str_date(-1):
+        while self.get_str_date(self.n_today) != self.get_str_date(-1):
             dict_of_dataframes 
             today = self.get_str_date(self.n_today)
-            portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, today)
+            portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, today=today)
             self.n_today += 1
             self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet = portfolio.wallet, today=today)

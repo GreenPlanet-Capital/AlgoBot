@@ -1,7 +1,7 @@
 from Production.Backtesters.V1.Position import Position
 class Portfolio:
 
-    def __init__(self,*,initial_capital) -> None:
+    def __init__(self, *, initial_capital) -> None:
         self.wallet = initial_capital
         self.positions = {str: Position}
         self.exits = []
@@ -77,7 +77,7 @@ class Portfolio:
             new_entry += '\n\n'
 
         new_entry += "EXITS:\n"
-        for unique_id in self.e= self.dictionary_grafting()xits:
+        for unique_id in self.exits:
             new_entry += self.positions[unique_id].get_current_position_status()
             new_entry += '\n\n'
 

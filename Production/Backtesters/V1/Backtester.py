@@ -38,13 +38,19 @@ class Backtester:
         return self.StockDataDict[self.list_stock[0]].loc[n,'DATE']
         
     def newPositions(self, *, dict_of_dataframes, wallet, today):
+        self.max_position_size = self.portfolio.get_current_account_size() * self.percentRisk_PerTrade
         number_of_new_positions = math.floor((wallet/self.max_position_size))
-        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = self.training_period, filter_percentile = 80, filter_activation_flag = True, long_only_flag = False)
+        print(f'number_of_new_positions: {number_of_new_positions}')
+        if(number_of_new_positions==0):
+            return 0
+        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 100, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
         position_list = obj.run()
+        position_list = list(set(position_list))
+        print(f'position_list: {position_list}')
         
         for i in range(number_of_new_positions):
             ticker,strength_val = position_list[i]
-            entry_price = dict_of_dataframes[ticker].loc[len(dict_of_dataframes[ticker])-1,"TYPICAL PRICE"]
+            entry_price = dict_of_dataframes[ticker].iloc[len(dict_of_dataframes[ticker])-1]["TYPICAL PRICE"]
             number_of_shares = int(math.floor(self.max_position_size/entry_price))
             today = self.get_str_date(self.n_today)
             entry_date = today
@@ -56,7 +62,7 @@ class Backtester:
                 position_type = "SHORT"
 
             #Generating the Unique ID
-            unique_ID = str(ticker) + str(today)
+            unique_ID = ticker + today
             positionObj = Position(unique_id = unique_ID, ticker = ticker, entry_price = entry_price, number_of_shares = number_of_shares, entry_date = entry_date, position_type = position_type)
             self.portfolio.enter(unique_id = unique_ID, position = positionObj)
       
@@ -67,16 +73,18 @@ class Backtester:
         self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers = self.list_stock, update_data = self.update_data)
         self.validate_StockDataDict()
         self.portfolio = Portfolio(initial_capital = 100000, base_lookback=self.base_lookback)
-        dict_of_dataframes = self.dictionary_grafting()
-        today = self.get_str_date(self.n_today)
-        self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet = self.portfolio.wallet, today=today)
-        print(self.portfolio.get_current_account_size())
-        self.portfolio.update_register(current_date=today)
-        self.n_today += 1
+        # dict_of_dataframes = self.dictionary_grafting()
+        # today = self.get_str_date(self.n_today)
+        # self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet = self.portfolio.wallet, today=today)
+        # print(self.portfolio.get_current_account_size())
+        # self.portfolio.update_register(current_date=today)
+        # self.n_today += 1
         
         while self.get_str_date(self.n_today) != self.get_str_date(-1):
-            dict_of_dataframes 
+            dict_of_dataframes = self.dictionary_grafting()
             today = self.get_str_date(self.n_today)
+            self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet=self.portfolio.wallet, today=today)
             self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)
             self.n_today += 1
-            self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet = self.portfolio.wallet, today=today)
+        today = self.get_str_date(self.n_today)
+        self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)

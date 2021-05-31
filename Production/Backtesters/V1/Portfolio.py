@@ -1,9 +1,10 @@
-from Production.Backtesters.V1.Position import Position
+from Backtesters.V1.Position import Position
 class Portfolio:
 
-    def __init__(self, *, initial_capital) -> None:
+    def __init__(self, *, initial_capital, base_lookback) -> None:
         self.wallet = initial_capital
-        self.positions = {str: Position}
+        self.base_lookback = base_lookback
+        self.positions = {}
         self.exits = []
 
     def enter(self, *, unique_id, position: Position):
@@ -23,6 +24,7 @@ class Portfolio:
             do_we_abort = False
             if unique_id in self.exits:
                 continue
+            # print(position.get_current_position_status())
             ticker = position.ticker
             ma_list = list(NewStockDataDict[ticker]['TYPICAL PRICE'])
             current_price = ma_list[-1]
@@ -54,7 +56,7 @@ class Portfolio:
             if do_we_abort:
                 self.exit(unique_id=unique_id)
         
-        self.update_register(current_date)
+        self.update_register(current_date=current_date)
 
     def get_current_account_size(self):
         current_account_size = 0
@@ -64,10 +66,10 @@ class Portfolio:
             current_account_size += position.get_current_value()
         return current_account_size + self.wallet
 
-    def update_register(self, current_date):
+    def update_register(self, *, current_date):
         new_entry = ""
         new_entry += f'Positions on {current_date}\n\n'
-        new_entry += f'Current Account Size: {self.get_currentAccountSize}\n'
+        new_entry += f'Current Account Size: {self.get_current_account_size()}\n'
         new_entry += f'Wallet: {self.wallet}\n\n'
 
         for unique_id, position_obj in self.positions.items():

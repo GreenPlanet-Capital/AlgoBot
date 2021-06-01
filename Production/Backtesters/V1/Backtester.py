@@ -45,7 +45,6 @@ class Backtester:
             return 0
         obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 100, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
         position_list = obj.run()
-        position_list = list(set(position_list))
         print(f'position_list: {position_list}')
         
         for i in range(number_of_new_positions):

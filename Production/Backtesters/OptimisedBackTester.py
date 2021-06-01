@@ -57,7 +57,7 @@ class OptimisedBackTester:
     def newPosition(self, dict_of_dataframes, number_of_required_positions):
         max_position_size = self.initial_capital*self.percentRisk_PerTrade
         print(max_position_size)
-        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.5, number_of_readings = self.number_of_readings, filter_percentile = 60, filter_activation_flag = True, long_only_flag = False)
+        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.5, number_of_readings = self.number_of_readings, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
         position_list = obj.run()
 
         for i in range(number_of_required_positions):
@@ -132,7 +132,7 @@ class OptimisedBackTester:
 
             #Checking for Long Exits
             if(self.portfolio.loc[uid,'LONG/SHORT'] == 'LONG'):
-                envma_val = sum(price_list[(-self.base_lookback + 4):])/(self.base_lookback - 4)
+                envma_val = sum(price_list[(-self.base_lookback):])/(self.base_lookback)
                 #envma_val = (envma_val + envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)

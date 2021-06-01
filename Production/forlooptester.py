@@ -24,7 +24,7 @@ def main():
     x = stock_data.generate_dict(list_stok,update_data=update_data)
 
 
-    test_obj = OptimisedBackTester(dict_of_dataframes = x, base_lookback = 17, training_period = 50, test_period = 500, number_of_readings = 30, transaction_cost_per_trade = 20, percentRisk_PerTrade = 0.05)
+    test_obj = OptimisedBackTester(dict_of_dataframes = x, base_lookback = 17, training_period = 50, test_period = 500, number_of_readings = 50, transaction_cost_per_trade = 20, percentRisk_PerTrade = 0.03)
 
     test_obj.test()
 if __name__ == '__main__':

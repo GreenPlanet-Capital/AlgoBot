@@ -63,12 +63,19 @@ class OptimisedBackTester:
         for i in range(number_of_required_positions):
             ticker,strength_val = position_list[i]
             temp_df = dict_of_dataframes[ticker] 
-            temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
-            price_list = list(temp_df['Typical Price'])
-            present_price = price_list[-1]
-            present_price = present_price.round(3)
+            try: 
+                temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
+                price_list = list(temp_df['Typical Price'])
+                present_price = price_list[-1]
+                present_price = round((present_price), 3)
+            except ValueError:
+                continue
 
-            num_of_shares = math.floor(max_position_size/present_price)
+            try:
+                num_of_shares = math.floor(max_position_size/present_price)
+            except ValueError:
+                number_of_required_positions += 1
+                continue
 
             position_type = ""
             if(strength_val > 0):
@@ -101,14 +108,19 @@ class OptimisedBackTester:
         uid_list = list(self.portfolio.index.values)
         for i in uid_list:
             uid = i
-            ticker = self.portfolio.loc[uid, 'Ticker']
-            temp_df = dict_of_dataframes[ticker]
-            temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
-            price_list = list(temp_df['Typical Price'])
+
+            try: 
+                ticker = self.portfolio.loc[uid, 'Ticker']
+                temp_df = dict_of_dataframes[ticker]
+                temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
+                price_list = list(temp_df['Typical Price'])
+            except ValueError:
+                continue
 
             present_price = price_list[-1]
+            present_price = round((present_price), 3)
             #Present Price Update
-            self.portfolio.loc[uid,'PresentPrice'] = present_price.round(3)
+            self.portfolio.loc[uid,'PresentPrice'] = present_price
 
             #Max/Min Price Update
             if (self.portfolio.loc[uid,'LONG/SHORT'] == 'LONG'):

@@ -4,6 +4,7 @@ from Backtesters.V1.Portfolio import Portfolio
 from Backtesters.V1.Position import Position
 from Engines.OptimisedModel import OptimisedModel
 import warnings
+import copy
 
 class Backtester:
 
@@ -19,6 +20,7 @@ class Backtester:
         self.percentRisk_PerTrade = percentRisk_PerTrade
         self.max_position_size = self.initial_capital * self.percentRisk_PerTrade
         self.n_today = self.training_period
+        self.position_list = []
     
     def validate_StockDataDict(self):
         for ticker,df in self.StockDataDict.items():
@@ -28,27 +30,36 @@ class Backtester:
 
     def dictionary_grafting(self):
         out_dict = {}
-        for i in self.list_stock:
-            out_dict[i] = self.StockDataDict[i].iloc[self.n_today-self.training_period: self.n_today]
+        for ticker, df in self.StockDataDict.items():
+            out_dict[ticker] = df.iloc[(self.n_today - self.training_period): self.n_today]
         return out_dict
 
     def get_str_date(self,n):
         if(n==-1):
-            n = len(self.StockDataDict[self.list_stock[0]])-1
-        return self.StockDataDict[self.list_stock[0]].iloc[n]['DATE']
+            n = len(self.StockDataDict[self.list_stock[0]])
+        return self.StockDataDict[self.list_stock[0]].iloc[n-1]['DATE']
         
     def newPositions(self, *, dict_of_dataframes, wallet, today):
         self.max_position_size = self.portfolio.get_current_account_size() * self.percentRisk_PerTrade
         number_of_new_positions = math.floor((wallet/self.max_position_size))
+        print()
         print(f'number_of_new_positions: {number_of_new_positions}')
+        copy_dict_of_dataframes = copy.deepcopy(dict_of_dataframes)
+        for ticker, df in copy_dict_of_dataframes.items():
+            df.drop("TYPICAL PRICE", inplace=True, axis=1)
+            df.drop('DATE', inplace=True, axis=1)
+            copy_dict_of_dataframes[ticker] = df
         if(number_of_new_positions==0):
             return 0
-        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 30, filter_percentile = 70, filter_activation_flag = True, long_only_flag = True)
-        position_list = obj.run()
-        print(f'position_list: {position_list}')
-        
+        obj = OptimisedModel(dict_of_dataframes=copy_dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=1.5, multiplier2=2,
+                             lin_reg_filter_multiplier=0.8, number_of_readings=30, filter_percentile=70, filter_activation_flag=True, long_only_flag=True)
+        self.position_list = obj.run()
+        with open('new_positions_list.txt', 'a') as f:
+            f.write(str(self.position_list))
+            f.write('\n\n')
+        print(self.position_list)
         for i in range(number_of_new_positions):
-            ticker,strength_val = position_list[i]
+            ticker,strength_val = self.position_list[i]
             entry_price = dict_of_dataframes[ticker].iloc[len(dict_of_dataframes[ticker])-1]["TYPICAL PRICE"]
             number_of_shares = int(math.floor(self.max_position_size/entry_price))
             today = self.get_str_date(self.n_today)
@@ -69,7 +80,8 @@ class Backtester:
         with open('backtest_results.txt', 'w') as f:
             f.write('')
         
-        self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers = self.list_stock, update_data = self.update_data)
+        self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
+            
         self.validate_StockDataDict()
         self.portfolio = Portfolio(initial_capital = 100000, base_lookback=self.base_lookback)
         # dict_of_dataframes = self.dictionary_grafting()
@@ -81,9 +93,19 @@ class Backtester:
         
         while self.get_str_date(self.n_today) != self.get_str_date(-1):
             dict_of_dataframes = self.dictionary_grafting()
+            print(dict_of_dataframes[self.list_stock[0]])
             today = self.get_str_date(self.n_today)
             self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet=self.portfolio.wallet, today=today)
+            self.position_list = []
             self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)
             self.n_today += 1
+        
+        dict_of_dataframes = self.dictionary_grafting()
+        print(dict_of_dataframes[self.list_stock[0]])
         today = self.get_str_date(self.n_today)
-        self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)
+        self.newPositions(dict_of_dataframes=dict_of_dataframes,
+                          wallet=self.portfolio.wallet, today=today)
+        self.position_list = []
+        self.portfolio.update_portfolio(
+            NewStockDataDict=dict_of_dataframes, current_date=today)
+        self.n_today += 1

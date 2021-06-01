@@ -13,7 +13,7 @@ Columns: Ticker, LONG/SHORT, Number Of Shares, Entry Price, Max/Min Price, Exit 
 '''
 
 class OptimisedBackTester:
-    initial_capital = 100000
+    initial_capital = 1000000
     cash = initial_capital
     day_count = 0
     #positions_book = pd.DataFrame(columns = ['Ticker','LONG/SHORT' , 'NumOfShares', 'EntryPrice', 'Max/MinPrice', 'ExitPrice', 'EntryDay', 'ExitDay'])
@@ -57,7 +57,7 @@ class OptimisedBackTester:
     def newPosition(self, dict_of_dataframes, number_of_required_positions):
         max_position_size = self.initial_capital*self.percentRisk_PerTrade
         print(max_position_size)
-        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = self.number_of_readings, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
+        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.5, number_of_readings = self.number_of_readings, filter_percentile = 60, filter_activation_flag = True, long_only_flag = False)
         position_list = obj.run()
 
         for i in range(number_of_required_positions):
@@ -119,11 +119,11 @@ class OptimisedBackTester:
 
             #Checking for Long Exits
             if(self.portfolio.loc[uid,'LONG/SHORT'] == 'LONG'):
-                envma_val = sum(price_list[-self.base_lookback:])/self.base_lookback
+                envma_val = sum(price_list[-self.base_lookback:])/(self.base_lookback)
                 #envma_val = (envma_val + envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)
-                stop_loss_trigger = self.portfolio.loc[uid,'Max/MinPrice'] - trading_range*0.2
+                stop_loss_trigger = max((self.portfolio.loc[uid,'Max/MinPrice'] - trading_range*0.2), (0.96*self.portfolio.loc[uid,'Max/MinPrice']))
 
                 if(present_price < envma_val):
                     #Closing Position for Trend Slowing
@@ -141,7 +141,7 @@ class OptimisedBackTester:
                 #envma_val = (envma_val - envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)
-                stop_loss_trigger = self.portfolio.loc[uid,'Max/MinPrice'] + trading_range*0.2
+                stop_loss_trigger = min((self.portfolio.loc[uid,'Max/MinPrice'] + trading_range*0.2), (1.04*self.portfolio.loc[uid,'Max/MinPrice']))
 
                 if(present_price > envma_val):
                     #Closing Position for Trend Slowing

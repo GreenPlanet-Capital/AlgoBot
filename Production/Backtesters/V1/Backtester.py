@@ -35,7 +35,7 @@ class Backtester:
     def get_str_date(self,n):
         if(n==-1):
             n = len(self.StockDataDict[self.list_stock[0]])-1
-        return self.StockDataDict[self.list_stock[0]].loc[n,'DATE']
+        return self.StockDataDict[self.list_stock[0]].iloc[n]['DATE']
         
     def newPositions(self, *, dict_of_dataframes, wallet, today):
         self.max_position_size = self.portfolio.get_current_account_size() * self.percentRisk_PerTrade
@@ -43,7 +43,7 @@ class Backtester:
         print(f'number_of_new_positions: {number_of_new_positions}')
         if(number_of_new_positions==0):
             return 0
-        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 30, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
+        obj = OptimisedModel(dict_of_dataframes = dict_of_dataframes, base_lookback = self.base_lookback, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 30, filter_percentile = 70, filter_activation_flag = True, long_only_flag = True)
         position_list = obj.run()
         print(f'position_list: {position_list}')
         

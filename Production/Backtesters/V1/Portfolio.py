@@ -79,10 +79,10 @@ class Portfolio:
             new_entry += position_obj.get_current_position_status()
             new_entry += '\n\n'
 
-        # new_entry += "EXITS:\n"
-        # for unique_id in self.exits:
-        #     new_entry += self.positions[unique_id].get_current_position_status()
-        #     new_entry += '\n\n'
+        new_entry += "EXITS:\n"
+        for unique_id in self.exits:
+            new_entry += self.positions[unique_id].get_current_position_status()
+            new_entry += '\n\n'
 
         with open('backtest_results.txt', 'a') as f:
             f.write(new_entry)

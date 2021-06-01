@@ -87,7 +87,7 @@ class BasketStockData:
         if update_data:        
             basket_data = yf.download(
             tickers = list_of_tickers,
-            period = '1y',
+            period = 'max',
             interval = '1d',
             group_by = 'ticker',
             auto_adjust = False,

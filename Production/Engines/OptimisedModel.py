@@ -462,11 +462,13 @@ class OptimisedModel:
         out_list = []
         for i in sorted_abs_list:
             for x in long_book:
-                if(x[1] == i and x is not in out_list):
+                if(x[1] == i):
                     out_list.append(x)
+                    long_book.remove(x)
             for y in short_book:
-                if(abs(y[1]) == i and x is not in out_list):
+                if(abs(y[1]) == i):
                     out_list.append(y)
+                    short_book.remove(y)
 
         out_list = out_list[:self.number_of_readings]
         return out_list

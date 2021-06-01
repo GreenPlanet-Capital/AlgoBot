@@ -66,6 +66,7 @@ class OptimisedBackTester:
             temp_df['Typical Price'] = (temp_df['HIGH'] + temp_df['LOW'] + temp_df['CLOSE'])/3
             price_list = list(temp_df['Typical Price'])
             present_price = price_list[-1]
+            present_price = present_price.round(3)
 
             num_of_shares = math.floor(max_position_size/present_price)
 
@@ -107,7 +108,7 @@ class OptimisedBackTester:
 
             present_price = price_list[-1]
             #Present Price Update
-            self.portfolio.loc[uid,'PresentPrice'] = present_price
+            self.portfolio.loc[uid,'PresentPrice'] = present_price.round(3)
 
             #Max/Min Price Update
             if (self.portfolio.loc[uid,'LONG/SHORT'] == 'LONG'):

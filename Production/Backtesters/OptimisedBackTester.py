@@ -132,7 +132,7 @@ class OptimisedBackTester:
 
             #Checking for Long Exits
             if(self.portfolio.loc[uid,'LONG/SHORT'] == 'LONG'):
-                envma_val = sum(price_list[-self.base_lookback:])/(self.base_lookback)
+                envma_val = sum(price_list[(-self.base_lookback + 4):])/(self.base_lookback - 4)
                 #envma_val = (envma_val + envma_val*0.1)
 
                 trading_range = max(price_list) - min(price_list)

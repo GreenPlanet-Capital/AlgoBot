@@ -30,7 +30,7 @@ class Portfolio:
             ma_list = list(NewStockDataDict[ticker]['TYPICAL PRICE'])
             current_price = ma_list[-1]
             position.update(current_price=current_price, current_date=current_date)
-            moving_average_value = ma_list[-self.base_lookback]/self.base_lookback
+            moving_average_value = sum(ma_list[-self.base_lookback:])/self.base_lookback
 
             # Moving Average Triggers
             if position.position_type == "LONG":
@@ -59,8 +59,6 @@ class Portfolio:
 
             self.update_register(current_date=current_date)
         
-        
-
     def get_current_account_size(self):
         current_account_size = 0
         for unique_id, position in self.positions.items():

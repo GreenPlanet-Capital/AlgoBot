@@ -46,11 +46,11 @@ class Portfolio:
             trading_range = max_val - min_val
             
             if position.position_type == "LONG":
-                stop_loss_trigger = max_val - (0.1 * trading_range)
+                stop_loss_trigger = 0.96*max_val #max_val - (0.1 * trading_range)
                 if current_price<stop_loss_trigger:
                     do_we_abort = True
             elif position.position_type == "SHORT":
-                stop_loss_trigger = min_val + (0.1 * trading_range)
+                stop_loss_trigger = 0.96*min_val#min_val + (0.1 * trading_range)
                 if current_price>stop_loss_trigger:
                     do_we_abort = True
 

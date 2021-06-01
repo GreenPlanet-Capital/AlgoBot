@@ -38,7 +38,7 @@ class Backtester:
         return self.StockDataDict[self.list_stock[0]].loc[n,'DATE']
         
     def newPositions(self, *, dict_of_dataframes, wallet, today):
-        self.max_position_size = self.portfolio.get_current_account_size() * self.percentRisk_PerTrade
+        self.max_position_size = wallet * self.percentRisk_PerTrade
         number_of_new_positions = math.floor((wallet/self.max_position_size))
         print(f'number_of_new_positions: {number_of_new_positions}')
         if(number_of_new_positions==0):

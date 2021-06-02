@@ -22,6 +22,8 @@ class Position:
 
     def get_current_position_status(self):
         pnl = ((self.prices[-1] - self.prices[0])/self.prices[0])*100
+        if self.position_type=="SHORT":
+            pnl = -pnl
         return self.string_position(pnl)
 
     def get_current_value(self):

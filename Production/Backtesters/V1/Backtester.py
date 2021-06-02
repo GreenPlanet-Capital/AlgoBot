@@ -70,6 +70,9 @@ class Backtester:
     def run(self):
         with open('backtest_results.txt', 'w') as f:
             f.write('')
+
+        with open('current_account_size_log.csv', 'w') as f:
+            f.write('Date,Current Account Size\n')
         
         self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
         self.validate_StockDataDict()

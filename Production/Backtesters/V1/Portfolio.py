@@ -1,4 +1,5 @@
 from Backtesters.V1.Position import Position
+import csv
 class Portfolio:
 
     def __init__(self, *, initial_capital, base_lookback) -> None:
@@ -68,8 +69,13 @@ class Portfolio:
     def update_register(self, *, current_date):
         new_entry = ""
         new_entry += f'Positions on {current_date}\n\n'
-        new_entry += f'Current Account Size: {self.get_current_account_size()}\n'
+        current_account_size = self.get_current_account_size()
+        new_entry += f'Current Account Size: {current_account_size}\n'
         new_entry += f'Wallet: {self.wallet}\n\n'
+
+        with open('current_account_size_log.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([current_date, current_account_size])
 
         for unique_id, position_obj in self.positions.items():
             if unique_id in self.exits:

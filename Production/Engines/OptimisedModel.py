@@ -19,10 +19,8 @@ output: ordered list
 ticker_data_list format: (ticker, breakout_score, filter_linreg, ls_strength)
 '''
 class OptimisedModel: 
-    ticker_data_list = []
-    percentile_limit = 0
-    unordered_dict= {}
-    def __init__(self, dict_of_dataframes, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, number_of_readings, filter_percentile = 75, filter_activation_flag = True, long_only_flag = False):
+    
+    def __init__(self, *, dict_of_dataframes, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, number_of_readings, filter_percentile = 75, filter_activation_flag = True, long_only_flag = False):
         self.base_lookback = base_lookback
         self.dict_of_dataframes = dict_of_dataframes
         self.lin_reg_filter_multiplier = lin_reg_filter_multiplier
@@ -32,6 +30,8 @@ class OptimisedModel:
         self.filter_percentile = filter_percentile
         self.filter_activation_flag = filter_activation_flag
         self.long_only_flag = long_only_flag
+        self.ticker_data_list = []
+        self.unordered_dict = {}
 
     def array_slicer(self, df_input):
         df_input['TYPICAL PRICE'] = ((df_input['HIGH'] + df_input['LOW'] + df_input['CLOSE']) / 3).round(2)

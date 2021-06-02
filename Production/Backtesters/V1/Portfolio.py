@@ -18,18 +18,12 @@ class Portfolio:
         elif position.position_type=="SHORT":
             self.wallet += position.number_of_shares * (2*position.prices[0] - position.prices[-1])
         self.exits.append(unique_id)
-        print(self.exits)
-        return True
 
     def update_portfolio(self, *, NewStockDataDict: dict, current_date):
-        print(f'Current Date: {current_date}')
-        print(self.positions.items())
         for unique_id, position in self.positions.items():
             do_we_abort = False
             if unique_id in self.exits:
-                print(f"ENTERED HERE: {unique_id}")
                 continue
-            # print(position.get_current_position_status())
             ticker = position.ticker
             ma_list = list(NewStockDataDict[ticker]['TYPICAL PRICE'])
             current_price = ma_list[-1]
@@ -39,11 +33,9 @@ class Portfolio:
             # Moving Average Triggers
             if position.position_type == "LONG":
                 if current_price<moving_average_value:
-                    print("LONG TREND SLOW")
                     do_we_abort = True
             elif position.position_type == "SHORT":
                 if current_price>moving_average_value:
-                    print("SHORT TREND SLOW")
                     do_we_abort = True
 
             # Stoploss Triggers
@@ -54,25 +46,14 @@ class Portfolio:
             if position.position_type == "LONG":
                 stop_loss_trigger = max_val - (0.1 * trading_range)
                 if current_price<stop_loss_trigger:
-                    print("LONG STOPLOSS")
-                    print(f'stop_loss_trigger: {stop_loss_trigger}')
                     do_we_abort = True
             elif position.position_type == "SHORT":
                 stop_loss_trigger = min_val + (0.1 * trading_range)
                 if current_price>stop_loss_trigger:
-                    print("SHORT STOPLOSS")
                     do_we_abort = True
-            
-            print(position.get_current_position_status())
-            print(f'ma_list: {ma_list}')
-            print(f'current_price: {current_price}')
-            print(f'moving_average_value: {moving_average_value}')
-            print(f'do_we_abort: {do_we_abort}')
 
             if do_we_abort:
-                return_status = self.exit(unique_id=unique_id)
-                if return_status:
-                    print(f'Succesfully exited {unique_id}')
+                self.exit(unique_id=unique_id)
 
         self.update_register(current_date=current_date)
         

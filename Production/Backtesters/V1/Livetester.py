@@ -1,5 +1,5 @@
 import math
-from StockDataExtraction.BasketStockData_Backtest import BasketStockData_Backtest
+from StockDataExtraction.BasketStockData_Livetest import BasketStockData_Livetest
 from Backtesters.V1.Portfolio import Portfolio
 from Backtesters.V1.Position import Position
 from Engines.OptimisedModel import OptimisedModel
@@ -8,9 +8,9 @@ import warnings
 import copy
 import math
 
-class Backtester:
+class Livetester:
 
-    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, stop_loss_percent, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
+    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, stop_loss_percent, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, livetest_day, update_data=True, percentRisk_PerTrade=0.1):
         self.StockDataDict = {}
         self.list_stock = list_stock
         self.initial_capital = initial_capital
@@ -24,8 +24,7 @@ class Backtester:
         self.long_only_flag = long_only_flag
         self.training_period = training_period
         self.current_account_size_csv = current_account_size_csv
-        self.start_date = start_date
-        self.end_date = end_date
+        self.livetest_day = livetest_day
         self.update_data = update_data
         self.percentRisk_PerTrade = percentRisk_PerTrade
         self.max_position_size = self.initial_capital * self.percentRisk_PerTrade
@@ -76,13 +75,13 @@ class Backtester:
             self.portfolio.enter(unique_id = unique_ID, position = positionObj)
       
     def run(self):
-        with open('backtest_results.txt', 'w') as f:
+        with open('livetest_results.txt', 'w') as f:
             f.write('')
 
         with open(f'{self.current_account_size_csv}.csv', 'w') as f:
             f.write('Date,Current Account Size\n')
         
-        self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
+        self.StockDataDict = BasketStockData_Livetest().generate_dict(back_limit=self.livetest_day+self.training_period, list_of_tickers=self.list_stock, update_data=self.update_data)
         self.validate_StockDataDict()
         self.portfolio = Portfolio(initial_capital = self.initial_capital, base_lookback=self.base_lookback)
 

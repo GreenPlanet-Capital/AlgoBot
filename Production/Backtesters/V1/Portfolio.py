@@ -95,5 +95,5 @@ class Portfolio:
             self.exits.remove(unique_id)
             del self.positions[unique_id]
 
-        with open('backtest_results.txt', 'a') as f:
+        with open('livetest_results.txt', 'a') as f:
             f.write(new_entry)

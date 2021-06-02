@@ -117,7 +117,7 @@ class BasketStockData:
             self.out_dict[ticker] = df_out
         return self.out_dict
 
-    def __str__():
+    def __str__(self):
         return (self.out_dict.to_string())
 
 def main():

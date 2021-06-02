@@ -13,3 +13,7 @@ gpc-goes-beserk.csv
 gpc-is-ballsy-asf.csv
 large-base-lookback.csv
 stop-loss-percent-change.csv
+.DS_Store
+livetest_day.txt
+.gitignore
+livetest-account-size.csv

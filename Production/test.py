@@ -18,7 +18,7 @@ def main():
         update_data = False
     
     begin = time.time()
-    backtest1 = Backtester(list_stock=list_stok, initial_capital=1000000, base_lookback=5, multiplier1=1.5, multiplier2=2, lin_reg_filter_multiplier=0.5, filter_percentile=50, filter_activation_flag=False, long_only_flag=True, training_period=50, current_account_size_csv='long-only', start_date="2019-01-01", end_date="2021-06-01", update_data=update_data, percentRisk_PerTrade=0.03)
+    backtest1 = Backtester(list_stock=list_stok, initial_capital=1000000, base_lookback=5, multiplier1=1.5, multiplier2=2, lin_reg_filter_multiplier=0.5, filter_percentile=50, filter_activation_flag=True, long_only_flag=False, training_period=20, current_account_size_csv='riskier-of-riskiest', start_date="2019-01-01", end_date="2021-06-01", update_data=update_data, percentRisk_PerTrade=0.1)
     backtest1.run()
     end = time.time()
     print(f'Time taken for the backtest: {end - begin}')

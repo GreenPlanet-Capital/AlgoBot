@@ -18,10 +18,10 @@ def main():
         update_data = False
     
     begin = time.time()
-    backtest1 = Backtester(list_stock=list_stok, initial_capital=1000000, base_lookback=17, training_period=50, start_date="2019-01-01", end_date="2021-06-01", update_data=update_data, percentRisk_PerTrade=0.03)
+    backtest1 = Backtester(list_stock=list_stok, initial_capital=1000000, base_lookback=5, training_period=50, start_date="2019-01-01", end_date="2021-06-01", update_data=update_data, percentRisk_PerTrade=0.03)
     backtest1.run()
     end = time.time()
-    print(f'Time taken to extract data: {end - begin}')
+    print(f'Time taken for the backtest: {end - begin}')
 
 if __name__ == '__main__':
     main()

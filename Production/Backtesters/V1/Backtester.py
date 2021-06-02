@@ -10,7 +10,7 @@ import math
 
 class Backtester:
 
-    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
+    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, stop_loss_percent, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
         self.StockDataDict = {}
         self.list_stock = list_stock
         self.initial_capital = initial_capital
@@ -18,6 +18,7 @@ class Backtester:
         self.multiplier1 = multiplier1
         self.multiplier2 = multiplier2
         self.lin_reg_filter_multiplier = lin_reg_filter_multiplier
+        self.stop_loss_percent = stop_loss_percent
         self.filter_percentile = filter_percentile
         self.filter_activation_flag = filter_activation_flag
         self.long_only_flag = long_only_flag
@@ -91,7 +92,7 @@ class Backtester:
             today = self.get_str_date(self.n_today)
             self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet=self.portfolio.wallet, today=today)
             self.portfolio.update_portfolio(
-                NewStockDataDict=dict_of_dataframes, current_date=today, current_account_size_csv=self.current_account_size_csv)
+                NewStockDataDict=dict_of_dataframes, stop_loss_percent=self.stop_loss_percent, current_date=today, current_account_size_csv=self.current_account_size_csv)
             self.n_today += 1
         print(f'N_TODAY: {self.n_today}')
         dict_of_dataframes = self.dictionary_grafting()
@@ -99,5 +100,5 @@ class Backtester:
         self.newPositions(dict_of_dataframes=dict_of_dataframes,
                           wallet=self.portfolio.wallet, today=today)
         self.portfolio.update_portfolio(
-            NewStockDataDict=dict_of_dataframes, current_date=today, current_account_size_csv=self.current_account_size_csv)
+            NewStockDataDict=dict_of_dataframes, stop_loss_percent=self.stop_loss_percent, current_date=today, current_account_size_csv=self.current_account_size_csv)
         self.n_today += 1

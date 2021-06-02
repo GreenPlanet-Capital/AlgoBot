@@ -20,7 +20,7 @@ class Portfolio:
             self.wallet += position.number_of_shares * (2*position.prices[0] - position.prices[-1])
         self.exits.append(unique_id)
 
-    def update_portfolio(self, *, NewStockDataDict: dict, current_date, current_account_size_csv):
+    def update_portfolio(self, *, NewStockDataDict: dict, stop_loss_percent, current_date, current_account_size_csv):
         for unique_id, position in self.positions.items():
             do_we_abort = False
             if unique_id in self.exits:
@@ -45,11 +45,11 @@ class Portfolio:
             trading_range = max_val - min_val
             
             if position.position_type == "LONG":
-                stop_loss_trigger = max_val - (0.1 * trading_range)
+                stop_loss_trigger = max_val - (stop_loss_percent * trading_range)
                 if current_price<stop_loss_trigger:
                     do_we_abort = True
             elif position.position_type == "SHORT":
-                stop_loss_trigger = min_val + (0.1 * trading_range)
+                stop_loss_trigger = min_val + (stop_loss_percent * trading_range)
                 if current_price>stop_loss_trigger:
                     do_we_abort = True
 

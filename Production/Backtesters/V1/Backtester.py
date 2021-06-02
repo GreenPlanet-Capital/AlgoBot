@@ -10,12 +10,19 @@ import math
 
 class Backtester:
 
-    def __init__(self, *, list_stock, initial_capital, base_lookback, training_period, start_date, end_date, update_data = True, percentRisk_PerTrade = 0.1):
+    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
         self.StockDataDict = {}
         self.list_stock = list_stock
         self.initial_capital = initial_capital
         self.base_lookback = base_lookback
+        self.multiplier1 = multiplier1
+        self.multiplier2 = multiplier2
+        self.lin_reg_filter_multiplier = lin_reg_filter_multiplier
+        self.filter_percentile = filter_percentile
+        self.filter_activation_flag = filter_activation_flag
+        self.long_only_flag = long_only_flag
         self.training_period = training_period
+        self.current_account_size_csv = current_account_size_csv
         self.start_date = start_date
         self.end_date = end_date
         self.update_data = update_data
@@ -46,8 +53,8 @@ class Backtester:
         number_of_new_positions = math.floor((wallet/self.max_position_size))
         if(number_of_new_positions==0):
             return 0
-        obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=1.5, multiplier2=2, lin_reg_filter_multiplier=0.8,
-                             number_of_readings=number_of_new_positions, filter_percentile=70, filter_activation_flag=True, long_only_flag=False)
+        obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=self.multiplier1, multiplier2=self.multiplier2, lin_reg_filter_multiplier=self.lin_reg_filter_multiplier,
+                             number_of_readings=number_of_new_positions, filter_percentile=self.filter_percentile, filter_activation_flag=self.filter_activation_flag, long_only_flag=self.long_only_flag)
         position_list = obj.run()
         for i in range(number_of_new_positions):
             ticker,strength_val = position_list[i]
@@ -71,7 +78,7 @@ class Backtester:
         with open('backtest_results.txt', 'w') as f:
             f.write('')
 
-        with open('current_account_size_log.csv', 'w') as f:
+        with open(f'{self.current_account_size_csv}.csv', 'w') as f:
             f.write('Date,Current Account Size\n')
         
         self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
@@ -83,7 +90,8 @@ class Backtester:
             dict_of_dataframes = self.dictionary_grafting()
             today = self.get_str_date(self.n_today)
             self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet=self.portfolio.wallet, today=today)
-            self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)
+            self.portfolio.update_portfolio(
+                NewStockDataDict=dict_of_dataframes, current_date=today, current_account_size_csv=self.current_account_size_csv)
             self.n_today += 1
         print(f'N_TODAY: {self.n_today}')
         dict_of_dataframes = self.dictionary_grafting()
@@ -91,5 +99,5 @@ class Backtester:
         self.newPositions(dict_of_dataframes=dict_of_dataframes,
                           wallet=self.portfolio.wallet, today=today)
         self.portfolio.update_portfolio(
-            NewStockDataDict=dict_of_dataframes, current_date=today)
+            NewStockDataDict=dict_of_dataframes, current_date=today, current_account_size_csv=self.current_account_size_csv)
         self.n_today += 1

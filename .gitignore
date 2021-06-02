@@ -1,3 +1,4 @@
 Indicator_CSVs/
 __pycache__/
 backtest_results.txt
+current_account_size_log.csv

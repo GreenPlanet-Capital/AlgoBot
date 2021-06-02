@@ -2,3 +2,6 @@ Indicator_CSVs/
 __pycache__/
 backtest_results.txt
 current_account_size_log.csv
+long-only.csv
+multiplier-change.csv
+training_period-100.csv

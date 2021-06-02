@@ -3,8 +3,10 @@ from StockDataExtraction.BasketStockData_Backtest import BasketStockData_Backtes
 from Backtesters.V1.Portfolio import Portfolio
 from Backtesters.V1.Position import Position
 from Engines.OptimisedModel import OptimisedModel
+import numpy as np
 import warnings
 import copy
+import math
 
 class Backtester:
 
@@ -22,10 +24,11 @@ class Backtester:
         self.n_today = self.training_period
     
     def validate_StockDataDict(self):
-        for ticker,df in self.StockDataDict.items():
-            if 0 in list(df["HIGH"]):
+        for ticker, df in copy.deepcopy(self.StockDataDict).items():
+            if len([x for x in list(df["HIGH"]) if math.isnan(x)]) > 0:
                 del self.StockDataDict[ticker]
-                warnings.warn("Deleting Ticker: " + str(ticker) + " due to insufficient data")
+                self.list_stock.remove(ticker)
+                print("Deleting Ticker: " + str(ticker) + " due to insufficient data")
 
     def dictionary_grafting(self):
         out_dict = {}
@@ -43,8 +46,8 @@ class Backtester:
         number_of_new_positions = math.floor((wallet/self.max_position_size))
         if(number_of_new_positions==0):
             return 0
-        obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=5, multiplier1=1.5, multiplier2=2, lin_reg_filter_multiplier=0.8,
-                       number_of_readings=30, filter_percentile=70, filter_activation_flag=True, long_only_flag=True)
+        obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=1.5, multiplier2=2, lin_reg_filter_multiplier=0.8,
+                             number_of_readings=number_of_new_positions, filter_percentile=70, filter_activation_flag=True, long_only_flag=False)
         position_list = obj.run()
         for i in range(number_of_new_positions):
             ticker,strength_val = position_list[i]
@@ -65,18 +68,21 @@ class Backtester:
             self.portfolio.enter(unique_id = unique_ID, position = positionObj)
       
     def run(self):
+        with open('backtest_results.txt', 'w') as f:
+            f.write('')
         
         self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
         self.validate_StockDataDict()
-        self.portfolio = Portfolio(initial_capital = 100000, base_lookback=self.base_lookback)
+        self.portfolio = Portfolio(initial_capital = self.initial_capital, base_lookback=self.base_lookback)
 
         while self.get_str_date(self.n_today) != self.get_str_date(-1):
+            print(f'N_TODAY: {self.n_today}')
             dict_of_dataframes = self.dictionary_grafting()
             today = self.get_str_date(self.n_today)
             self.newPositions(dict_of_dataframes=dict_of_dataframes, wallet=self.portfolio.wallet, today=today)
             self.portfolio.update_portfolio(NewStockDataDict=dict_of_dataframes, current_date=today)
             self.n_today += 1
-        
+        print(f'N_TODAY: {self.n_today}')
         dict_of_dataframes = self.dictionary_grafting()
         today = self.get_str_date(self.n_today)
         self.newPositions(dict_of_dataframes=dict_of_dataframes,

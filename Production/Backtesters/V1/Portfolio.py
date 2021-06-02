@@ -20,7 +20,7 @@ class Portfolio:
             self.wallet += position.number_of_shares * (2*position.prices[0] - position.prices[-1])
         self.exits.append(unique_id)
 
-    def update_portfolio(self, *, NewStockDataDict: dict, current_date):
+    def update_portfolio(self, *, NewStockDataDict: dict, current_date, current_account_size_csv):
         for unique_id, position in self.positions.items():
             do_we_abort = False
             if unique_id in self.exits:
@@ -56,7 +56,8 @@ class Portfolio:
             if do_we_abort:
                 self.exit(unique_id=unique_id)
 
-        self.update_register(current_date=current_date)
+        self.update_register(current_date=current_date,
+                             current_account_size_csv=current_account_size_csv)
         
     def get_current_account_size(self):
         current_account_size = 0
@@ -66,14 +67,14 @@ class Portfolio:
             current_account_size += position.get_current_value()
         return current_account_size + self.wallet
 
-    def update_register(self, *, current_date):
+    def update_register(self, *, current_date, current_account_size_csv):
         new_entry = ""
         new_entry += f'Positions on {current_date}\n\n'
         current_account_size = self.get_current_account_size()
         new_entry += f'Current Account Size: {current_account_size}\n'
         new_entry += f'Wallet: {self.wallet}\n\n'
 
-        with open('current_account_size_log.csv', 'a', newline='') as f:
+        with open(f'{current_account_size_csv}.csv', 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([current_date, current_account_size])
 

@@ -56,8 +56,8 @@ class Backtester:
         obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=self.multiplier1, multiplier2=self.multiplier2, lin_reg_filter_multiplier=self.lin_reg_filter_multiplier,
                              number_of_readings=number_of_new_positions, filter_percentile=self.filter_percentile, filter_activation_flag=self.filter_activation_flag, long_only_flag=self.long_only_flag)
         position_list = obj.run()
-        for i in range(number_of_new_positions):
-            ticker,strength_val = position_list[i]
+        for new_position in position_list:
+            ticker, strength_val = new_position
             entry_price = dict_of_dataframes[ticker].iloc[len(dict_of_dataframes[ticker])-1]["TYPICAL PRICE"]
             number_of_shares = int(math.floor(self.max_position_size/entry_price))
             today = self.get_str_date(self.n_today)

@@ -42,8 +42,7 @@ def main():
     # print("Shorts: ")
     # print(shorts)
     # print()
-    print(x[list_stok[0]])
-    obj = OptimisedModel(dict_of_dataframes = x, base_lookback = 5, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.8, number_of_readings = 30, filter_percentile = 70, filter_activation_flag = True, long_only_flag = True)
+    obj = OptimisedModel(dict_of_dataframes = x, base_lookback = 17, multiplier1 = 1.5, multiplier2 = 2, lin_reg_filter_multiplier = 0.5, number_of_readings = 30, filter_percentile = 70, filter_activation_flag = True, long_only_flag = False)
     print(obj.run())
 
     end1 = time.time()

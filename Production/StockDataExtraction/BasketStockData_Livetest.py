@@ -10,19 +10,18 @@ import yfinance as yf
 import os
 from pathlib import Path
 
-class BasketStockData_Backtest:
+class BasketStockData_Livetest:
     def __init__(self):
         self.out_dict = {}
 
-    def generate_dict(self, start = "0000-00-00", end = "0000-00-00", list_of_tickers = [], update_data=True):
+    def generate_dict(self, *, back_limit, list_of_tickers = [], update_data=True):
         ctr = 1
         Indicator_CSVs = Path(os.getcwd()) / 'Indicator_CSVs'
 
         if update_data:        
             basket_data = yf.download(
             tickers = list_of_tickers,
-            start = start,
-            end = end,
+            period = '1y',
             interval = '1d',
             group_by = 'ticker',
             auto_adjust = False,
@@ -47,7 +46,7 @@ class BasketStockData_Backtest:
             df_out['DATE'] = df1['Date']
             df_out['TYPICAL PRICE'] = (
                 (df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
-            
+            df_out = df_out.iloc[-back_limit:]
             self.out_dict[ticker] = df_out
         return self.out_dict
 
@@ -55,7 +54,7 @@ class BasketStockData_Backtest:
         return (self.out_dict.to_string())
 
 def main():
-    stock_data = BasketStockData_Backtest()
+    stock_data = BasketStockData_Livetest()
     x = stock_data.generate_dict(start="2020-01-01", end = "2021-01-01", list_of_tickers = ['AAPL', 'MSFT'], update_data=True)
     print(x)
     

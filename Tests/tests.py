@@ -1,9 +1,5 @@
 import pandas as pd
+import yfinance as yf
 
-a = pd.DataFrame(columns = ['a','b'])
-a.loc['AAPL'] = ['1','b']
-a.loc['MSFT'] = ['a','b']
-a.loc['XLXX'] = ['a','b']
-
-a.loc['AAPL','a'] = 3
-print(a)
+data = yf.download(tickers = "ADANIPORTS.NS", period = "1d", interval = "1m", threads = True)
+print(data)

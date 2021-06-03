@@ -14,22 +14,34 @@ class BasketStockData_Backtest:
     def __init__(self):
         self.out_dict = {}
 
-    def generate_dict(self, start = "0000-00-00", end = "0000-00-00", list_of_tickers = [], update_data=True):
+    def generate_dict(self, start = "0000-00-00", end = "0000-00-00", list_of_tickers = [], update_data=True, IntraDayFlag = False):
         ctr = 1
         Indicator_CSVs = Path(os.getcwd()) / 'Indicator_CSVs'
 
-        if update_data:        
-            basket_data = yf.download(
-            tickers = list_of_tickers,
-            start = start,
-            end = end,
-            interval = '1d',
-            group_by = 'ticker',
-            auto_adjust = True,
-            prepost = False,
-            threads = True,
-            proxy = None
-            )
+        if update_data:  
+            if (IntraDayFlag):
+                basket_data = yf.download(
+                tickers = list_of_tickers,
+                period = "1d",
+                interval = '1m',
+                group_by = 'ticker',
+                auto_adjust = True,
+                prepost = False,
+                threads = True,
+                proxy = None
+                )
+            else:      
+                basket_data = yf.download(
+                tickers = list_of_tickers,
+                start = start,
+                end = end,
+                interval = '1d',
+                group_by = 'ticker',
+                auto_adjust = True,
+                prepost = False,
+                threads = True,
+                proxy = None
+                )
             basket_data = basket_data.T
 
             for ticker in list_of_tickers:
@@ -44,7 +56,10 @@ class BasketStockData_Backtest:
             df_out['LOW'] = df1['Low']
             df_out['CLOSE'] = df1['Close']
             df_out['VOLUME'] = df1['Volume']
-            df_out['DATE'] = df1['Date']
+            if(IntraDayFlag):
+                df_out['DATE'] = df1['Datetime']
+            else:
+                df_out['DATE'] = df1['Date']
             df_out['TYPICAL PRICE'] = (
                 (df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             

@@ -10,7 +10,7 @@ import math
 
 class Backtester:
 
-    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, stop_loss_percent, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
+    def __init__(self, *, list_stock, initial_capital, base_lookback, multiplier1, multiplier2, lin_reg_filter_multiplier, stop_loss_percent, filter_percentile, filter_activation_flag, long_only_flag, training_period, current_account_size_csv, IntraDayFlag = False, start_date, end_date, update_data=True, percentRisk_PerTrade=0.1):
         self.StockDataDict = {}
         self.list_stock = list_stock
         self.initial_capital = initial_capital
@@ -24,6 +24,7 @@ class Backtester:
         self.long_only_flag = long_only_flag
         self.training_period = training_period
         self.current_account_size_csv = current_account_size_csv
+        self.IntraDayFlag = IntraDayFlag
         self.start_date = start_date
         self.end_date = end_date
         self.update_data = update_data
@@ -82,7 +83,7 @@ class Backtester:
         with open(f'{self.current_account_size_csv}.csv', 'w') as f:
             f.write('Date,Current Account Size\n')
         
-        self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data)
+        self.StockDataDict = BasketStockData_Backtest().generate_dict(start = self.start_date, end = self.end_date, list_of_tickers=self.list_stock, update_data=self.update_data, IntraDayFlag= self.IntraDayFlag)
         self.validate_StockDataDict()
         self.portfolio = Portfolio(initial_capital = self.initial_capital, base_lookback=self.base_lookback)
 

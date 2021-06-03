@@ -32,9 +32,7 @@ def main():
         long_only_flag=False, 
         training_period=40, 
         current_account_size_csv='Intraday-Test', 
-        IntraDayFlag=True, 
-        start_date="2013-01-01", 
-        end_date="2015-01-01", 
+        IntraDayFlag=True,
         update_data=update_data, 
         percentRisk_PerTrade=0.1)
     backtest1.run()

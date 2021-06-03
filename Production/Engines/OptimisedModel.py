@@ -280,25 +280,25 @@ class OptimisedModel:
         short_iterator.append(mcg3 - (env_std_val3*mcg3))
 
         #CCI_SMA1
-        cci_sma1 = (present_price - sma1)/std1*0.015
+        cci_sma1 = (present_price - sma1)/(std1*0.015)
         #CCI_SMA2
-        cci_sma2 = (present_price - sma2)/std2*0.015
+        cci_sma2 = (present_price - sma2)/(std2*0.015)
         #CCI_SMA3
-        cci_sma3 = (present_price - sma3)/std3*0.015
+        cci_sma3 = (present_price - sma3)/(std3*0.015)
 
         #CCI_WMA1
-        cci_wma1 = (present_price - wma1)/std1*0.015
+        cci_wma1 = (present_price - wma1)/(std1*0.015)
         #CCI_WMA2
-        cci_wma2 = (present_price - wma2)/std2*0.015
+        cci_wma2 = (present_price - wma2)/(std2*0.015)
         #CCI_WMA3
-        cci_wma3 = (present_price - wma3)/std3*0.015
+        cci_wma3 = (present_price - wma3)/(std3*0.015)
 
         #CCI_MCG1
-        cci_mcg1 = (present_price - mcg1)/std1*0.015
+        cci_mcg1 = (present_price - mcg1)/(std1*0.015)
         #CCI_MCG2
-        cci_mcg2 = (present_price - mcg2)/std2*0.015
+        cci_mcg2 = (present_price - mcg2)/(std2*0.015)
         #CCI_MCG3
-        cci_mcg3 = (present_price - mcg3)/std3*0.015
+        cci_mcg3 = (present_price - mcg3)/(std3*0.015)
 
         #SMA1_SMA2
         sma1_sma2 = sma1 - sma2
@@ -366,6 +366,14 @@ class OptimisedModel:
                 ls_strength -= 1
 
         filter_linreg = self.lin_reg( lin_reg_array)
+        
+        abs_score = breakout_score + ls_strength
+        if(abs_score > 0 and present_price < sma1):
+            breakout_score = 0
+            ls_strength = 0
+        elif(abs_score < 0 and present_price > sma1):
+            breakout_score = 0
+            ls_strength = 0
 
         return breakout_score, filter_linreg, ls_strength        
 

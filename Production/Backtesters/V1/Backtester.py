@@ -44,6 +44,7 @@ class Backtester:
             out_dict[ticker] = df.iloc[(self.n_today - self.training_period): self.n_today]
         return out_dict
 
+
     def get_str_date(self,n):
         if(n==-1):
             n = len(self.StockDataDict[self.list_stock[0]])

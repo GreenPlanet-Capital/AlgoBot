@@ -25,7 +25,7 @@ class BasketStockData_Backtest:
             end = end,
             interval = '1d',
             group_by = 'ticker',
-            auto_adjust = False,
+            auto_adjust = True,
             prepost = False,
             threads = True,
             proxy = None

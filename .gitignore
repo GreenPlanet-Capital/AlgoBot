@@ -14,3 +14,8 @@ gpc-is-ballsy-asf.csv
 large-base-lookback.csv
 stop-loss-percent-change.csv
 livetest_day.txt
+GME-Catch.csv
+.gitignore
+medium-term-trend.csv
+short-term-trend.csv
+long-term-trend.csv

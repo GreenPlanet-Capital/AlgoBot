@@ -20,3 +20,6 @@ medium-term-trend.csv
 short-term-trend.csv
 Intraday1Test.csv
 Production/test.py
+livetest-account-size.csv
+.gitignore
+livetest_results.txt

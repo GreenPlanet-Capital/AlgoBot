@@ -47,7 +47,7 @@ class BasketStockData_Backtest:
             df_out['LOW'] = df1['Low']
             df_out['CLOSE'] = df1['Close']
             df_out['VOLUME'] = df1['Volume']
-            df_out['DATE'] = df1['Date']
+            df_out['DATE'] = df1['Datetime']
             df_out['TYPICAL PRICE'] = ((df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             
             df_out = df_out.drop(empty_dates_indices, inplace=False)

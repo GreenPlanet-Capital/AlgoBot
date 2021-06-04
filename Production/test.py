@@ -20,21 +20,21 @@ def main():
     
     begin = time.time()
     backtest1 = Backtester(
-        list_stock=list_stok, 
-        initial_capital=1000000, 
-        base_lookback=10, 
-        multiplier1=1.5, 
-        multiplier2=2, 
-        lin_reg_filter_multiplier=0.5, 
-        stop_loss_percent=0.0, 
-        filter_percentile=70, 
-        filter_activation_flag=True, 
-        long_only_flag=False, 
-        training_period=40, 
-        current_account_size_csv='Intraday-Test', 
-        IntraDayFlag=True,
+        list_stock = list_stok, 
+        initial_capital = 1000000, 
+        base_lookback = 5,
+        multiplier1 = 1.7, 
+        multiplier2 = 2.1, 
+        lin_reg_filter_multiplier = 0.5, 
+        stop_loss_percent = 0.05, 
+        filter_percentile = 70, 
+        filter_activation_flag = True, 
+        long_only_flag = False, 
+        training_period = 20, 
+        current_account_size_csv = 'IntradayTest', 
         update_data=update_data, 
-        percentRisk_PerTrade=0.1)
+        percentRisk_PerTrade=0.05
+        )
     backtest1.run()
     end = time.time()
     print(f'Time taken for the backtest: {end - begin}')

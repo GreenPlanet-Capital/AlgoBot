@@ -22,21 +22,20 @@ def main():
     backtest1 = Livetester(
 
         list_stock=basket,
-        initial_capital=1000000, 
-        base_lookback=15,
+        initial_capital=215705, 
+        base_lookback=5,
         multiplier1=1.5, 
         multiplier2=2, 
         lin_reg_filter_multiplier=0.5, 
-        stop_loss_percent=0.05, 
-        filter_percentile=70, 
+        stop_loss_percent=0.1, 
+        filter_percentile=60, 
         filter_activation_flag=True, 
         long_only_flag=False, 
-        training_period=50, 
-        current_account_size_csv='long-term-trend', 
-        start_date="2021-01-01", 
-        end_date="2021-06-02", 
-        update_data=update_data, 
-        percentRisk_PerTrade=0.05
+        training_period=20, 
+        current_account_size_csv='livetest-account-size', 
+        livetest_day=livetest_day,
+        update_data=True, 
+        percentRisk_PerTrade=0.25
         
         )
     backtest1.run()

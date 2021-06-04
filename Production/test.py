@@ -1,7 +1,4 @@
-from StockDataExtraction.StockData import BasketStockData
 import sys
-from Backtesters.SwingBacktest import SwingLongShortBacktest
-from Backtesters.OptimisedBackTester import OptimisedBackTester
 from Backtesters.V1.Backtester import Backtester
 import time
 import sys

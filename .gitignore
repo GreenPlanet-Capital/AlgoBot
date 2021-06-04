@@ -23,3 +23,5 @@ Intraday1Test.csv
 livetest_results.txt
 .gitignore
 livetest-account-size.csv
+.DS_Store
+intraday-test-trend.csv

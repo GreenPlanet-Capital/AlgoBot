@@ -348,7 +348,9 @@ class OptimisedModel:
             sma1_sma2, sma2_sma3, sma1_sma3,
             wma1_wma2, wma2_wma3, wma1_wma3,
             mcg1_mcg2, mcg2_mcg3, mcg1_mcg3,
-            linreg1, linreg2, linreg3
+            linreg1, linreg2, linreg3,
+            wma1_sma1, wma1_mcg1, wma2_mcg2,
+            wma2_sma2, wma3_sma3, wma3_mcg3
             ]
         
         breakout_score = 0
@@ -368,12 +370,20 @@ class OptimisedModel:
         filter_linreg = self.lin_reg( lin_reg_array)
         
         abs_score = breakout_score + ls_strength
-        if(abs_score > 0 and present_price < sma1):
-            breakout_score = 0
-            ls_strength = 0
+        if(abs_score > 0):
+            if(present_price < sma1):
+                breakout_score = 0
+                ls_strength = 0
+            elif(present_price < (0.96*main_lookback_array[-2])):
+                breakout_score = 0
+                ls_strength = 0
         elif(abs_score < 0 and present_price > sma1):
-            breakout_score = 0
-            ls_strength = 0
+            if(present_price > sma1):
+                breakout_score = 0
+                ls_strength = 0
+            elif(present_price > (1.04*main_lookback_array[-2])):
+                breakout_score = 0
+                ls_strength = 0
 
         return breakout_score, filter_linreg, ls_strength        
 

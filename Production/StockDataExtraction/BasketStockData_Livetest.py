@@ -9,6 +9,7 @@ import gspread
 import yfinance as yf
 import os
 from pathlib import Path
+import math
 
 class BasketStockData_Livetest:
     def __init__(self):
@@ -34,6 +35,9 @@ class BasketStockData_Livetest:
             for ticker in list_of_tickers:
                 basket_data.loc[(ticker,),].T.to_csv((Indicator_CSVs / f'{ticker}.csv'), sep=',', encoding='utf-8')
 
+        empty_dates_indices = []
+        df1 = pd.read_csv(Indicator_CSVs / f"{list_of_tickers[0]}.csv")
+        empty_dates_indices = self.getIndexes(df1['High'])
 
         for ticker in list_of_tickers:
             df1 = pd.read_csv(Indicator_CSVs / f"{ticker}.csv")
@@ -47,9 +51,18 @@ class BasketStockData_Livetest:
             df_out['TYPICAL PRICE'] = (
                 (df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             df_out = df_out.iloc[-back_limit:]
+            df_out = df_out.drop(empty_dates_indices, inplace=False)
             self.out_dict[ticker] = df_out
         return self.out_dict
 
+    def getIndexes(self, npArray):
+        listOfPos = list()
+        npArray_list = list(npArray)
+        for i, price in enumerate(npArray_list):
+            if math.isnan(price):
+                listOfPos.append(i)
+        return listOfPos
+    
     def __str__(self):
         return (self.out_dict.to_string())
 

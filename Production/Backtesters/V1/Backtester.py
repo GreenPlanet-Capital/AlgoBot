@@ -72,6 +72,9 @@ class Backtester:
             unique_ID = ticker + today
             positionObj = Position(unique_id = unique_ID, ticker = ticker, entry_price = entry_price, number_of_shares = number_of_shares, entry_date = entry_date, position_type = position_type)
             self.portfolio.enter(unique_id = unique_ID, position = positionObj)
+            
+            #Transaction Cost
+            self.portfolio.wallet -= 20
       
     def run(self):
         with open('backtest_results.txt', 'w') as f:

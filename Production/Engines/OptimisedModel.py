@@ -370,12 +370,20 @@ class OptimisedModel:
         filter_linreg = self.lin_reg( lin_reg_array)
         
         abs_score = breakout_score + ls_strength
-        if(abs_score > 0 and present_price < sma1):
-            breakout_score = 0
-            ls_strength = 0
+        if(abs_score > 0):
+            if(present_price < sma1):
+                breakout_score = 0
+                ls_strength = 0
+            elif(present_price < (0.96*main_lookback_array[-2])):
+                breakout_score = 0
+                ls_strength = 0
         elif(abs_score < 0 and present_price > sma1):
-            breakout_score = 0
-            ls_strength = 0
+            if(present_price > sma1):
+                breakout_score = 0
+                ls_strength = 0
+            elif(present_price > (1.04*main_lookback_array[-2])):
+                breakout_score = 0
+                ls_strength = 0
 
         return breakout_score, filter_linreg, ls_strength        
 

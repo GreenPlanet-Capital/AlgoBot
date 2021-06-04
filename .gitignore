@@ -18,4 +18,5 @@ GME-Catch.csv
 long-term-trend.csv
 medium-term-trend.csv
 short-term-trend.csv
+__pycache__/
 Intraday1Test.csv

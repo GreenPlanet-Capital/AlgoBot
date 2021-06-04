@@ -33,10 +33,10 @@ class Portfolio:
 
             # Moving Average Triggers
             if position.position_type == "LONG":
-                if current_price<moving_average_value:
+                if current_price < moving_average_value:
                     do_we_abort = True
             elif position.position_type == "SHORT":
-                if current_price>moving_average_value:
+                if current_price > moving_average_value:
                     do_we_abort = True
 
             # Stoploss Triggers

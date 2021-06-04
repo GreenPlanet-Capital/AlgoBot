@@ -15,5 +15,8 @@ large-base-lookback.csv
 stop-loss-percent-change.csv
 .DS_Store
 livetest_day.txt
-.gitignore
-livetest-account-size.csv
+GME-Catch.csv
+long-term-trend.csv
+medium-term-trend.csv
+short-term-trend.csv
+Intraday1Test.csv

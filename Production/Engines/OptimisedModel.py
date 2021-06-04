@@ -348,7 +348,9 @@ class OptimisedModel:
             sma1_sma2, sma2_sma3, sma1_sma3,
             wma1_wma2, wma2_wma3, wma1_wma3,
             mcg1_mcg2, mcg2_mcg3, mcg1_mcg3,
-            linreg1, linreg2, linreg3
+            linreg1, linreg2, linreg3,
+            wma1_sma1, wma1_mcg1, wma2_mcg2,
+            wma2_sma2, wma3_sma3, wma3_mcg3
             ]
         
         breakout_score = 0

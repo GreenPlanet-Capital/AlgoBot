@@ -3,9 +3,11 @@
 # Function returns a dataframe with the price from 2016 to present day
 # small_data_flag is set to true is the last 100 trading days quotes are required
 """
+from copy import Error, error
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
+from pandas.core.indexes.base import ensure_index_from_sequences
 import yfinance as yf
 import os
 from pathlib import Path
@@ -47,6 +49,9 @@ class BasketStockData_Backtest:
             df_out['LOW'] = df1['Low']
             df_out['CLOSE'] = df1['Close']
             df_out['VOLUME'] = df1['Volume']
+            date_col_name = list(df1)[0]
+            if (date_col_name != 'Datetime'):
+                df1.rename(columns={date_col_name: 'Datetime'}, inplace=True)
             df_out['DATE'] = df1['Datetime']
             df_out['TYPICAL PRICE'] = ((df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             

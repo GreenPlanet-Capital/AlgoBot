@@ -37,7 +37,7 @@ class BasketStockData_Backtest:
 
         empty_dates_indices = []
         df1 = pd.read_csv(Indicator_CSVs / f"{list_of_tickers[0]}.csv")
-        empty_dates_indices = self.getIndexes(df1['High'])
+        empty_dates_indices = self.getIndexes(df1['High'], 0)
 
         for ticker in list_of_tickers:
             df1 = pd.read_csv(Indicator_CSVs / f"{ticker}.csv")
@@ -51,16 +51,30 @@ class BasketStockData_Backtest:
             df_out['TYPICAL PRICE'] = ((df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             
             df_out = df_out.drop(empty_dates_indices, inplace=False)
+            df_out.reset_index(inplace=True, drop=True)
+
+            empty_dates_indices_for_ticker = []
+            empty_dates_indices_for_ticker = self.getIndexes(df_out['HIGH'], 0)
+            shifted_df = df_out.shift(1)
+            for i in empty_dates_indices_for_ticker:
+                df_out.at[i,'HIGH'] = shifted_df.loc[i,'HIGH']
+                df_out.at[i,'OPEN'] = shifted_df.loc[i,'OPEN']
+                df_out.at[i,'LOW'] = shifted_df.loc[i,'LOW']
+                df_out.at[i,'CLOSE'] = shifted_df.loc[i,'CLOSE']
+                df_out.at[i,'VOLUME'] = shifted_df.loc[i,'VOLUME']
+                df_out.at[i,'TYPICAL PRICE'] = shifted_df.loc[i,'TYPICAL PRICE']
+                shifted_df = df_out.shift(1)
+
             self.out_dict[ticker] = df_out
 
         return self.out_dict
 
-    def getIndexes(self, npArray):
+    def getIndexes(self, npArray, shift):
         listOfPos = list()
         npArray_list = list(npArray)
         for i, price in enumerate(npArray_list):
             if math.isnan(price):
-                listOfPos.append(i)
+                listOfPos.append(i+shift)
         return listOfPos
 
     def __str__(self):

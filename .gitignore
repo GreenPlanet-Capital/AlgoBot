@@ -25,3 +25,4 @@ livetest_results.txt
 livetest-account-size.csv
 .DS_Store
 intraday-test-trend.csv
+nse-intraday-test-trend.csv

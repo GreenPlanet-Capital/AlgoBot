@@ -23,3 +23,7 @@ Production/test.py
 livetest-account-size.csv
 .gitignore
 livetest_results.txt
+nse-intraday-test-trend.csv
+.DS_Store
+.gitignore
+intraday-test-trend.csv

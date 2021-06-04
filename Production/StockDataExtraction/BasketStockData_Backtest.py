@@ -58,7 +58,6 @@ class BasketStockData_Backtest:
         return self.out_dict
 
     def getIndexes(self, npArray):
-        ''' Get index positions of value in dataframe i.e. dfObj.'''
         listOfPos = list()
         npArray_list = list(npArray)
         for i, price in enumerate(npArray_list):

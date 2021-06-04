@@ -18,7 +18,7 @@ def main():
 
         list_stock=basket,
         initial_capital=1000000, 
-        base_lookback=15,
+        base_lookback=5,
         multiplier1=1.5, 
         multiplier2=2, 
         lin_reg_filter_multiplier=0.5, 
@@ -26,13 +26,13 @@ def main():
         filter_percentile=70, 
         filter_activation_flag=True, 
         long_only_flag=False, 
-        training_period=50, 
+        training_period=20, 
         current_account_size_csv='long-term-trend', 
-        start_date="2021-01-01", 
+        start_date="2020-01-01", 
         end_date="2021-06-02", 
         update_data=update_data, 
-        percentRisk_PerTrade=0.05
-        
+        percentRisk_PerTrade=0.1
+
         )
     backtest1.run()
     end = time.time()

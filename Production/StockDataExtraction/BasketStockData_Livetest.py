@@ -37,6 +37,8 @@ class BasketStockData_Livetest:
 
         empty_dates_indices = []
         df1 = pd.read_csv(Indicator_CSVs / f"{list_of_tickers[0]}.csv")
+        df1 = df1.iloc[-back_limit:]
+        df1 = df1.reset_index(drop=True)
         empty_dates_indices = self.getIndexes(df1['High'])
 
         for ticker in list_of_tickers:
@@ -51,7 +53,10 @@ class BasketStockData_Livetest:
             df_out['TYPICAL PRICE'] = (
                 (df_out['HIGH'] + df_out['LOW'] + df_out['CLOSE']) / 3).round(2)
             df_out = df_out.iloc[-back_limit:]
+            df_out = df_out.reset_index(drop=True)
             df_out = df_out.drop(empty_dates_indices, inplace=False)
+            print(df_out)
+            raise os.error
             self.out_dict[ticker] = df_out
         return self.out_dict
 

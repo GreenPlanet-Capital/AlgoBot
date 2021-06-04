@@ -3,6 +3,7 @@ from StockDataExtraction.BasketStockData_Backtest import BasketStockData_Backtes
 from Backtesters.V1.Portfolio import Portfolio
 from Backtesters.V1.Position import Position
 from Engines.OptimisedModel import OptimisedModel
+from Engines.TurtleTraders import TurtleTraders
 import numpy as np
 import warnings
 import copy
@@ -54,8 +55,7 @@ class Backtester:
         number_of_new_positions = math.floor((wallet/self.max_position_size))
         if(number_of_new_positions==0):
             return 0
-        obj = OptimisedModel(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, multiplier1=self.multiplier1, multiplier2=self.multiplier2, lin_reg_filter_multiplier=self.lin_reg_filter_multiplier,
-                             number_of_readings=number_of_new_positions, filter_percentile=self.filter_percentile, filter_activation_flag=self.filter_activation_flag, long_only_flag=self.long_only_flag)
+        obj = TurtleTraders(dict_of_dataframes=dict_of_dataframes, base_lookback=self.base_lookback, number_of_readings=number_of_new_positions, long_only_flag=self.long_only_flag)
         position_list = obj.run()
         for new_position in position_list:
             ticker, strength_val = new_position

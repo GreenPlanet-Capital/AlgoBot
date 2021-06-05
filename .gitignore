@@ -27,3 +27,4 @@ nse-intraday-test-trend.csv
 .DS_Store
 .gitignore
 intraday-test-trend.csv
+nyse-run.csv

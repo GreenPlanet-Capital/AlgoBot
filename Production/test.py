@@ -5,7 +5,7 @@ import sys
 from SecuritySelection.Baskets import Markets
 
 def main():
-    basket = Markets.nyse    
+    basket = Markets.snp    
     
     if len(sys.argv) > 1:
         if sys.argv[1] == '--update':
@@ -29,7 +29,7 @@ def main():
         training_period=20, 
         current_account_size_csv='nyse-run', 
         start_date="2020-01-01", 
-        end_date="2021-06-02", 
+        end_date="2021-06-01", 
         update_data=update_data, 
         percentRisk_PerTrade=0.05
 

@@ -34,7 +34,7 @@ def main():
         training_period=20, 
         current_account_size_csv='livetest-account-size', 
         livetest_day=livetest_day,
-        update_data=False, 
+        update_data=True, 
         percentRisk_PerTrade=0.25
         
         )

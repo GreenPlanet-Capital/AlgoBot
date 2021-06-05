@@ -23,3 +23,8 @@ Intraday1Test.csv
 livetest_results.txt
 .gitignore
 livetest-account-size.csv
+intraday-test-trend.csv
+.gitignore
+nyse-run.csv
+.gitignore
+nse-intraday-test-trend.csv

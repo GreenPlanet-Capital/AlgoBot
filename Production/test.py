@@ -27,7 +27,7 @@ def main():
         filter_activation_flag=True, 
         long_only_flag=False, 
         training_period=20, 
-        current_account_size_csv='nyse-run', 
+        current_account_size_csv='test_run', 
         start_date="2020-01-01", 
         end_date="2021-06-01", 
         update_data=update_data, 

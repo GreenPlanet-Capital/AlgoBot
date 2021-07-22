@@ -15,11 +15,11 @@ def main():
     basket = Markets.snp
     begin = time.time()
     stock_data = BasketStockData_Backtest()
+    update_data = False
     if len(sys.argv)>1:
         if sys.argv[1]=='--update':
             update_data = True
-    else:
-        update_data = False
+        
     x = stock_data.generate_dict(start='2020-01-01', end='2021-06-01', list_of_tickers=basket, update_data=update_data)
     end = time.time()
     print(f'Time taken to extract data: {end - begin}')

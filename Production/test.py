@@ -5,7 +5,7 @@ import sys
 from SecuritySelection.Baskets import Markets
 
 def main():
-    basket = Markets.snp    
+    basket = Markets.nse    
     
     if len(sys.argv) > 1:
         if sys.argv[1] == '--update':
@@ -27,7 +27,7 @@ def main():
         filter_activation_flag=True, 
         long_only_flag=False, 
         training_period=20, 
-        current_account_size_csv='test_run', 
+        current_account_size_csv='test_run_indian', 
         start_date="2015-01-01", 
         end_date="2021-06-01", 
         update_data=update_data, 

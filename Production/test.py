@@ -5,7 +5,7 @@ import sys
 from SecuritySelection.Baskets import Markets
 
 def main():
-    basket = Markets.nse    
+    basket = Markets.nasdaq  
     
     if len(sys.argv) > 1:
         if sys.argv[1] == '--update':
@@ -18,20 +18,20 @@ def main():
 
         list_stock=basket,
         initial_capital=1000000, 
-        base_lookback=5,
+        base_lookback=10,
         multiplier1=1.5, 
         multiplier2=2, 
         lin_reg_filter_multiplier=0.5, 
         stop_loss_percent=0.05, 
-        filter_percentile=65, 
+        filter_percentile=80, 
         filter_activation_flag=True, 
-        long_only_flag=True, 
-        training_period=20, 
-        current_account_size_csv='test_run_indian_long_only', 
+        long_only_flag=False, 
+        training_period=30, 
+        current_account_size_csv='test_run_nasdaq', 
         start_date="2015-01-01", 
         end_date="2021-06-01", 
         update_data=update_data, 
-        percentRisk_PerTrade=0.05
+        percentRisk_PerTrade=0.03
 
         )
     backtest1.run()

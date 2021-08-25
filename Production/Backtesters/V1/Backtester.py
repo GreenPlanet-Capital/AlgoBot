@@ -77,7 +77,7 @@ class Backtester:
             self.portfolio.enter(unique_id = unique_ID, position = positionObj)
 
             #Transaction Costs
-            self.portfolio.wallet -= (0.005*number_of_shares*entry_price)
+            self.portfolio.wallet -= (0.0025*number_of_shares*entry_price)
       
     def run(self):
         with open('backtest_results.txt', 'w') as f:

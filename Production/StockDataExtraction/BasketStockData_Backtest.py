@@ -5,8 +5,6 @@
 """
 from copy import Error
 import pandas as pd
-from oauth2client.service_account import ServiceAccountCredentials
-import gspread
 import yfinance as yf
 import os
 from pathlib import Path
